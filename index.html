@@ -330,13 +330,36 @@
     align-items: center;
     border-bottom: 2px solid var(--molding);
   }
-  .sidebar-title {
-    font-size: 11px;
-    font-weight: 600;
-    text-transform: uppercase;
-    letter-spacing: 0.12em;
-    color: var(--text-muted);
+  
+  /* === ADDED PILL DESIGN FOR TASKS AND NOTES === */
+  .tabs-container {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px;
+    background: var(--surface-2);
+    border-radius: 999px;
   }
+  .tab-item {
+    padding: 10px 22px;
+    border-radius: 999px;
+    color: var(--text-muted);
+    cursor: pointer;
+    transition: 0.2s ease;
+    font-family: var(--sans);
+    font-size: 14px;
+    font-weight: 500;
+  }
+  .tab-item.active {
+    background: var(--bg);
+    color: var(--text);
+    font-weight: 600;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  }
+  .tab-item:hover:not(.active) {
+    color: var(--text-soft);
+  }
+
   .btn-new {
     width: 28px; height: 28px;
     background: var(--accent);
@@ -957,7 +980,11 @@
     </div>
 
     <div class="sidebar-list-head">
-      <span class="sidebar-title" id="notesCountLabel">Notes</span>
+      <!-- Replaced plain text label with pill design -->
+      <div class="tabs-container">
+        <div class="tab-item active">Notes</div>
+        <div class="tab-item">Tasks</div>
+      </div>
       <button class="btn-new" id="newNoteBtn" title="New note (Ctrl+N)">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
           <path d="M12 5v14M5 12h14"/>
