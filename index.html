@@ -1561,7 +1561,25 @@
     shell.addEventListener('mouseleave', resetTilt);
   })();
 
-  /* ---------- IndexedDB (temporary buffer only) ---------- */
+  /* ---------- Random RED glow easter egg (1/100 chance every cycle) ---------- */
+  (function initGlassColorFlip() {
+    const shell = document.querySelector('.login-shell');
+    if (!shell) return;
+    
+    function maybeChangeToRed() {
+      const randomChance = Math.random();
+      if (randomChance < 0.01) { // 1/100 chance
+        shell.style.setProperty('--glass-sheen', 'rgba(220, 38, 38, 0.75)');
+        setTimeout(() => {
+          const isDarkMode = document.documentElement.getAttribute('data-theme') === 'dark';
+          const originalColor = isDarkMode ? 'rgba(255, 255, 255, 0.35)' : 'rgba(253, 126, 20, 0.65)';
+          shell.style.setProperty('--glass-sheen', originalColor);
+        }, 60000); // 1 minute
+      }
+      setTimeout(maybeChangeToRed, 20000); // Check every 20 seconds
+    }
+    maybeChangeToRed();
+  })();
   class NotesDB {
     constructor() {
       this.db = null;
