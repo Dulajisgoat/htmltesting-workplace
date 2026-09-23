@@ -3,486 +3,2161 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Recall — Access</title>
+<title>Blooddonut — Curriculum Vitae</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap">
 <style>
   :root {
-    --bg-light: #f0f2f5;
-    --glass-dark: rgba(255, 255, 255, 0.65);
-    --glass-light: rgba(255, 255, 255, 0.8);
-    --glass-border: rgba(200, 30, 50, 0.2);
-    --glass-highlight: rgba(255, 255, 255, 0.9);
-    
-    --glass-saturation: 180%;
-    --glass-blur: 20px;
-    --glass-blur-heavy: 40px;
-    --glass-inner-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.9), inset 0 -1px 1px rgba(168, 44, 69, 0.1);
-    --glass-drop-shadow: 0 8px 32px rgba(168, 44, 69, 0.08), 0 2px 8px rgba(168, 44, 69, 0.05);
-    
-    --red-deep: #C41E3A;
-    --red-bright: #FF2400;
-    --red-glow: rgba(255, 36, 0, 0.4);
-    
-    --text-red: #C41E3A;
-    --text-dark-red: #8B0000;
-    --text-white: #FFFFFF;
-    --text-muted: #A0A0A0;
+    --bg:           #0c0a0a;
+    --bg-soft:      #100c0c;
+    --bg-glass:     rgba(16,12,12,0.72);
+    --bg-glass-edge: rgba(168,40,40,0.16);
+    --bg-card:      #131010;
+    --ink:          #ece4dc;
+    --ink-soft:     #9a8f86;
+    --ink-faint:    #5a5048;
+    --oxblood:      #7a1f1f;
+    --oxblood-deep: #4a1212;
+    --oxblood-glow: #a82828;
+    --sanguine:     #b93737;
+    --hairline:     #1f1818;
+    --hairline-soft:#181414;
+    --serif: 'Instrument Serif', 'Times New Roman', serif;
+    --sans:  'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    --mono:  'JetBrains Mono', 'Courier New', monospace;
+    --ease-quiet: cubic-bezier(.22,1,.36,1);
+    --ease-precise: cubic-bezier(.4,0,.2,1);
   }
 
-  * { 
-    box-sizing: border-box; 
-    margin: 0;
-    padding: 0;
-  }
-
+  * { margin:0; padding:0; box-sizing:border-box; }
+  html { scroll-behavior: smooth; }
   body {
-    font-family: 'Manrope', -apple-system, 'Segoe UI', Helvetica, sans-serif;
-    font-size: 11pt;
-    line-height: 1.65;
-    color: var(--text-red);
-    min-height: 100vh;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 20px;
-    background: var(--bg-light);
-    position: relative;
-    overflow-x: hidden;
-    overflow-y: auto;
+    background: var(--bg);
+    color: var(--ink);
+    font-family: var(--sans);
+    font-size: 15px;
+    line-height: 1.7;
+    font-weight: 300;
     -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
     text-rendering: optimizeLegibility;
+    overflow-x: hidden;
   }
 
-  /* Liquid Glass Background Elements */
-  .glass-bg {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    z-index: -2;
-    background: 
-      radial-gradient(circle at 10% 10%, rgba(255, 36, 0, 0.05) 0%, transparent 40%),
-      radial-gradient(circle at 90% 80%, rgba(196, 30, 58, 0.08) 0%, transparent 45%),
-      #f0f2f5;
-    overflow: hidden;
-  }
-
-  .orb {
-    position: fixed;
-    border-radius: 50%;
-    filter: blur(80px);
-    z-index: -1;
-    opacity: 0.3;
-    animation: floatOrb 20s infinite ease-in-out;
-  }
-
-  .orb-1 { width: 400px; height: 400px; background: var(--red-deep); top: -100px; left: -100px; }
-  .orb-2 { width: 300px; height: 300px; background: var(--red-bright); bottom: -50px; right: -50px; animation-delay: -5s; }
-  .orb-3 { width: 200px; height: 200px; background: #FF6B6B; top: 40%; left: 40%; animation-delay: -10s; }
-
-  /* Auth Card */
-  .auth-card {
-    background: var(--glass-dark);
-    backdrop-filter: blur(var(--glass-blur-heavy)) saturate(var(--glass-saturation));
-    -webkit-backdrop-filter: blur(var(--glass-blur-heavy)) saturate(var(--glass-saturation));
-    border: 1px solid var(--glass-border);
-    border-radius: 24px;
-    padding: 48px 40px;
-    width: 100%;
-    max-width: 440px;
-    box-shadow: var(--glass-drop-shadow), var(--glass-inner-shadow);
-    position: relative;
-    overflow: hidden;
-    animation: fadeUp 0.8s cubic-bezier(0.25, 1, 0.5, 1) forwards;
-  }
-
-  .auth-card::before {
+  /* Ambient sanguine glow at the edges — subtle, no gradient spam */
+  body::after {
     content: '';
-    position: absolute;
-    top: 0; left: 0; right: 0; height: 1px;
-    background: linear-gradient(90deg, transparent, var(--glass-highlight), transparent);
-  }
-
-  .auth-card::after {
-    content: '';
-    position: absolute;
-    top: -50%; left: -50%;
-    width: 200%; height: 200%;
-    background: radial-gradient(circle at 30% 20%, rgba(255, 255, 255, 0.3) 0%, transparent 40%);
+    position: fixed;
+    inset: 0;
+    background:
+      radial-gradient(ellipse 80% 50% at 10% 0%, rgba(122,31,31,0.08), transparent 60%),
+      radial-gradient(ellipse 60% 40% at 100% 100%, rgba(74,18,18,0.10), transparent 55%);
     pointer-events: none;
+    z-index: 0;
   }
 
-  .auth-content {
-    position: relative;
+  /* Paper grain */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='240' height='240'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 0.05  0 0 0 0 0.04  0 0 0 0 0.03  0 0 0 0.5 0'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>");
+    opacity: 0.35;
+    pointer-events: none;
     z-index: 1;
+    mix-blend-mode: overlay;
   }
 
-  /* Logo */
-  .logo {
-    width: 72px;
-    height: 72px;
-    background: #FFFFFF;
-    border-radius: 20px;
+  ::selection { background: var(--oxblood); color: var(--ink); }
+
+  /* ─────────────────────── EDITABLE STATES ─────────────────────── */
+  [contenteditable="true"] {
+    outline: none;
+    transition: background 220ms var(--ease-precise), box-shadow 220ms var(--ease-precise);
+    border-radius: 2px;
+  }
+  [contenteditable="true"]:hover {
+    background: rgba(168,40,40,0.05);
+    box-shadow: 0 0 0 1px rgba(168,40,40,0.18) inset;
+  }
+  [contenteditable="true"]:focus {
+    background: rgba(168,40,40,0.08);
+    box-shadow: 0 0 0 1px var(--oxblood-glow) inset, 0 0 0 3px rgba(168,40,40,0.12);
+  }
+  [contenteditable="true"]:empty::before {
+    content: attr(data-placeholder);
+    color: var(--ink-faint);
+    font-style: italic;
+    opacity: 0.7;
+  }
+
+  .upload-zone {
+    position: relative;
+    cursor: pointer;
+    transition: background 300ms var(--ease-precise), box-shadow 300ms var(--ease-precise);
+  }
+  .upload-zone:hover {
+    background: rgba(168,40,40,0.04);
+  }
+  .upload-zone.is-dragover {
+    background: rgba(168,40,40,0.10);
+    box-shadow: inset 0 0 0 2px var(--sanguine);
+  }
+  .upload-zone.has-image {
+    background-size: cover;
+    background-position: center;
+  }
+  .upload-zone.has-image::after {
+    content: 'Click to replace';
+    position: absolute;
+    bottom: 0; left: 0; right: 0;
+    background: linear-gradient(to top, rgba(12,10,10,0.95), transparent);
+    padding: 0.8rem 1rem;
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--ink-soft);
+    opacity: 0;
+    transition: opacity 240ms var(--ease-precise);
+  }
+  .upload-zone:hover::after { opacity: 1; }
+
+  /* ─────────────────────── LIQUID GLASS PANEL ─────────────────────── */
+  .glass-panel {
+    background: var(--bg-glass);
+    backdrop-filter: blur(20px) saturate(140%);
+    -webkit-backdrop-filter: blur(20px) saturate(140%);
+    border: 1px solid var(--bg-glass-edge);
+    box-shadow:
+      0 8px 32px rgba(0,0,0,0.4),
+      inset 0 1px 0 rgba(255,255,255,0.04),
+      inset 0 0 0 1px rgba(168,40,40,0.06);
+    position: relative;
+  }
+  .glass-panel::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg, rgba(168,40,40,0.06) 0%, transparent 40%, transparent 60%, rgba(185,55,55,0.04) 100%);
+    pointer-events: none;
+    border-radius: inherit;
+  }
+
+  /* ─────────────────────── NAV (glass) ─────────────────────── */
+  .nav {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 100;
+    padding: 1.2rem 2.4rem;
+    background: var(--bg-glass);
+    backdrop-filter: blur(20px) saturate(140%);
+    -webkit-backdrop-filter: blur(20px) saturate(140%);
+    border-bottom: 1px solid var(--hairline);
+    box-shadow: inset 0 1px 0 rgba(255,255,255,0.03);
+  }
+  .nav__inner {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    max-width: 1280px;
+    margin: 0 auto;
+    font-family: var(--mono);
+    font-size: 11.5px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--ink-soft);
+  }
+  .nav__brand {
+    color: var(--ink);
     display: flex;
     align-items: center;
-    justify-content: center;
-    margin: 0 auto 32px;
-    font-family: 'Space Grotesk', sans-serif;
-    font-size: 42px;
-    font-weight: 600;
-    color: var(--red-deep);
-    box-shadow: 0 8px 24px rgba(196, 30, 58, 0.15), inset 0 1px 0 rgba(255, 255, 255, 0.9);
-    position: relative;
-    overflow: hidden;
-    letter-spacing: -0.04em;
+    gap: 0.6rem;
   }
-
-  .logo::before {
-    content: '';
-    position: absolute;
-    top: 0; left: 0; right: 0; height: 50%;
-    background: linear-gradient(180deg, rgba(255,255,255,0.4) 0%, transparent 100%);
-    pointer-events: none;
+  .nav__brand .dot {
+    width: 8px; height: 8px;
+    background: var(--sanguine);
+    display: inline-block;
+    border-radius: 50%;
+    box-shadow: 0 0 8px var(--oxblood-glow);
+    animation: pulse-dot 3s var(--ease-quiet) infinite;
   }
-
-  /* Typography */
-  .auth-title {
-    font-family: 'Space Grotesk', sans-serif;
-    font-size: 28px;
-    font-weight: 600;
-    color: var(--text-dark-red);
-    text-align: center;
-    margin-bottom: 8px;
-    letter-spacing: -0.02em;
+  @keyframes pulse-dot {
+    0%, 100% { opacity: 0.6; box-shadow: 0 0 6px var(--oxblood-glow); }
+    50% { opacity: 1; box-shadow: 0 0 14px var(--sanguine); }
   }
-
-  .auth-subtitle {
-    font-family: 'Manrope', sans-serif;
-    font-size: 14px;
-    color: var(--text-red);
-    text-align: center;
-    margin-bottom: 32px;
-    opacity: 0.8;
-  }
-
-  /* Toggle */
-  .auth-toggle {
+  .nav__items {
     display: flex;
-    background: rgba(255, 255, 255, 0.4);
-    border-radius: 12px;
-    padding: 4px;
-    margin-bottom: 32px;
+    gap: 2rem;
+  }
+  .nav__items a {
+    color: var(--ink-soft);
+    text-decoration: none;
+    transition: color 240ms var(--ease-precise);
     position: relative;
-    border: 1px solid var(--glass-border);
+  }
+  .nav__items a:hover { color: var(--ink); }
+  .nav__items a.is-current { color: var(--sanguine); }
+  .nav__items a.is-current::before {
+    content: ''; position: absolute; left: -12px; top: 50%;
+    width: 4px; height: 4px; background: var(--sanguine);
+    border-radius: 50%;
+    transform: translateY(-50%);
+  }
+  .nav__edit-hint {
+    font-family: var(--mono);
+    font-size: 10px;
+    color: var(--ink-faint);
+    letter-spacing: 0.12em;
+  }
+  .nav__edit-hint::before {
+    content: '◆';
+    color: var(--sanguine);
+    margin-right: 0.4rem;
+  }
+  @media (max-width: 980px) {
+    .nav__items { display: none; }
+    .nav__edit-hint { display: none; }
   }
 
-  .toggle-btn {
-    flex: 1;
-    padding: 10px 16px;
-    background: transparent;
-    border: none;
-    border-radius: 8px;
-    font-family: 'Space Grotesk', sans-serif;
-    font-size: 13px;
-    font-weight: 600;
-    color: var(--text-red);
-    cursor: pointer;
-    transition: color 0.3s ease;
-    position: relative;
-    z-index: 1;
-    letter-spacing: 0.02em;
-  }
-
-  .toggle-btn.active {
-    color: var(--text-white);
-  }
-
-  .toggle-slider {
-    position: absolute;
-    top: 4px;
-    left: 4px;
-    width: calc(50% - 4px);
-    height: calc(100% - 8px);
-    background: linear-gradient(135deg, var(--red-deep) 0%, var(--red-bright) 100%);
-    border-radius: 8px;
-    transition: transform 0.4s cubic-bezier(0.25, 1, 0.5, 1);
-    box-shadow: 0 4px 12px rgba(196, 30, 58, 0.3);
-  }
-
-  .toggle-slider.right {
-    transform: translateX(100%);
-  }
-
-  /* Form */
-  .auth-form {
+  /* ─────────────────────── FLOATING TOOL PALETTE ─────────────────────── */
+  .tools {
+    position: fixed;
+    right: 1.6rem;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 90;
+    padding: 1.2rem 1rem;
+    border-radius: 14px;
     display: flex;
     flex-direction: column;
-    gap: 20px;
+    gap: 0.8rem;
+    width: 240px;
+    font-family: var(--mono);
+    font-size: 10.5px;
+    letter-spacing: 0.06em;
   }
-
-  .input-group {
-    position: relative;
+  .tools__title {
+    color: var(--sanguine);
+    text-transform: uppercase;
+    letter-spacing: 0.14em;
+    font-size: 10px;
+    margin-bottom: 0.4rem;
+    display: flex; justify-content: space-between;
+    align-items: center;
   }
-
-  .input-field {
+  .tools__title .badge {
+    font-family: var(--mono);
+    font-size: 8px;
+    padding: 2px 6px;
+    background: rgba(185,55,55,0.15);
+    color: var(--sanguine);
+    border-radius: 2px;
+    letter-spacing: 0.1em;
+  }
+  .tools__section {
+    border-top: 1px solid var(--hairline);
+    padding-top: 0.8rem;
+  }
+  .tools__section:first-of-type { border-top: none; padding-top: 0; }
+  .tools__section-label {
+    color: var(--ink-faint);
+    text-transform: uppercase;
+    font-size: 9px;
+    letter-spacing: 0.14em;
+    margin-bottom: 0.6rem;
+  }
+  .tool-btn {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    padding: 0.55rem 0.7rem;
+    background: rgba(31,24,24,0.5);
+    border: 1px solid var(--hairline);
+    color: var(--ink-soft);
+    cursor: pointer;
+    font-family: var(--mono);
+    font-size: 10.5px;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    transition: all 280ms var(--ease-precise);
     width: 100%;
-    padding: 16px 20px;
-    background: rgba(255, 255, 255, 0.5);
-    border: 1px solid var(--glass-border);
-    border-radius: 14px;
-    font-family: 'Manrope', sans-serif;
-    font-size: 14px;
-    color: var(--text-dark-red);
+    text-align: left;
+    border-radius: 4px;
+  }
+  .tool-btn:hover {
+    background: rgba(122,31,31,0.2);
+    border-color: var(--oxblood);
+    color: var(--ink);
+  }
+  .tool-btn .glyph {
+    color: var(--sanguine);
+    font-size: 13px;
+    line-height: 1;
+  }
+  .tool-btn.is-primary {
+    background: linear-gradient(180deg, rgba(185,55,55,0.18), rgba(122,31,31,0.18));
+    border-color: rgba(185,55,55,0.3);
+    color: var(--ink);
+  }
+  .tool-btn.is-primary:hover {
+    background: linear-gradient(180deg, rgba(185,55,55,0.3), rgba(122,31,31,0.25));
+    border-color: var(--sanguine);
+  }
+  .tool-slider {
+    width: 100%;
+    -webkit-appearance: none;
+    appearance: none;
+    height: 2px;
+    background: var(--hairline);
     outline: none;
-    transition: all 0.3s ease;
-    backdrop-filter: blur(4px);
-    -webkit-backdrop-filter: blur(4px);
+    margin: 0.4rem 0;
   }
-
-  .input-field:focus {
-    background: rgba(255, 255, 255, 0.8);
-    border-color: var(--red-bright);
-    box-shadow: 0 0 0 4px rgba(255, 36, 0, 0.1);
-  }
-
-  .input-field::placeholder {
-    color: var(--text-muted);
-    font-weight: 400;
-  }
-
-  /* Submit Button */
-  .submit-btn {
-    width: 100%;
-    padding: 16px;
-    background: linear-gradient(135deg, var(--red-deep) 0%, var(--red-bright) 100%);
-    border: none;
-    border-radius: 14px;
-    color: var(--text-white);
-    font-family: 'Space Grotesk', sans-serif;
-    font-size: 15px;
-    font-weight: 600;
+  .tool-slider::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    width: 12px; height: 12px;
+    background: var(--sanguine);
+    border-radius: 50%;
     cursor: pointer;
-    transition: all 0.3s ease;
-    position: relative;
-    overflow: hidden;
-    box-shadow: 0 8px 24px rgba(196, 20, 58, 0.3);
-    margin-top: 8px;
-    letter-spacing: 0.02em;
+    box-shadow: 0 0 8px var(--oxblood-glow);
   }
-
-  .submit-btn:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 12px 32px rgba(196, 20, 58, 0.4);
-  }
-
-  .submit-btn:active {
-    transform: translateY(0);
-  }
-
-  .submit-btn::before {
-    content: '';
-    position: absolute;
-    top: 0; left: 0; right: 0; height: 50%;
-    background: linear-gradient(180deg, rgba(255,255,255,0.2) 0%, transparent 100%);
-    pointer-events: none;
-  }
-
-  /* Secondary Action */
-  .secondary-action {
-    text-align: center;
-    margin-top: 24px;
-    font-size: 13px;
-    color: var(--text-red);
-  }
-
-  .secondary-action button {
-    background: none;
-    border: none;
-    color: var(--red-bright);
-    font-family: 'Space Grotesk', sans-serif;
-    font-weight: 600;
+  .tool-slider::-moz-range-thumb {
+    width: 12px; height: 12px;
+    background: var(--sanguine);
+    border-radius: 50%;
     cursor: pointer;
-    padding: 0;
-    font-size: 13px;
-    transition: opacity 0.3s ease;
+    border: none;
+  }
+  .tools__value {
+    color: var(--sanguine);
+    font-size: 10px;
+    text-align: right;
+  }
+  .tools__hint {
+    font-family: var(--mono);
+    font-size: 9.5px;
+    color: var(--ink-faint);
+    line-height: 1.5;
+    margin-top: 0.6rem;
+    padding: 0.6rem;
+    background: rgba(31,24,24,0.4);
+    border-left: 2px solid var(--oxblood);
+  }
+  @media (max-width: 1080px) {
+    .tools {
+      position: fixed;
+      right: 1rem;
+      bottom: 1rem;
+      top: auto;
+      transform: none;
+      width: 220px;
+      padding: 1rem;
+    }
+  }
+  @media (max-width: 640px) {
+    .tools {
+      width: calc(100% - 2rem);
+      right: 1rem;
+      left: 1rem;
+    }
   }
 
-  .secondary-action button:hover {
-    opacity: 0.8;
-    text-decoration: underline;
-  }
-
-  /* Form State */
-  .form-section {
-    display: none;
-  }
-
-  .form-section.active {
-    display: block;
-    animation: fadeIn 0.5s ease forwards;
-  }
-
-  .hidden-field {
-    max-height: 0;
-    overflow: hidden;
+  /* Toast */
+  .toast {
+    position: fixed;
+    bottom: 2rem; left: 50%;
+    transform: translateX(-50%) translateY(20px);
+    background: var(--bg-glass);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid var(--oxblood);
+    color: var(--ink);
+    padding: 0.7rem 1.4rem;
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    z-index: 200;
     opacity: 0;
-    transition: max-height 0.5s ease, opacity 0.3s ease, margin 0.3s ease;
+    pointer-events: none;
+    transition: all 400ms var(--ease-quiet);
+    border-radius: 4px;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.4);
+  }
+  .toast.is-show {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+  }
+  .toast::before {
+    content: '◆';
+    color: var(--sanguine);
+    margin-right: 0.5rem;
+  }
+
+  /* ─────────────────────── LAYOUT ─────────────────────── */
+  section { position: relative; z-index: 2; }
+  .section {
+    padding: 8rem 2.4rem;
+    border-top: 1px solid var(--hairline);
+  }
+  .section--hero { padding-top: 11rem; border-top: none; }
+  @media (max-width: 768px) {
+    .section { padding: 5rem 1.4rem; }
+    .section--hero { padding-top: 7rem; }
+  }
+  .container { max-width: 1280px; margin: 0 auto; }
+  .container--narrow { max-width: 920px; margin: 0 auto; }
+
+  .section__head {
+    display: grid;
+    grid-template-columns: 90px 1fr;
+    gap: 2rem;
+    margin-bottom: 4rem;
+    align-items: baseline;
+  }
+  .section__index {
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 0.14em;
+    color: var(--sanguine);
+    text-transform: uppercase;
+  }
+  .section__title {
+    font-family: var(--serif);
+    font-weight: 400;
+    font-size: clamp(2.4rem, 5vw, 3.6rem);
+    line-height: 1.05;
+    letter-spacing: -0.015em;
+  }
+  .section__title em {
+    color: var(--sanguine);
+    font-style: italic;
+  }
+  @media (max-width: 600px) {
+    .section__head { grid-template-columns: 1fr; gap: 0.8rem; }
+  }
+
+  /* ─────────────────────── HERO ─────────────────────── */
+  .hero {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding: 8rem 2.4rem 3rem;
+  }
+  .hero__top {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    font-family: var(--mono);
+    font-size: 11.5px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--ink-soft);
+  }
+  .hero__top .meta-block { display: flex; flex-direction: column; gap: 0.3rem; }
+  .hero__top .meta-block strong { color: var(--ink); font-weight: 500; }
+  .hero__top .meta-block.right { text-align: right; }
+
+  .hero__center {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 4rem 0;
+  }
+
+  .hero__name {
+    font-family: var(--serif);
+    font-weight: 400;
+    font-size: clamp(3.5rem, 11vw, 9rem);
+    line-height: 0.92;
+    letter-spacing: -0.025em;
+    margin-bottom: 1.4rem;
+  }
+  .hero__name .line-mask { display: block; overflow: hidden; }
+  .hero__name .line {
+    display: block;
+    transform: translateY(110%);
+    transition: transform 1100ms var(--ease-quiet);
+  }
+  .hero__name .line.is-revealed { transform: translateY(0); }
+  .hero__name .italic {
+    font-style: italic;
+    color: var(--sanguine);
+  }
+
+  .hero__sub {
+    font-family: var(--sans);
+    font-weight: 300;
+    font-size: clamp(1rem, 1.4vw, 1.25rem);
+    color: var(--ink-soft);
+    max-width: 640px;
+    line-height: 1.6;
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 1000ms 700ms var(--ease-quiet), transform 1000ms 700ms var(--ease-quiet);
+  }
+  .hero__sub.is-revealed { opacity: 1; transform: translateY(0); }
+  .hero__sub em { color: var(--ink); font-style: normal; font-weight: 400; }
+
+  .hero__bottom {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--ink-faint);
+    padding-top: 2rem;
+    border-top: 1px solid var(--hairline);
+  }
+  .hero__bottom .scroll-hint {
+    display: flex; align-items: center; gap: 0.6rem;
+    color: var(--ink-soft);
+  }
+  .hero__bottom .scroll-hint::after {
+    content: ''; width: 24px; height: 1px; background: var(--sanguine);
+    animation: pulse-line 2.4s var(--ease-quiet) infinite;
+  }
+  @keyframes pulse-line {
+    0%, 100% { transform: scaleX(0.4); transform-origin: left; opacity: 0.5; }
+    50% { transform: scaleX(1); opacity: 1; }
+  }
+  @media (max-width: 768px) {
+    .hero__top { flex-direction: column; gap: 1rem; }
+    .hero__top .meta-block.right { text-align: left; }
+    .hero__bottom { flex-direction: column; gap: 0.8rem; align-items: flex-start; }
+  }
+
+  /* ─────────────────────── ABOUT ─────────────────────── */
+  .about__grid {
+    display: grid;
+    grid-template-columns: 1fr 1.4fr;
+    gap: 5rem;
+    align-items: start;
+  }
+  .about__portrait {
+    position: sticky;
+    top: 7rem;
+    aspect-ratio: 4/5;
+    background: var(--bg-card);
+    border: 1px dashed var(--oxblood);
+    overflow: hidden;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 360px;
+  }
+  .about__portrait .placeholder-text {
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--ink-faint);
+    text-align: center;
+    padding: 1.4rem;
+    line-height: 1.6;
+  }
+  .about__portrait .placeholder-text strong {
+    color: var(--sanguine);
+    display: block;
+    font-size: 13px;
+    margin-bottom: 0.4rem;
+  }
+  .about__portrait .caption {
+    position: absolute; bottom: 0; left: 0; right: 0;
+    padding: 0.8rem 1rem;
+    background: linear-gradient(to top, rgba(12,10,10,0.9), transparent);
+    font-family: var(--mono); font-size: 10px;
+    letter-spacing: 0.1em; text-transform: uppercase;
+    color: var(--ink-soft);
+    z-index: 2;
+  }
+
+  .about__body p {
+    font-size: 1.1rem;
+    line-height: 1.75;
+    margin-bottom: 1.6rem;
+    color: var(--ink);
+  }
+  .about__body p.lead {
+    font-family: var(--serif);
+    font-size: clamp(1.5rem, 2.4vw, 1.9rem);
+    line-height: 1.4;
+    letter-spacing: -0.01em;
+    margin-bottom: 2.4rem;
+    color: var(--ink);
+  }
+  .about__body p.lead em { color: var(--sanguine); font-style: italic; }
+
+  .about__meta {
+    margin-top: 3rem;
+    padding-top: 2rem;
+    border-top: 1px solid var(--hairline);
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.6rem 2rem;
+    font-family: var(--mono);
+    font-size: 11.5px;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+  }
+  .about__meta dt { color: var(--ink-faint); margin-bottom: 0.3rem; }
+  .about__meta dd { color: var(--ink); }
+
+  @media (max-width: 880px) {
+    .about__grid { grid-template-columns: 1fr; gap: 3rem; }
+    .about__portrait { position: relative; top: 0; max-width: 360px; }
+    .about__meta { grid-template-columns: 1fr; }
+  }
+
+  /* ─────────────────────── EDUCATION ─────────────────────── */
+  .edu__list { display: flex; flex-direction: column; }
+  .edu__row {
+    display: grid;
+    grid-template-columns: 180px 1fr 200px;
+    gap: 3rem;
+    padding: 2.6rem 0;
+    border-top: 1px solid var(--hairline);
+    position: relative;
+    transition: background 300ms var(--ease-precise);
+  }
+  .edu__row:last-child { border-bottom: 1px solid var(--hairline); }
+  .edu__row::before {
+    content: ''; position: absolute; left: 0; top: 0;
+    width: 2px; height: 0; background: var(--sanguine);
+    transition: height 600ms var(--ease-quiet);
+  }
+  .edu__row:hover::before { height: 100%; }
+  .edu__row:hover .edu__degree { color: var(--sanguine); }
+
+  .edu__year {
+    font-family: var(--mono);
+    font-size: 12px;
+    letter-spacing: 0.08em;
+    color: var(--ink-faint);
+    text-transform: uppercase;
+    padding-left: 1rem;
+  }
+  .edu__degree {
+    font-family: var(--serif);
+    font-size: 1.5rem;
+    line-height: 1.25;
+    color: var(--ink);
+    margin-bottom: 0.5rem;
+    letter-spacing: -0.01em;
+    transition: color 300ms var(--ease-precise);
+  }
+  .edu__inst { color: var(--ink-soft); font-size: 0.95rem; margin-bottom: 0.6rem; }
+  .edu__thesis {
+    font-style: italic;
+    color: var(--ink-soft);
+    font-size: 0.92rem;
+    line-height: 1.6;
+    max-width: 540px;
+  }
+  .edu__thesis .label {
+    font-style: normal;
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--ink-faint);
+    margin-right: 0.5rem;
+  }
+  .edu__loc {
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--ink-faint);
+    text-align: right;
+  }
+  @media (max-width: 760px) {
+    .edu__row { grid-template-columns: 1fr; gap: 0.6rem; padding: 2rem 0; }
+    .edu__year { padding-left: 0; }
+    .edu__loc { text-align: left; }
+  }
+
+  /* ─────────────────────── PHILOSOPHY ─────────────────────── */
+  .philo__grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 5rem;
+    align-items: start;
+  }
+  .philo__left { position: sticky; top: 8rem; }
+  .philo__left .label {
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--sanguine);
+    margin-bottom: 1.4rem;
+  }
+  .philo__left h2 {
+    font-family: var(--serif);
+    font-weight: 400;
+    font-size: clamp(2.2rem, 4.4vw, 3.4rem);
+    line-height: 1.05;
+    letter-spacing: -0.015em;
+    margin-bottom: 1.6rem;
+  }
+  .philo__left h2 em { color: var(--sanguine); font-style: italic; }
+  .philo__left .quote-mark {
+    font-family: var(--serif);
+    font-style: italic;
+    font-size: 5rem;
+    line-height: 0.6;
+    color: var(--oxblood-deep);
+    margin-bottom: 1rem;
+    display: block;
+  }
+  .philo__left .attribution {
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--ink-faint);
+    margin-top: 1.4rem;
+  }
+
+  .philo__right p {
+    font-size: 1.08rem;
+    line-height: 1.8;
+    color: var(--ink);
+    margin-bottom: 1.8rem;
+  }
+  .philo__right p:first-child::first-letter {
+    font-family: var(--serif);
+    font-size: 3.6rem;
+    line-height: 1;
+    float: left;
+    padding: 0.1rem 0.8rem 0 0;
+    color: var(--sanguine);
+    font-style: italic;
+  }
+  .philo__right p em { color: var(--sanguine); font-style: italic; }
+
+  .philo__pillars {
+    margin-top: 3rem;
+    padding-top: 2rem;
+    border-top: 1px solid var(--hairline);
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.6rem;
+  }
+  .philo__pillar { padding: 1.2rem 0; }
+  .philo__pillar .num {
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: 0.16em;
+    color: var(--sanguine);
+    margin-bottom: 0.6rem;
+  }
+  .philo__pillar h4 {
+    font-family: var(--serif);
+    font-weight: 400;
+    font-size: 1.15rem;
+    color: var(--ink);
+    margin-bottom: 0.4rem;
+  }
+  .philo__pillar p {
+    font-size: 0.9rem;
+    line-height: 1.6;
+    color: var(--ink-soft);
     margin: 0;
   }
 
-  .hidden-field.visible {
-    max-height: 80px;
-    opacity: 1;
+  @media (max-width: 880px) {
+    .philo__grid { grid-template-columns: 1fr; gap: 3rem; }
+    .philo__left { position: relative; top: 0; }
+    .philo__pillars { grid-template-columns: 1fr; }
   }
 
-  /* Keyframe Animations */
-  @keyframes fadeIn { 
-    from { opacity: 0; } 
-    to { opacity: 1; } 
+  /* ─────────────────────── VALUES ─────────────────────── */
+  .values__grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0;
+    border-top: 1px solid var(--hairline);
+    border-left: 1px solid var(--hairline);
   }
-  
-  @keyframes fadeUp { 
-    from { opacity: 0; transform: translateY(20px); } 
-    to { opacity: 1; transform: translateY(0); } 
+  .value {
+    padding: 2.6rem 2.2rem;
+    border-right: 1px solid var(--hairline);
+    border-bottom: 1px solid var(--hairline);
+    position: relative;
+    transition: background 360ms var(--ease-precise);
+    cursor: default;
   }
-  
-  @keyframes floatOrb {
-    0%, 100% { transform: translate(0, 0); }
-    25% { transform: translate(30px, 30px); }
-    50% { transform: translate(-20px, 40px); }
-    75% { transform: translate(20px, -30px); }
+  .value:hover { background: var(--bg-card); }
+  .value::before {
+    content: ''; position: absolute; top: 0; left: 0;
+    width: 0; height: 2px; background: var(--sanguine);
+    transition: width 600ms var(--ease-quiet);
+  }
+  .value:hover::before { width: 100%; }
+  .value__num {
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: 0.14em;
+    color: var(--sanguine);
+    margin-bottom: 1.2rem;
+  }
+  .value__title {
+    font-family: var(--serif);
+    font-weight: 400;
+    font-size: 1.7rem;
+    line-height: 1.2;
+    color: var(--ink);
+    margin-bottom: 1rem;
+    letter-spacing: -0.01em;
+  }
+  .value__title em { color: var(--sanguine); font-style: italic; }
+  .value__body {
+    font-size: 0.96rem;
+    line-height: 1.7;
+    color: var(--ink-soft);
+  }
+  @media (max-width: 720px) { .values__grid { grid-template-columns: 1fr; } }
+
+  /* ─────────────────────── CAREER ─────────────────────── */
+  .career__head-meta {
+    display: grid;
+    grid-template-columns: 180px 1fr 1fr 160px;
+    gap: 2rem;
+    padding: 1rem 0 1.4rem;
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--ink-faint);
+    border-bottom: 1px solid var(--hairline);
+  }
+  .career__head-meta span:nth-child(4) { text-align: right; }
+
+  .career__list { display: flex; flex-direction: column; position: relative; }
+  .career__row {
+    display: grid;
+    grid-template-columns: 180px 1fr 1fr 160px;
+    gap: 2rem;
+    padding: 2.2rem 0;
+    border-bottom: 1px solid var(--hairline);
+    position: relative;
+    transition: background 300ms var(--ease-precise);
+  }
+  .career__row::before {
+    content: ''; position: absolute; left: 0; top: 0;
+    width: 2px; height: 0; background: var(--sanguine);
+    transition: height 560ms var(--ease-quiet);
+  }
+  .career__row:hover::before { height: 100%; }
+  .career__row:hover .career__role { color: var(--sanguine); }
+
+  .career__years {
+    font-family: var(--mono);
+    font-size: 11.5px;
+    letter-spacing: 0.08em;
+    color: var(--ink-faint);
+    text-transform: uppercase;
+    padding-left: 1rem;
+    line-height: 1.5;
+  }
+  .career__years .current {
+    color: var(--sanguine);
+    display: inline-block;
+    margin-top: 0.3rem;
+  }
+  .career__years .current::before {
+    content: '●'; margin-right: 0.4rem; font-size: 8px;
+    vertical-align: middle;
+  }
+  .career__role {
+    font-family: var(--serif);
+    font-size: 1.4rem;
+    line-height: 1.25;
+    color: var(--ink);
+    margin-bottom: 0.4rem;
+    transition: color 300ms var(--ease-precise);
+    letter-spacing: -0.01em;
+  }
+  .career__inst { font-size: 0.92rem; color: var(--ink-soft); margin-bottom: 0.6rem; }
+  .career__inst .city {
+    font-family: var(--mono); font-size: 10.5px;
+    color: var(--ink-faint); margin-left: 0.6rem;
+    letter-spacing: 0.08em; text-transform: uppercase;
+  }
+  .career__detail { font-size: 0.92rem; line-height: 1.65; color: var(--ink-soft); }
+  .career__detail .tag {
+    display: inline-block;
+    font-family: var(--mono);
+    font-size: 9.5px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--sanguine);
+    margin-right: 0.5rem;
+  }
+  .career__type {
+    font-family: var(--mono);
+    font-size: 10.5px;
+    letter-spacing: 0.1em;
+    color: var(--ink-faint);
+    text-transform: uppercase;
+    text-align: right;
+  }
+  @media (max-width: 880px) {
+    .career__head-meta { display: none; }
+    .career__row { grid-template-columns: 1fr; gap: 0.6rem; padding: 1.8rem 0; }
+    .career__years { padding-left: 0; }
+    .career__type { text-align: left; }
   }
 
-  /* Responsive */
-  @media (max-width: 480px) {
-    .auth-card {
-      padding: 36px 24px;
-    }
-    .auth-title {
-      font-size: 24px;
-    }
+  /* ─────────────────────── SKILLS ─────────────────────── */
+  .skills__grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 4rem 5rem;
+  }
+  .skill-group__head {
+    display: flex;
+    align-items: baseline;
+    gap: 1rem;
+    margin-bottom: 1.4rem;
+    padding-bottom: 0.8rem;
+    border-bottom: 1px solid var(--hairline);
+  }
+  .skill-group__num {
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: 0.14em;
+    color: var(--sanguine);
+  }
+  .skill-group__title {
+    font-family: var(--serif);
+    font-weight: 400;
+    font-size: 1.3rem;
+    color: var(--ink);
+    letter-spacing: -0.01em;
+  }
+  .skill-group__count {
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: 0.1em;
+    color: var(--ink-faint);
+    margin-left: auto;
+  }
+  .skill-list { list-style: none; display: flex; flex-direction: column; }
+  .skill-list li {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 1rem;
+    padding: 0.6rem 0;
+    border-bottom: 1px dashed var(--hairline-soft);
+    font-size: 0.95rem;
+    color: var(--ink);
+    transition: color 300ms var(--ease-precise), padding-left 360ms var(--ease-quiet);
+    cursor: default;
+  }
+  .skill-list li:hover {
+    color: var(--sanguine);
+    padding-left: 0.6rem;
+  }
+  .skill-list li .level {
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: 0.1em;
+    color: var(--ink-faint);
+    text-transform: uppercase;
+  }
+  .skill-list li:hover .level { color: var(--sanguine); }
+
+  @media (max-width: 760px) { .skills__grid { grid-template-columns: 1fr; gap: 2.4rem; } }
+
+  /* ─────────────────────── COMMUNITY ─────────────────────── */
+  .community__grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 0;
+    border-top: 1px solid var(--hairline);
+    border-left: 1px solid var(--hairline);
+  }
+  .community__card {
+    padding: 2rem 1.8rem;
+    border-right: 1px solid var(--hairline);
+    border-bottom: 1px solid var(--hairline);
+    position: relative;
+    transition: background 360ms var(--ease-precise);
+  }
+  .community__card:hover { background: var(--bg-card); }
+  .community__card::before {
+    content: ''; position: absolute; top: 0; left: 0;
+    width: 0; height: 2px; background: var(--sanguine);
+    transition: width 560ms var(--ease-quiet);
+  }
+  .community__card:hover::before { width: 100%; }
+  .community__year {
+    font-family: var(--mono);
+    font-size: 10.5px;
+    letter-spacing: 0.12em;
+    color: var(--sanguine);
+    margin-bottom: 0.8rem;
+  }
+  .community__role {
+    font-family: var(--serif);
+    font-weight: 400;
+    font-size: 1.25rem;
+    line-height: 1.3;
+    color: var(--ink);
+    margin-bottom: 0.5rem;
+    letter-spacing: -0.01em;
+  }
+  .community__org { font-size: 0.88rem; color: var(--ink-soft); margin-bottom: 0.8rem; }
+  .community__body { font-size: 0.86rem; line-height: 1.6; color: var(--ink-soft); }
+  @media (max-width: 980px) { .community__grid { grid-template-columns: repeat(2, 1fr); } }
+  @media (max-width: 600px) { .community__grid { grid-template-columns: 1fr; } }
+
+  /* ─────────────────────── CERTIFICATIONS ─────────────────────── */
+  .certs__list { display: flex; flex-direction: column; }
+  .cert {
+    display: grid;
+    grid-template-columns: 90px 1fr 220px 140px;
+    gap: 2rem;
+    padding: 1.6rem 0;
+    border-bottom: 1px solid var(--hairline);
+    position: relative;
+    transition: background 300ms var(--ease-precise);
+    align-items: baseline;
+  }
+  .cert:first-child { border-top: 1px solid var(--hairline); }
+  .cert::before {
+    content: ''; position: absolute; left: 0; top: 0;
+    width: 2px; height: 0; background: var(--sanguine);
+    transition: height 500ms var(--ease-quiet);
+  }
+  .cert:hover::before { height: 100%; }
+  .cert:hover .cert__title { color: var(--sanguine); }
+
+  .cert__year {
+    font-family: var(--mono);
+    font-size: 11.5px;
+    letter-spacing: 0.08em;
+    color: var(--ink-faint);
+    text-transform: uppercase;
+    padding-left: 1rem;
+  }
+  .cert__title {
+    font-family: var(--serif);
+    font-size: 1.2rem;
+    line-height: 1.3;
+    color: var(--ink);
+    transition: color 300ms var(--ease-precise);
+    letter-spacing: -0.005em;
+  }
+  .cert__issuer { font-size: 0.9rem; color: var(--ink-soft); }
+  .cert__cred {
+    font-family: var(--mono);
+    font-size: 10.5px;
+    letter-spacing: 0.08em;
+    color: var(--ink-faint);
+    text-transform: uppercase;
+    text-align: right;
+  }
+  @media (max-width: 880px) {
+    .cert { grid-template-columns: 1fr; gap: 0.4rem; padding: 1.4rem 0; }
+    .cert__year { padding-left: 0; }
+    .cert__cred { text-align: left; }
+  }
+
+  /* ─────────────────────── REFERENCES ─────────────────────── */
+  .refs__grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 0;
+    border-top: 1px solid var(--hairline);
+    border-left: 1px solid var(--hairline);
+  }
+  .ref {
+    padding: 2.4rem 1.8rem;
+    border-right: 1px solid var(--hairline);
+    border-bottom: 1px solid var(--hairline);
+    position: relative;
+    transition: background 360ms var(--ease-precise);
+  }
+  .ref:hover { background: var(--bg-card); }
+  .ref::before {
+    content: ''; position: absolute; top: 0; left: 0;
+    width: 0; height: 2px; background: var(--sanguine);
+    transition: width 560ms var(--ease-quiet);
+  }
+  .ref:hover::before { width: 100%; }
+  .ref__name {
+    font-family: var(--serif);
+    font-weight: 400;
+    font-size: 1.5rem;
+    color: var(--ink);
+    margin-bottom: 0.4rem;
+    letter-spacing: -0.01em;
+  }
+  .ref__role { font-size: 0.92rem; color: var(--ink-soft); margin-bottom: 0.4rem; line-height: 1.4; }
+  .ref__inst {
+    font-family: var(--mono);
+    font-size: 10.5px;
+    letter-spacing: 0.08em;
+    color: var(--ink-faint);
+    text-transform: uppercase;
+    margin-bottom: 1.4rem;
+  }
+  .ref__contact {
+    font-family: var(--mono);
+    font-size: 11px;
+    line-height: 1.7;
+    color: var(--ink-soft);
+    word-break: break-word;
+  }
+  .ref__contact .label { color: var(--ink-faint); margin-right: 0.4rem; }
+  @media (max-width: 880px) { .refs__grid { grid-template-columns: 1fr; } }
+
+  /* ─────────────────────── FOOTER ─────────────────────── */
+  .footer {
+    padding: 4rem 2.4rem 2.4rem;
+    border-top: 1px solid var(--hairline);
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 2rem;
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--ink-faint);
+  }
+  .footer .col strong {
+    color: var(--ink); font-weight: 500;
+    display: block; margin-bottom: 0.4rem;
+  }
+  .footer .col p { line-height: 1.6; }
+  .footer .col.right { text-align: right; }
+  .footer__bottom {
+    grid-column: 1 / -1;
+    margin-top: 2.4rem;
+    padding-top: 1.4rem;
+    border-top: 1px solid var(--hairline-soft);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .footer__bottom .dot {
+    display: inline-block; width: 6px; height: 6px;
+    background: var(--sanguine); margin-right: 0.4rem;
+    vertical-align: middle;
+    box-shadow: 0 0 6px var(--oxblood-glow);
+  }
+  @media (max-width: 720px) {
+    .footer { grid-template-columns: 1fr; }
+    .footer .col.right { text-align: left; }
+    .footer__bottom { flex-direction: column; gap: 0.8rem; align-items: flex-start; }
+  }
+
+  /* Hidden file input */
+  #file-input { display: none; }
+
+  /* Add row button */
+  .add-row-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.6rem;
+    padding: 0.6rem 1rem;
+    background: transparent;
+    border: 1px dashed var(--oxblood);
+    color: var(--ink-soft);
+    cursor: pointer;
+    font-family: var(--mono);
+    font-size: 10.5px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    transition: all 280ms var(--ease-precise);
+    margin-top: 1.6rem;
+    border-radius: 2px;
+  }
+  .add-row-btn:hover {
+    border-color: var(--sanguine);
+    color: var(--sanguine);
+    background: rgba(185,55,55,0.06);
+  }
+  .add-row-btn .glyph { color: var(--sanguine); font-size: 14px; line-height: 1; }
+
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after { transition: none !important; animation: none !important; }
+    .hero__name .line, .hero__sub { opacity: 1; transform: none; }
   }
 </style>
 </head>
 <body>
 
-<div class="glass-bg"></div>
-<div class="orb orb-1"></div>
-<div class="orb orb-2"></div>
-<div class="orb orb-3"></div>
-
-<div class="auth-card">
-  <div class="auth-content">
-    
-    <!-- R Logo with white background -->
-    <div class="logo">R</div>
-    
-    <h1 class="auth-title" id="formTitle">Welcome Back</h1>
-    <p class="auth-subtitle" id="formSubtitle">Sign in to continue your learning</p>
-    
-    <!-- Toggle Switch -->
-    <div class="auth-toggle">
-      <div class="toggle-slider" id="toggleSlider"></div>
-      <button class="toggle-btn active" id="loginBtn">Sign In</button>
-      <button class="toggle-btn" id="signupBtn">Sign Up</button>
+<!-- ─────────────────────── NAV ─────────────────────── -->
+<nav class="nav">
+  <div class="nav__inner">
+    <div class="nav__brand">
+      <span class="dot"></span>
+      <span contenteditable="true" data-placeholder="Your Name">Adrian R. Vargas</span>
+      <span style="color:var(--ink-faint);margin:0 0.4rem;">—</span>
+      <span>Curriculum Vitae</span>
     </div>
-    
-    <!-- Login Form -->
-    <form class="auth-form form-section active" id="loginForm">
-      <div class="input-group">
-        <input type="email" class="input-field" placeholder="Email Address" required>
-      </div>
-      <div class="input-group">
-        <input type="password" class="input-field" placeholder="Password" required>
-      </div>
-      <button type="submit" class="submit-btn">Sign In</button>
-    </form>
-    
-    <!-- Sign Up Form -->
-    <form class="auth-form form-section" id="signupForm">
-      <div class="input-group">
-        <input type="text" class="input-field" placeholder="Full Name" required>
-      </div>
-      <div class="input-group">
-        <input type="email" class="input-field" placeholder="Email Address" required>
-      </div>
-      <div class="input-group">
-        <input type="password" class="input-field" placeholder="Create Password" required>
-      </div>
-      <button type="submit" class="submit-btn">Create Account</button>
-    </form>
-    
-    <p class="secondary-action">
-      <span id="secondaryText">Don't have an account?</span>
-      <button type="button" id="switchModeBtn">Sign up</button>
-    </p>
-    
+    <div class="nav__items">
+      <a href="#about">About</a>
+      <a href="#education">Education</a>
+      <a href="#philosophy">Philosophy</a>
+      <a href="#values">Values</a>
+      <a href="#career">Career</a>
+      <a href="#skills">Skills</a>
+      <a href="#community">Community</a>
+      <a href="#certifications">Certifications</a>
+      <a href="#references">References</a>
+    </div>
+    <div class="nav__edit-hint">Live editable · save with ⌘/Ctrl+S</div>
   </div>
-</div>
+</nav>
+
+<!-- ─────────────────────── FLOATING TOOL PALETTE ─────────────────────── -->
+<aside class="tools glass-panel" id="tools">
+  <div class="tools__title">
+    <span>Document Studio</span>
+    <span class="badge">LIVE</span>
+  </div>
+
+  <div class="tools__section">
+    <div class="tools__section-label">Portrait image</div>
+    <button class="tool-btn" id="btn-upload-portrait">
+      <span class="glyph">⊕</span>
+      <span>Upload portrait</span>
+    </button>
+    <button class="tool-btn" id="btn-clear-portrait">
+      <span class="glyph">⊘</span>
+      <span>Clear image</span>
+    </button>
+  </div>
+
+  <div class="tools__section">
+    <div class="tools__section-label">Document state</div>
+    <button class="tool-btn is-primary" id="btn-export">
+      <span class="glyph">↓</span>
+      <span>Export as JSON</span>
+    </button>
+    <button class="tool-btn" id="btn-import">
+      <span class="glyph">↑</span>
+      <span>Import JSON</span>
+    </button>
+    <button class="tool-btn" id="btn-print">
+      <span class="glyph">⎙</span>
+      <span>Print / PDF</span>
+    </button>
+  </div>
+
+  <div class="tools__section">
+    <div class="tools__section-label">Type scale · <span id="scale-value" style="color:var(--sanguine)">100%</span></div>
+    <input type="range" class="tool-slider" id="scale-slider" min="85" max="120" value="100" step="5">
+  </div>
+
+  <div class="tools__section">
+    <button class="tool-btn" id="btn-revert">
+      <span class="glyph">⟲</span>
+      <span>Revert to original</span>
+    </button>
+  </div>
+
+  <div class="tools__hint">
+    Every text on this page is editable. Click to type. Press Enter to add lines; Shift+Enter for line breaks.
+  </div>
+</aside>
+
+<input type="file" id="file-input" accept="image/*">
+
+<!-- ─────────────────────── HERO ─────────────────────── -->
+<header class="hero section--hero" id="top">
+  <div class="hero__top">
+    <div class="meta-block">
+      <span contenteditable="true" data-placeholder="Document type">Curriculum Vitae</span>
+      <strong contenteditable="true" data-placeholder="Volume / revision">Vol. 03 / Revised 2025</strong>
+    </div>
+    <div class="meta-block right">
+      <span contenteditable="true" data-placeholder="Filed from">Filed</span>
+      <strong contenteditable="true" data-placeholder="Location">Manila — Quezon City</strong>
+    </div>
+  </div>
+
+  <div class="hero__center">
+    <h1 class="hero__name">
+      <span class="line-mask"><span class="line" contenteditable="true" data-placeholder="First name(s)">Adrian R.</span></span>
+      <span class="line-mask"><span class="line italic" contenteditable="true" data-placeholder="Surname">Vargas</span></span>
+    </h1>
+    <p class="hero__sub" contenteditable="true" data-placeholder="One paragraph describing who you are and what you do.">
+      Educator, researcher, and program builder. <em>Fourteen years</em> inside classrooms, research labs, and public-sector training — most of them spent trying to make the institutions I worked for a little more honest, a little more patient, and a little more useful to the people they were meant to serve.
+    </p>
+  </div>
+
+  <div class="hero__bottom">
+    <div class="scroll-hint">Scroll to read</div>
+    <div contenteditable="true" data-placeholder="Footer hint">§ 01 — 09 · Document follows</div>
+  </div>
+</header>
+
+<!-- ─────────────────────── 01 · ABOUT ─────────────────────── -->
+<section class="section" id="about">
+  <div class="container">
+    <div class="section__head">
+      <div class="section__index">§ 01</div>
+      <h2 class="section__title"><span contenteditable="true" data-placeholder="Section title">Background</span> <em>—</em> <span contenteditable="true" data-placeholder="Subtitle">a brief accounting.</span></h2>
+    </div>
+
+    <div class="about__grid">
+      <aside class="about__portrait upload-zone" id="portrait-zone">
+        <div class="placeholder-text">
+          <strong>Drop image here</strong>
+          or click to upload<br>
+          <span style="font-size:9px;opacity:0.7;">JPG · PNG · WEBP</span>
+        </div>
+        <div class="caption" contenteditable="true" data-placeholder="Caption (optional)">Photographed at the faculty lounge, Diliman · 2024</div>
+      </aside>
+
+      <div class="about__body">
+        <p class="lead" contenteditable="true" data-placeholder="Lead paragraph — set the tone.">
+          I was born in <em>San Fernando, La Union</em>, the son of a public-school teacher and a municipal clerk. Most of what I know about teaching I learned from watching my mother grade papers at the kitchen table until midnight — and from the slow, patient criticism of mentors who took me seriously long before I had earned the right to be taken seriously.
+        </p>
+
+        <p contenteditable="true" data-placeholder="Body paragraph.">
+          My work sits at the intersection of teacher education, curriculum studies, and applied development research. I have spent the last decade teaching pre-service and in-service teachers, building research programs inside the College of Education, and advising public-sector partners on the messy, unglamorous work of curriculum reform. I am not interested in innovation as a slogan — only in the slow accumulation of small improvements that survive the year after they are introduced.
+        </p>
+
+        <p contenteditable="true" data-placeholder="Body paragraph.">
+          I currently hold a faculty appointment at the <em>University of the Philippines Diliman</em>, where I teach graduate courses in curriculum theory, foundations of education, and qualitative research methods. I direct a small research cell that studies teacher career trajectories in basic education, with field sites in Regions I and Cordillera. I write for a handful of peer-reviewed journals; I am not a frequent conference-goer; I prefer long documents to short ones.
+        </p>
+
+        <p contenteditable="true" data-placeholder="Personal note (optional).">
+          Outside of work I read slowly, walk further than I should, and keep a small garden in Quezon City that has survived three summers and my inattention.
+        </p>
+
+        <dl class="about__meta">
+          <div><dt contenteditable="true" data-placeholder="Label">Born</dt><dd contenteditable="true" data-placeholder="Value">San Fernando, La Union · 1984</dd></div>
+          <div><dt contenteditable="true" data-placeholder="Label">Based</dt><dd contenteditable="true" data-placeholder="Value">Quezon City, Metro Manila</dd></div>
+          <div><dt contenteditable="true" data-placeholder="Label">Languages</dt><dd contenteditable="true" data-placeholder="Value">English, Filipino, Ilocano</dd></div>
+          <div><dt contenteditable="true" data-placeholder="Label">Reading now</dt><dd contenteditable="true" data-placeholder="Value">Mathew Lipon — "The Just Community"</dd></div>
+        </dl>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ─────────────────────── 02 · EDUCATION ─────────────────────── -->
+<section class="section" id="education">
+  <div class="container">
+    <div class="section__head">
+      <div class="section__index">§ 02</div>
+      <h2 class="section__title"><span contenteditable="true">Educational</span> <em>background.</em></h2>
+    </div>
+
+    <div class="edu__list" id="edu-list">
+      <div class="edu__row">
+        <div class="edu__year" contenteditable="true" data-placeholder="Year range">2014 — 2018</div>
+        <div class="edu__main">
+          <div class="edu__degree" contenteditable="true" data-placeholder="Degree">Doctor of Philosophy in Education</div>
+          <div class="edu__inst" contenteditable="true" data-placeholder="Institution">University of the Philippines — Diliman</div>
+          <div class="edu__thesis" contenteditable="true" data-placeholder="Thesis / note">
+            <span class="label">Dissertation</span>
+            "Staying: A Narrative Study of Long-Tenure Rural Teachers in the Ilocos Region, 1985–2015"
+          </div>
+        </div>
+        <div class="edu__loc" contenteditable="true" data-placeholder="Location">Quezon City · PH</div>
+      </div>
+
+      <div class="edu__row">
+        <div class="edu__year" contenteditable="true">2009 — 2011</div>
+        <div class="edu__main">
+          <div class="edu__degree" contenteditable="true">Master of Arts in Education (Curriculum Studies)</div>
+          <div class="edu__inst" contenteditable="true">Ateneo de Manila University</div>
+          <div class="edu__thesis" contenteditable="true">
+            <span class="label">Thesis</span>
+            "Curriculum as Bureaucracy: A Reading of the 2002 Basic Education Reform from the Teacher's Desk"
+          </div>
+        </div>
+        <div class="edu__loc" contenteditable="true">Quezon City · PH</div>
+      </div>
+
+      <div class="edu__row">
+        <div class="edu__year" contenteditable="true">2002 — 2006</div>
+        <div class="edu__main">
+          <div class="edu__degree" contenteditable="true">Bachelor of Secondary Education, <em>magna cum laude</em></div>
+          <div class="edu__inst" contenteditable="true">Saint Louis University — Baguio City</div>
+          <div class="edu__thesis" contenteditable="true">
+            <span class="label">Undergraduate paper</span>
+            "Practicum Reflections: Teaching Social Studies at a Provincial High School"
+          </div>
+        </div>
+        <div class="edu__loc" contenteditable="true">Baguio City · PH</div>
+      </div>
+
+      <div class="edu__row">
+        <div class="edu__year" contenteditable="true">1998 — 2002</div>
+        <div class="edu__main">
+          <div class="edu__degree" contenteditable="true">Secondary Education — Academic Track</div>
+          <div class="edu__inst" contenteditable="true">La Union National High School</div>
+          <div class="edu__thesis" contenteditable="true">
+            <span class="label">Note</span>
+            Valedictorian, Class of 2002. First in family to attend university.
+          </div>
+        </div>
+        <div class="edu__loc" contenteditable="true">San Fernando · PH</div>
+      </div>
+    </div>
+
+    <button class="add-row-btn" data-target="edu-list" data-template="edu">
+      <span class="glyph">+</span> Add education row
+    </button>
+  </div>
+</section>
+
+<!-- ─────────────────────── 03 · PHILOSOPHY ─────────────────────── -->
+<section class="section" id="philosophy">
+  <div class="container">
+    <div class="philo__grid">
+      <div class="philo__left">
+        <div class="label" contenteditable="true">§ 03 — Philosophy</div>
+        <span class="quote-mark">"</span>
+        <h2 contenteditable="true" data-placeholder="Core belief, set in serif.">
+          I do not<br>believe in <em>teaching</em><br>— I believe in <em>being taught.</em>
+        </h2>
+        <div class="attribution" contenteditable="true" data-placeholder="Attribution / date">— Working note, 2021</div>
+      </div>
+
+      <div class="philo__right">
+        <p contenteditable="true" data-placeholder="Opening paragraph of your philosophy.">
+          My teaching practice is built on a single, stubborn conviction: that the most important thing a teacher does is consent to be changed by the people in front of them. The classroom is not a delivery channel. It is a small, temporary public — a place where, for fifty minutes, we agree to think out loud together and accept the risk that we will leave the room different from how we entered.
+        </p>
+
+        <p contenteditable="true">
+          I was trained in a tradition that took curriculum seriously as <em>a moral document</em>, not a technical one. The syllabus is a claim about what matters. The reading list is a claim about whose minds count. The assessment rubric is a claim about what kind of person we are trying to produce. None of these are neutral — and the moment a teacher forgets that, the classroom becomes a small bureaucracy of unexamined habits.
+        </p>
+
+        <p contenteditable="true">
+          I am suspicious of the language of "excellence" when it is unattached to a particular good. I prefer the older word — <em>virtue</em> — because it carries the implication of practice, of failure, of patience. Excellence sounds like a trophy; virtue sounds like a habit you keep.
+        </p>
+
+        <p contenteditable="true">
+          In practice, this means I write syllabi that are shorter than my colleagues', grade fewer assignments than the rubric expects, and ask my students to write more than I will ever return feedback on. I trust the surplus. I trust that the work they do that I never see is more important than the work I see.
+        </p>
+
+        <div class="philo__pillars">
+          <div class="philo__pillar">
+            <div class="num" contenteditable="true">Pillar 01</div>
+            <h4 contenteditable="true">Patience over pace.</h4>
+            <p contenteditable="true">The curriculum does not have to be "covered." It has to be encountered. I would rather teach one essay carefully than five essays briskly.</p>
+          </div>
+          <div class="philo__pillar">
+            <div class="num" contenteditable="true">Pillar 02</div>
+            <h4 contenteditable="true">Honesty over polish.</h4>
+            <p contenteditable="true">I tell my students when a reading does not work, when an assignment is poorly designed, when I have changed my mind. They can tell the difference.</p>
+          </div>
+          <div class="philo__pillar">
+            <div class="num" contenteditable="true">Pillar 03</div>
+            <h4 contenteditable="true">Service over prestige.</h4>
+            <p contenteditable="true">The work a teacher does for an institution should be visible mainly to the institution. The work that matters most is rarely the work that gets cited.</p>
+          </div>
+          <div class="philo__pillar">
+            <div class="num" contenteditable="true">Pillar 04</div>
+            <h4 contenteditable="true">Repair over invention.</h4>
+            <p contenteditable="true">Most of what we need already exists and is broken. I prefer to fix what is there than to design what is new for the sake of newness.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ─────────────────────── 04 · VALUES ─────────────────────── -->
+<section class="section" id="values">
+  <div class="container">
+    <div class="section__head">
+      <div class="section__index">§ 04</div>
+      <h2 class="section__title"><span contenteditable="true">Values</span> <em>—</em> <span contenteditable="true">what I will and will not do.</span></h2>
+    </div>
+
+    <div class="values__grid" id="values-grid">
+      <div class="value">
+        <div class="value__num" contenteditable="true">V — 01</div>
+        <h3 class="value__title" contenteditable="true">Care <em>is</em> a method.</h3>
+        <p class="value__body" contenteditable="true">I do not treat care as a soft addition to instruction. The attention I pay to a student's name, to their previous writing, to the particular shape of their confusion — that <em>is</em> the instruction. Method without care is bureaucracy.</p>
+      </div>
+      <div class="value">
+        <div class="value__num" contenteditable="true">V — 02</div>
+        <h3 class="value__title" contenteditable="true">Plain speech.</h3>
+        <p class="value__body" contenteditable="true">I avoid jargon when ordinary words will do. The reason most policy documents are unreadable is not that the ideas are hard but that the writers are protecting themselves from being held accountable for what they said.</p>
+      </div>
+      <div class="value">
+        <div class="value__num" contenteditable="true">V — 03</div>
+        <h3 class="value__title" contenteditable="true">No invisible <em>labour.</em></h3>
+        <p class="value__body" contenteditable="true">I name the people who did the work. Graduate students who co-authored are listed as co-authors. Research assistants who shaped the analysis are credited in the methods section. The first-author byline is not a trophy case.</p>
+      </div>
+      <div class="value">
+        <div class="value__num" contenteditable="true">V — 04</div>
+        <h3 class="value__title" contenteditable="true">Decline work that cannot be done well.</h3>
+        <p class="value__body" contenteditable="true">I have learned to say no to invitations, commissions, and "quick" advisory roles where the timeline or budget does not permit the standard of work I would want attached to my name. A polite refusal is more honest than a thin deliverable.</p>
+      </div>
+      <div class="value">
+        <div class="value__num" contenteditable="true">V — 05</div>
+        <h3 class="value__title" contenteditable="true">Field before desk.</h3>
+        <p class="value__body" contenteditable="true">When the fieldwork and the literature disagree, I trust the fieldwork first and re-read the literature. The reverse order is how a great deal of bad policy gets written.</p>
+      </div>
+      <div class="value">
+        <div class="value__num" contenteditable="true">V — 06</div>
+        <h3 class="value__title" contenteditable="true">Refuse <em>vanity.</em></h3>
+        <p class="value__body" contenteditable="true">I do not maintain a personal brand. I do not post photographs of the classrooms I teach in. I do not give inspirational keynote talks. The work is what I am willing to be remembered by, and nothing else.</p>
+      </div>
+    </div>
+
+    <button class="add-row-btn" data-target="values-grid" data-template="value">
+      <span class="glyph">+</span> Add value
+    </button>
+  </div>
+</section>
+
+<!-- ─────────────────────── 05 · CAREER ─────────────────────── -->
+<section class="section" id="career">
+  <div class="container">
+    <div class="section__head">
+      <div class="section__index">§ 05</div>
+      <h2 class="section__title"><span contenteditable="true">Career development</span> <em>—</em> <span contenteditable="true">a progression.</span></h2>
+    </div>
+
+    <div class="career__head-meta">
+      <span>Years</span>
+      <span>Appointment</span>
+      <span>Detail</span>
+      <span>Type</span>
+    </div>
+
+    <div class="career__list" id="career-list">
+
+      <div class="career__row">
+        <div class="career__years" contenteditable="true">2023 — present<br><span class="current">current</span></div>
+        <div>
+          <div class="career__role" contenteditable="true">Associate Professor & Director, Teacher Trajectories Research Cell</div>
+          <div class="career__inst" contenteditable="true">University of the Philippines Diliman — College of Education<span class="city">Quezon City</span></div>
+          <div class="career__detail" contenteditable="true">
+            <span class="tag">Lead</span>
+            Founded and now direct a four-person research cell studying the career decisions of basic-education teachers in regional field sites. Lead investigator on a multi-year study of teacher retention in the Cordillera Administrative Region.
+          </div>
+        </div>
+        <div>
+          <div class="career__detail" contenteditable="true">
+            <span class="tag">Teaching</span>
+            Graduate seminars: <em>Curriculum Theory</em>, <em>Foundations of Education</em>, <em>Qualitative Research Methods</em>. Doctoral advising for seven candidates.
+          </div>
+        </div>
+        <div class="career__type" contenteditable="true">Tenured · Full-time</div>
+      </div>
+
+      <div class="career__row">
+        <div class="career__years" contenteditable="true">2019 — 2023</div>
+        <div>
+          <div class="career__role" contenteditable="true">Assistant Professor (Tenure-Track → Tenured)</div>
+          <div class="career__inst" contenteditable="true">University of the Philippines Diliman<span class="city">Quezon City</span></div>
+          <div class="career__detail" contenteditable="true">
+            <span class="tag">Promoted</span> Granted tenure in 2022. Served as Graduate Program Coordinator for the MA in Curriculum Studies program from 2021 to 2023.
+          </div>
+        </div>
+        <div>
+          <div class="career__detail" contenteditable="true">
+            <span class="tag">Research</span>
+            Principal investigator, <em>"Teachers Who Stay"</em> — a three-year narrative study of rural teacher retention.
+          </div>
+        </div>
+        <div class="career__type" contenteditable="true">Tenured · Full-time</div>
+      </div>
+
+      <div class="career__row">
+        <div class="career__years" contenteditable="true">2014 — 2019</div>
+        <div>
+          <div class="career__role" contenteditable="true">Instructor I → Assistant Professor</div>
+          <div class="career__inst" contenteditable="true">University of the Philippines Diliman<span class="city">Quezon City</span></div>
+          <div class="career__detail" contenteditable="true">
+            <span class="tag">Joined</span> Hired as Instructor I upon completion of doctoral coursework; promoted to Assistant Professor in 2017.
+          </div>
+        </div>
+        <div>
+          <div class="career__detail" contenteditable="true">
+            <span class="tag">Load</span> Undergraduate foundations courses; supervised pre-service teaching practicums in partner schools across NCR and Region IV-A.
+          </div>
+        </div>
+        <div class="career__type" contenteditable="true">Probationary → Tenure-track</div>
+      </div>
+
+      <div class="career__row">
+        <div class="career__years" contenteditable="true">2011 — 2014</div>
+        <div>
+          <div class="career__role" contenteditable="true">Senior Research Assistant</div>
+          <div class="career__inst" contenteditable="true">Philippine Social Science Council — Education Research Unit<span class="city">Quezon City</span></div>
+          <div class="career__detail" contenteditable="true">
+            <span class="tag">Supported</span> Field research assistant on three externally funded projects on basic education reform. Co-authored two working papers and one peer-reviewed article.
+          </div>
+        </div>
+        <div>
+          <div class="career__detail" contenteditable="true">
+            <span class="tag">Concurrent</span> Completed doctoral coursework on a reduced load; defended dissertation proposal in 2013.
+          </div>
+        </div>
+        <div class="career__type" contenteditable="true">Full-time · Research</div>
+      </div>
+
+      <div class="career__row">
+        <div class="career__years" contenteditable="true">2006 — 2009</div>
+        <div>
+          <div class="career__role" contenteditable="true">Secondary Teacher — Social Studies</div>
+          <div class="career__inst" contenteditable="true">La Union National High School — Department of Education<span class="city">San Fernando</span></div>
+          <div class="career__detail" contenteditable="true">
+            <span class="tag">Field</span> Three-year classroom assignment teaching Araling Panlipunan to Grades 7–9. Adviser, student government. Coached the school's debate team to a regional finals appearance in 2008.
+          </div>
+        </div>
+        <div>
+          <div class="career__detail" contenteditable="true">
+            <span class="tag">Recognition</span> Division-level award for Outstanding Secondary Teacher, 2008.
+          </div>
+        </div>
+        <div class="career__type" contenteditable="true">Plantilla · Public school</div>
+      </div>
+
+    </div>
+
+    <button class="add-row-btn" data-target="career-list" data-template="career">
+      <span class="glyph">+</span> Add career entry
+    </button>
+  </div>
+</section>
+
+<!-- ─────────────────────── 06 · SKILLS ─────────────────────── -->
+<section class="section" id="skills">
+  <div class="container">
+    <div class="section__head">
+      <div class="section__index">§ 06</div>
+      <h2 class="section__title"><span contenteditable="true">Key skills</span> <em>—</em> <span contenteditable="true">what I have actually done long enough to be useful at.</span></h2>
+    </div>
+
+    <div class="skills__grid" id="skills-grid">
+
+      <div class="skill-group">
+        <div class="skill-group__head">
+          <span class="skill-group__num" contenteditable="true">A — 01</span>
+          <span class="skill-group__title" contenteditable="true">Teaching & Instruction</span>
+          <span class="skill-group__count" contenteditable="true">06 items</span>
+        </div>
+        <ul class="skill-list">
+          <li><span contenteditable="true">Graduate seminar facilitation</span><span class="level" contenteditable="true">14 yrs</span></li>
+          <li><span contenteditable="true">Pre-service teacher supervision</span><span class="level" contenteditable="true">12 yrs</span></li>
+          <li><span contenteditable="true">Curriculum design — graduate level</span><span class="level" contenteditable="true">09 yrs</span></li>
+          <li><span contenteditable="true">Curriculum design — undergraduate</span><span class="level" contenteditable="true">11 yrs</span></li>
+          <li><span contenteditable="true">Large-lecture facilitation (100+)</span><span class="level" contenteditable="true">06 yrs</span></li>
+          <li><span contenteditable="true">Doctoral advising & committee work</span><span class="level" contenteditable="true">07 yrs</span></li>
+        </ul>
+      </div>
+
+      <div class="skill-group">
+        <div class="skill-group__head">
+          <span class="skill-group__num" contenteditable="true">A — 02</span>
+          <span class="skill-group__title" contenteditable="true">Research Methods</span>
+          <span class="skill-group__count" contenteditable="true">07 items</span>
+        </div>
+        <ul class="skill-list">
+          <li><span contenteditable="true">Narrative & life-history inquiry</span><span class="level" contenteditable="true">Specialist</span></li>
+          <li><span contenteditable="true">Qualitative coding (manual & software)</span><span class="level" contenteditable="true">Expert</span></li>
+          <li><span contenteditable="true">Ethnographic field methods</span><span class="level" contenteditable="true">Advanced</span></li>
+          <li><span contenteditable="true">Policy document analysis</span><span class="level" contenteditable="true">Advanced</span></li>
+          <li><span contenteditable="true">Mixed-methods design</span><span class="level" contenteditable="true">Working</span></li>
+          <li><span contenteditable="true">Survey instrument design</span><span class="level" contenteditable="true">Working</span></li>
+          <li><span contenteditable="true">Research ethics review (IRB)</span><span class="level" contenteditable="true">Advanced</span></li>
+        </ul>
+      </div>
+
+      <div class="skill-group">
+        <div class="skill-group__head">
+          <span class="skill-group__num" contenteditable="true">A — 03</span>
+          <span class="skill-group__title" contenteditable="true">Programme & Institutional Work</span>
+          <span class="skill-group__count" contenteditable="true">05 items</span>
+        </div>
+        <ul class="skill-list">
+          <li><span contenteditable="true">Graduate program coordination</span><span class="level" contenteditable="true">03 yrs</span></li>
+          <li><span contenteditable="true">External curriculum review</span><span class="level" contenteditable="true">04 engagements</span></li>
+          <li><span contenteditable="true">Research cell founding & direction</span><span class="level" contenteditable="true">02 yrs</span></li>
+          <li><span contenteditable="true">External grant management</span><span class="level" contenteditable="true">05 grants</span></li>
+          <li><span contenteditable="true">Department-level academic planning</span><span class="level" contenteditable="true">04 yrs</span></li>
+        </ul>
+      </div>
+
+      <div class="skill-group">
+        <div class="skill-group__head">
+          <span class="skill-group__num" contenteditable="true">A — 04</span>
+          <span class="skill-group__title" contenteditable="true">Writing, Tools, Languages</span>
+          <span class="skill-group__count" contenteditable="true">08 items</span>
+        </div>
+        <ul class="skill-list">
+          <li><span contenteditable="true">Academic prose (English)</span><span class="level" contenteditable="true">Primary</span></li>
+          <li><span contenteditable="true">Academic prose (Filipino)</span><span class="level" contenteditable="true">Working</span></li>
+          <li><span contenteditable="true">Editorial & peer review</span><span class="level" contenteditable="true">07 yrs</span></li>
+          <li><span contenteditable="true">NVivo, Atlas.ti, MAXQDA</span><span class="level" contenteditable="true">Expert</span></li>
+          <li><span contenteditable="true">Reference management — Zotero, EndNote</span><span class="level" contenteditable="true">Expert</span></li>
+          <li><span contenteditable="true">Plain-text scholarly workflow (LaTeX, Markdown)</span><span class="level" contenteditable="true">Advanced</span></li>
+          <li><span contenteditable="true">Ilocano — written & spoken</span><span class="level" contenteditable="true">Native</span></li>
+          <li><span contenteditable="true">Conversational Hokkien</span><span class="level" contenteditable="true">Basic</span></li>
+        </ul>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ─────────────────────── 07 · COMMUNITY ─────────────────────── -->
+<section class="section" id="community">
+  <div class="container">
+    <div class="section__head">
+      <div class="section__index">§ 07</div>
+      <h2 class="section__title"><span contenteditable="true">Extracurricular &</span> <em>community engagement.</em></h2>
+    </div>
+
+    <div class="community__grid" id="community-grid">
+
+      <div class="community__card">
+        <div class="community__year" contenteditable="true">2022 — present</div>
+        <div class="community__role" contenteditable="true">Volunteer Mentor</div>
+        <div class="community__org" contenteditable="true">Pathways to Higher Education — Manila</div>
+        <div class="community__body" contenteditable="true">Mentor first-generation undergraduate applicants from provincial public high schools through the college admissions process. Currently advising four students.</div>
+      </div>
+
+      <div class="community__card">
+        <div class="community__year" contenteditable="true">2020 — present</div>
+        <div class="community__role" contenteditable="true">Reader & Fact-Checker</div>
+        <div class="community__org" contenteditable="true">Rappler Talk Education (occasional)</div>
+        <div class="community__body" contenteditable="true">Ad-hoc reviewer of education-related commentary for factual accuracy and conceptual framing before publication. Unpaid, occasional.</div>
+      </div>
+
+      <div class="community__card">
+        <div class="community__year" contenteditable="true">2019 — 2023</div>
+        <div class="community__role" contenteditable="true">Board Member</div>
+        <div class="community__org" contenteditable="true">La Union Literacy Foundation</div>
+        <div class="community__body" contenteditable="true">Provincial literacy NGO serving adult learners and out-of-school youth in La Union. Stepped down in 2023 after two terms; remain an informal adviser.</div>
+      </div>
+
+      <div class="community__card">
+        <div class="community__year" contenteditable="true">2018 — present</div>
+        <div class="community__role" contenteditable="true">Volunteer Tutor</div>
+        <div class="community__org" contenteditable="true">Community of Readers, Diliman</div>
+        <div class="community__body" contenteditable="true">Saturday-morning reading circle with grade-school children at a barangay reading centre in Pansol, Quezon City. Twelve sessions a year, when in town.</div>
+      </div>
+
+      <div class="community__card">
+        <div class="community__year" contenteditable="true">2015 — 2018</div>
+        <div class="community__role" contenteditable="true">Debate Coach (Volunteer)</div>
+        <div class="community__org" contenteditable="true">San Fernando City National High School Debate Club</div>
+        <div class="community__body" contenteditable="true">Coached the school debate team that I had once been a member of. Took the team to two regional finals and one national semifinal.</div>
+      </div>
+
+      <div class="community__card">
+        <div class="community__year" contenteditable="true">2013 — present</div>
+        <div class="community__role" contenteditable="true">Lay Reader & Sunday School Teacher</div>
+        <div class="community__org" contenteditable="true">United Church of Christ in the Philippines — San Fernando, La Union</div>
+        <div class="community__body" contenteditable="true">Occasional lay reader; regular Sunday school teacher for the senior high group. On leave of absence from Sunday teaching while in residency in Diliman.</div>
+      </div>
+
+    </div>
+
+    <button class="add-row-btn" data-target="community-grid" data-template="community">
+      <span class="glyph">+</span> Add community engagement
+    </button>
+  </div>
+</section>
+
+<!-- ─────────────────────── 08 · CERTIFICATIONS ─────────────────────── -->
+<section class="section" id="certifications">
+  <div class="container">
+    <div class="section__head">
+      <div class="section__index">§ 08</div>
+      <h2 class="section__title"><span contenteditable="true">Certifications, trainings &</span> <em>seminars.</em></h2>
+    </div>
+
+    <div class="certs__list" id="certs-list">
+
+      <div class="cert">
+        <div class="cert__year" contenteditable="true">2024</div>
+        <div class="cert__title" contenteditable="true">Protecting Human Subjects in Educational Research — IRB Certification</div>
+        <div class="cert__issuer" contenteditable="true">University of the Philippines — National Institutes of Health</div>
+        <div class="cert__cred" contenteditable="true">Ref. IRB-2024-0417</div>
+      </div>
+
+      <div class="cert">
+        <div class="cert__year" contenteditable="true">2023</div>
+        <div class="cert__title" contenteditable="true">Advanced Qualitative Data Analysis with NVivo 14</div>
+        <div class="cert__issuer" contenteditable="true">QSR International — Online Intensive</div>
+        <div class="cert__cred" contenteditable="true">40 contact hrs</div>
+      </div>
+
+      <div class="cert">
+        <div class="cert__year" contenteditable="true">2022</div>
+        <div class="cert__title" contenteditable="true">Seminar — Decolonising the Curriculum: Implications for Philippine Basic Education</div>
+        <div class="cert__issuer" contenteditable="true">Philippine Educational Research Association</div>
+        <div class="cert__cred" contenteditable="true">Attended · 16 hrs</div>
+      </div>
+
+      <div class="cert">
+        <div class="cert__year" contenteditable="true">2021</div>
+        <div class="cert__title" contenteditable="true">Training — Mixed Methods Research Design in Education</div>
+        <div class="cert__issuer" contenteditable="true">University of Melbourne — Online Certificate</div>
+        <div class="cert__cred" contenteditable="true">Cert. MMRE-21-118</div>
+      </div>
+
+      <div class="cert">
+        <div class="cert__year" contenteditable="true">2020</div>
+        <div class="cert__title" contenteditable="true">Licensure Examination for Professional Teachers (LEPT)</div>
+        <div class="cert__issuer" contenteditable="true">Board of Professional Teachers — PRC</div>
+        <div class="cert__cred" contenteditable="true">Lic. No. 187432 · Rating 89.4</div>
+      </div>
+
+      <div class="cert">
+        <div class="cert__year" contenteditable="true">2019</div>
+        <div class="cert__title" contenteditable="true">Seminar Series — Curriculum, Pedagogy, and Assessment in the K–12 Era</div>
+        <div class="cert__issuer" contenteditable="true">SEAMEO INNOTECH — Quezon City</div>
+        <div class="cert__cred" contenteditable="true">Attended · 24 hrs</div>
+      </div>
+
+      <div class="cert">
+        <div class="cert__year" contenteditable="true">2018</div>
+        <div class="cert__title" contenteditable="true">Training — Narrative Inquiry in Educational Research</div>
+        <div class="cert__issuer" contenteditable="true">Ateneo de Manila — Dept. of Education</div>
+        <div class="cert__cred" contenteditable="true">36 contact hrs</div>
+      </div>
+
+      <div class="cert">
+        <div class="cert__year" contenteditable="true">2016</div>
+        <div class="cert__title" contenteditable="true">Seminar — Research Ethics in Fieldwork with Minors</div>
+        <div class="cert__issuer" contenteditable="true">Philippine Social Science Council</div>
+        <div class="cert__cred" contenteditable="true">Attended · 12 hrs</div>
+      </div>
+
+    </div>
+
+    <button class="add-row-btn" data-target="certs-list" data-template="cert">
+      <span class="glyph">+</span> Add certification
+    </button>
+  </div>
+</section>
+
+<!-- ─────────────────────── 09 · REFERENCES ─────────────────────── -->
+<section class="section" id="references">
+  <div class="container">
+    <div class="section__head">
+      <div class="section__index">§ 09</div>
+      <h2 class="section__title"><span contenteditable="true">Character</span> <em>references.</em></h2>
+    </div>
+
+    <div class="refs__grid" id="refs-grid">
+
+      <div class="ref">
+        <div class="ref__name" contenteditable="true">Dr. Lourdes M. Buenaventura</div>
+        <div class="ref__role" contenteditable="true">Professor Emeritus, Curriculum Studies</div>
+        <div class="ref__inst" contenteditable="true">University of the Philippines Diliman</div>
+        <div class="ref__contact">
+          <div><span class="label">Email</span><span contenteditable="true">lmbuenaventura@up.edu.ph</span></div>
+          <div><span class="label">Tel</span><span contenteditable="true">+63 2 8981 8500 loc. 4231</span></div>
+          <div><span class="label">Relation</span><span contenteditable="true">Doctoral adviser, colleague</span></div>
+        </div>
+      </div>
+
+      <div class="ref">
+        <div class="ref__name" contenteditable="true">Hon. Roberto A. Esteban</div>
+        <div class="ref__role" contenteditable="true">Former Schools Division Superintendent</div>
+        <div class="ref__inst" contenteditable="true">DepEd — La Union Division (retired 2022)</div>
+        <div class="ref__contact">
+          <div><span class="label">Email</span><span contenteditable="true">raesteban.del@gmail.com</span></div>
+          <div><span class="label">Mobile</span><span contenteditable="true">+63 917 540 2218</span></div>
+          <div><span class="label">Relation</span><span contenteditable="true">Supervisor, mentor since 2006</span></div>
+        </div>
+      </div>
+
+      <div class="ref">
+        <div class="ref__name" contenteditable="true">Prof. Carmela S. Tan</div>
+        <div class="ref__role" contenteditable="true">Director, Education Research Unit</div>
+        <div class="ref__inst" contenteditable="true">Philippine Social Science Council</div>
+        <div class="ref__contact">
+          <div><span class="label">Email</span><span contenteditable="true">cstan@pssc.org.ph</span></div>
+          <div><span class="label">Tel</span><span contenteditable="true">+63 2 8929 4781</span></div>
+          <div><span class="label">Relation</span><span contenteditable="true">Former direct supervisor, 2011–14</span></div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ─────────────────────── FOOTER ─────────────────────── -->
+<footer class="footer">
+  <div class="col">
+    <strong contenteditable="true">Document</strong>
+    <p contenteditable="true">Curriculum Vitae<br>Adrian R. Vargas<br>Vol. 03 — Revised April 2025</p>
+  </div>
+  <div class="col">
+    <strong contenteditable="true">Availability</strong>
+    <p contenteditable="true">Open to external reviews, doctoral committee invitations, and slow, well-scoped advisory work. Not available for one-off speaking engagements or unpaid consulting.</p>
+  </div>
+  <div class="col right">
+    <strong contenteditable="true">Address</strong>
+    <p contenteditable="true">College of Education<br>University of the Philippines<br>Diliman, Quezon City 1101</p>
+  </div>
+  <div class="footer__bottom">
+    <div><span class="dot"></span><span contenteditable="true">End of document · § 09 / 09</span></div>
+    <div contenteditable="true">Set in Instrument Serif & Inter · Quezon City · 2025</div>
+  </div>
+</footer>
 
 <script>
-  const loginBtn = document.getElementById('loginBtn');
-  const signupBtn = document.getElementById('signupBtn');
-  const loginForm = document.getElementById('loginForm');
-  const signupForm = document.getElementById('signupForm');
-  const toggleSlider = document.getElementById('toggleSlider');
-  const formTitle = document.getElementById('formTitle');
-  const formSubtitle = document.getElementById('formSubtitle');
-  const secondaryText = document.getElementById('secondaryText');
-  const switchModeBtn = document.getElementById('switchModeBtn');
+(function() {
+  'use strict';
 
-  function switchMode(mode) {
-    if (mode === 'login') {
-      loginBtn.classList.add('active');
-      signupBtn.classList.remove('active');
-      toggleSlider.classList.remove('right');
-      loginForm.classList.add('active');
-      signupForm.classList.remove('active');
-      formTitle.textContent = 'Welcome Back';
-      formSubtitle.textContent = 'Sign in to continue your learning';
-      secondaryText.textContent = "Don't have an account?";
-      switchModeBtn.textContent = 'Sign up';
-    } else {
-      signupBtn.classList.add('active');
-      loginBtn.classList.remove('active');
-      toggleSlider.classList.add('right');
-      signupForm.classList.add('active');
-      loginForm.classList.remove('active');
-      formTitle.textContent = 'Create Account';
-      formSubtitle.textContent = 'Start your learning journey today';
-      secondaryText.textContent = 'Already have an account?';
-      switchModeBtn.textContent = 'Sign in';
+  const toast = (msg) => {
+    let t = document.querySelector('.toast');
+    if (!t) {
+      t = document.createElement('div');
+      t.className = 'toast';
+      document.body.appendChild(t);
     }
+    t.textContent = msg;
+    t.classList.add('is-show');
+    clearTimeout(t._timer);
+    t._timer = setTimeout(() => t.classList.remove('is-show'), 2400);
+  };
+
+  /* ─── Hero three-line reveal ─── */
+  document.fonts.ready.then(() => {
+    const lines = document.querySelectorAll('.hero__name .line');
+    lines.forEach((line, i) => {
+      setTimeout(() => line.classList.add('is-revealed'), 180 + i * 130);
+    });
+    setTimeout(() => {
+      document.querySelector('.hero__sub')?.classList.add('is-revealed');
+    }, 620);
+  });
+
+  /* ─── Active nav item on scroll ─── */
+  const navLinks = document.querySelectorAll('.nav__items a');
+  const sections = document.querySelectorAll('section[id]');
+  if (sections.length && navLinks.length) {
+    const navIO = new IntersectionObserver((entries) => {
+      entries.forEach(e => {
+        if (e.isIntersecting) {
+          const id = e.target.id;
+          navLinks.forEach(l => {
+            l.classList.toggle('is-current', l.getAttribute('href') === '#' + id);
+          });
+        }
+      });
+    }, { rootMargin: '-40% 0px -55% 0px' });
+    sections.forEach(s => navIO.observe(s));
   }
 
-  loginBtn.addEventListener('click', () => switchMode('login'));
-  signupBtn.addEventListener('click', () => switchMode('signup'));
-  switchModeBtn.addEventListener('click', () => {
-    if (loginForm.classList.contains('active')) {
-      switchMode('signup');
-    } else {
-      switchMode('login');
+  /* ─── Portrait upload (click + drop) ─── */
+  const portraitZone = document.getElementById('portrait-zone');
+  const fileInput = document.getElementById('file-input');
+  const placeholderText = portraitZone.querySelector('.placeholder-text');
+
+  const readImage = (file) => {
+    if (!file || !file.type.startsWith('image/')) {
+      toast('Image file required');
+      return;
+    }
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      portraitZone.style.backgroundImage = `url(${e.target.result})`;
+      portraitZone.classList.add('has-image');
+      if (placeholderText) placeholderText.style.display = 'none';
+      toast('Portrait uploaded');
+    };
+    reader.readAsDataURL(file);
+  };
+
+  portraitZone.addEventListener('click', (e) => {
+    if (e.target.classList.contains('caption')) return;
+    fileInput.click();
+  });
+  fileInput.addEventListener('change', (e) => {
+    if (e.target.files[0]) readImage(e.target.files[0]);
+    e.target.value = '';
+  });
+  portraitZone.addEventListener('dragover', (e) => {
+    e.preventDefault();
+    portraitZone.classList.add('is-dragover');
+  });
+  portraitZone.addEventListener('dragleave', () => portraitZone.classList.remove('is-dragover'));
+  portraitZone.addEventListener('drop', (e) => {
+    e.preventDefault();
+    portraitZone.classList.remove('is-dragover');
+    if (e.dataTransfer.files[0]) readImage(e.dataTransfer.files[0]);
+  });
+
+  /* ─── Clear portrait ─── */
+  document.getElementById('btn-clear-portrait').addEventListener('click', () => {
+    portraitZone.style.backgroundImage = '';
+    portraitZone.classList.remove('has-image');
+    if (placeholderText) placeholderText.style.display = '';
+    toast('Portrait cleared');
+  });
+
+  /* ─── Trigger portrait upload from button ─── */
+  document.getElementById('btn-upload-portrait').addEventListener('click', () => {
+    fileInput.click();
+  });
+
+  /* ─── Export to JSON ─── */
+  document.getElementById('btn-export').addEventListener('click', () => {
+    const data = {
+      meta: {
+        exported: new Date().toISOString(),
+        version: 'blooddonut-1.0'
+      },
+      content: {}
+    };
+    document.querySelectorAll('[contenteditable="true"]').forEach((el, i) => {
+      const key = `field_${i}`;
+      data.content[key] = el.innerHTML;
+    });
+    const portrait = portraitZone.style.backgroundImage;
+    if (portrait) data.portrait = portrait.slice(5, -2); // strip url()
+    const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(blob);
+    a.download = 'blooddonut-cv.json';
+    a.click();
+    URL.revokeObjectURL(a.href);
+    toast('JSON exported');
+  });
+
+  /* ─── Import from JSON ─── */
+  document.getElementById('btn-import').addEventListener('click', () => {
+    const input = document.createElement('input');
+    input.type = 'file';
+    input.accept = '.json,application/json';
+    input.onchange = (e) => {
+      const file = e.target.files[0];
+      if (!file) return;
+      const reader = new FileReader();
+      reader.onload = (ev) => {
+        try {
+          const data = JSON.parse(ev.target.result);
+          const fields = document.querySelectorAll('[contenteditable="true"]');
+          const keys = Object.keys(data.content || {});
+          fields.forEach((el, i) => {
+            if (data.content[`field_${i}`] !== undefined) {
+              el.innerHTML = data.content[`field_${i}`];
+            }
+          });
+          if (data.portrait) {
+            portraitZone.style.backgroundImage = `url(${data.portrait})`;
+            portraitZone.classList.add('has-image');
+            if (placeholderText) placeholderText.style.display = 'none';
+          }
+          toast('Document imported');
+        } catch (err) {
+          toast('Invalid JSON file');
+        }
+      };
+      reader.readAsText(file);
+    };
+    input.click();
+  });
+
+  /* ─── Print ─── */
+  document.getElementById('btn-print').addEventListener('click', () => {
+    window.print();
+  });
+
+  /* ─── Type scale slider ─── */
+  const slider = document.getElementById('scale-slider');
+  const scaleValue = document.getElementById('scale-value');
+  slider.addEventListener('input', (e) => {
+    const v = e.target.value;
+    document.documentElement.style.fontSize = `${v}%`;
+    scaleValue.textContent = `${v}%`;
+  });
+
+  /* ─── Revert to original ─── */
+  document.getElementById('btn-revert').addEventListener('click', () => {
+    if (!confirm('Revert to the original placeholder content? All edits will be lost.')) return;
+    location.reload();
+  });
+
+  /* ─── Add row buttons ─── */
+  const templates = {
+    'edu': `<div class="edu__row">
+      <div class="edu__year" contenteditable="true" data-placeholder="Year range">YYYY — YYYY</div>
+      <div class="edu__main">
+        <div class="edu__degree" contenteditable="true" data-placeholder="Degree">Degree / Programme</div>
+        <div class="edu__inst" contenteditable="true" data-placeholder="Institution">Institution</div>
+        <div class="edu__thesis" contenteditable="true"><span class="label">Note</span> Description</div>
+      </div>
+      <div class="edu__loc" contenteditable="true" data-placeholder="Location">Location</div>
+    </div>`,
+    'value': `<div class="value">
+      <div class="value__num" contenteditable="true">V — 07</div>
+      <h3 class="value__title" contenteditable="true">A new value.</h3>
+      <p class="value__body" contenteditable="true">Describe the value and the practice it commits you to.</p>
+    </div>`,
+    'career': `<div class="career__row">
+      <div class="career__years" contenteditable="true">YYYY — YYYY</div>
+      <div>
+        <div class="career__role" contenteditable="true">Role / Title</div>
+        <div class="career__inst" contenteditable="true">Institution<span class="city">Location</span></div>
+        <div class="career__detail" contenteditable="true"><span class="tag">Tag</span> Description of work.</div>
+      </div>
+      <div><div class="career__detail" contenteditable="true"><span class="tag">Tag</span> Additional detail.</div></div>
+      <div class="career__type" contenteditable="true">Type</div>
+    </div>`,
+    'community': `<div class="community__card">
+      <div class="community__year" contenteditable="true">YYYY — present</div>
+      <div class="community__role" contenteditable="true">Role</div>
+      <div class="community__org" contenteditable="true">Organisation</div>
+      <div class="community__body" contenteditable="true">Description of the engagement and what it involved.</div>
+    </div>`,
+    'cert': `<div class="cert">
+      <div class="cert__year" contenteditable="true">YYYY</div>
+      <div class="cert__title" contenteditable="true">Certification title</div>
+      <div class="cert__issuer" contenteditable="true">Issuing body</div>
+      <div class="cert__cred" contenteditable="true">Credential ID</div>
+    </div>`
+  };
+
+  document.querySelectorAll('.add-row-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const target = document.getElementById(btn.dataset.target);
+      const tpl = templates[btn.dataset.template];
+      if (target && tpl) {
+        const tmp = document.createElement('div');
+        tmp.innerHTML = tpl.trim();
+        target.appendChild(tmp.firstChild);
+        toast('Row added — click to edit');
+      }
+    });
+  });
+
+  /* ─── Ctrl/Cmd + S to export ─── */
+  document.addEventListener('keydown', (e) => {
+    if ((e.ctrlKey || e.metaKey) && e.key === 's') {
+      e.preventDefault();
+      document.getElementById('btn-export').click();
     }
   });
 
-  // Prevent actual form submission for this demo
-  [loginForm, signupForm].forEach(form => {
-    form.addEventListener('submit', (e) => {
-      e.preventDefault();
-      const btn = form.querySelector('.submit-btn');
-      const originalText = btn.textContent;
-      btn.textContent = 'Loading...';
-      btn.disabled = true;
-      setTimeout(() => {
-        btn.textContent = originalText;
-        btn.disabled = false;
-      }, 1500);
-    });
-  });
+  /* ─── Reduced motion fallback ─── */
+  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    document.querySelectorAll('.hero__name .line, .hero__sub')
+      .forEach(el => el.classList.add('is-revealed'));
+  }
+})();
 </script>
 
 </body>
