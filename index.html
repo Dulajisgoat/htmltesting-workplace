@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Jordan Ellis — Resume</title>
+<title>CV Template</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,400;9..144,500;9..144,600&family=Work+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
@@ -19,9 +19,9 @@
     --sanguine:#7A2027;
     --sanguine-bright:#B03A3F;
     --sanguine-deep:#4E1519;
-    --glass-fill: linear-gradient(180deg, rgba(255,255,255,0.06), rgba(255,255,255,0.015));
-    --glass-border: rgba(255,255,255,0.10);
-    --glass-shadow: 0 20px 60px rgba(0,0,0,0.45), inset 0 1px 0 rgba(255,255,255,0.07);
+    --glass-fill: linear-gradient(180deg, rgba(255,255,255,0.07), rgba(255,255,255,0.015));
+    --glass-border: rgba(255,255,255,0.12);
+    --glass-shadow: 0 24px 70px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255,255,255,0.09);
   }
 
   *{ box-sizing:border-box; }
@@ -34,20 +34,18 @@
     font-family:'Work Sans', -apple-system, BlinkMacSystemFont, sans-serif;
     line-height:1.6;
     -webkit-font-smoothing:antialiased;
-    position:relative;
   }
 
   ::selection{ background:var(--sanguine-deep); color:var(--ink); }
-
   h1,h2,h3{ font-family:'Fraunces', Georgia, serif; font-weight:500; margin:0; color:var(--ink); }
   a{ color:inherit; }
 
   /* ---------- ambient background ---------- */
 
   .bg-blobs{ position:fixed; inset:0; z-index:-2; overflow:hidden; }
-  .blob{ position:absolute; border-radius:50%; filter:blur(100px); }
+  .blob{ position:absolute; border-radius:50%; filter:blur(110px); }
   .blob-1{ width:56vw; height:56vw; max-width:760px; max-height:760px; background:radial-gradient(circle, var(--sanguine-deep) 0%, transparent 68%); top:-16%; right:-14%; opacity:.65; animation:drift1 46s ease-in-out infinite alternate; }
-  .blob-2{ width:44vw; height:44vw; max-width:620px; max-height:620px; background:radial-gradient(circle, rgba(122,32,39,0.4) 0%, transparent 70%); bottom:-18%; left:-10%; opacity:.55; animation:drift2 54s ease-in-out infinite alternate; }
+  .blob-2{ width:44vw; height:44vw; max-width:620px; max-height:620px; background:radial-gradient(circle, rgba(122,32,39,0.42) 0%, transparent 70%); bottom:-18%; left:-10%; opacity:.55; animation:drift2 54s ease-in-out infinite alternate; }
   @keyframes drift1{ from{ transform:translate(0,0); } to{ transform:translate(-70px,50px); } }
   @keyframes drift2{ from{ transform:translate(0,0); } to{ transform:translate(60px,-40px); } }
 
@@ -56,14 +54,25 @@
     background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>");
   }
 
-  /* ---------- glass primitive ---------- */
+  /* ---------- glass primitive (liquid / glossy) ---------- */
 
   .glass{
+    position:relative; overflow:hidden;
     background:var(--glass-fill);
-    -webkit-backdrop-filter: blur(22px) saturate(150%);
-    backdrop-filter: blur(22px) saturate(150%);
+    -webkit-backdrop-filter: blur(28px) saturate(165%);
+    backdrop-filter: blur(28px) saturate(165%);
     border:1px solid var(--glass-border);
     box-shadow:var(--glass-shadow);
+  }
+  .glass::before{
+    content:""; position:absolute; top:-45%; left:-15%; width:140%; height:65%;
+    background:linear-gradient(120deg, rgba(255,255,255,0.20) 0%, rgba(255,255,255,0) 55%);
+    transform:rotate(-9deg); pointer-events:none;
+  }
+  .glass::after{
+    content:""; position:absolute; inset:0; border-radius:inherit;
+    box-shadow:inset 0 0 0 1px rgba(255,255,255,0.03), inset 0 -30px 40px -30px rgba(122,32,39,0.25);
+    pointer-events:none;
   }
 
   .wrap{ max-width:1180px; margin:0 auto; padding:0 48px; position:relative; }
@@ -81,21 +90,20 @@
     cursor:pointer; transition:background .35s ease, transform .35s ease, box-shadow .35s ease;
   }
   .rail button:hover{ background:var(--ink-dim); }
-  .rail button.active{ background:var(--sanguine-bright); transform:scale(1.7); box-shadow:0 0 10px rgba(176,58,63,0.7); }
+  .rail button.active{ background:var(--sanguine-bright); transform:scale(1.7); box-shadow:0 0 12px rgba(176,58,63,0.8); }
   @media (max-width:860px){ .rail{ display:none; } }
 
   .toolbar{
-    position:fixed; top:22px; right:22px; z-index:60;
-    display:flex; align-items:center; gap:6px;
-    padding:8px 8px 8px 16px; border-radius:999px;
+    position:fixed; top:22px; right:22px; z-index:60; border-radius:999px;
+    display:flex; align-items:center; gap:6px; padding:8px 8px 8px 16px;
   }
   .toolbar span.hint{ font-size:12.5px; color:var(--ink-dim); margin-right:6px; white-space:nowrap; }
   .toolbar button{
     all:unset; cursor:pointer; font-family:'Work Sans',sans-serif; font-size:12.5px; color:var(--ink);
-    padding:8px 14px; border-radius:999px; background:rgba(255,255,255,0.05); border:1px solid var(--line);
+    padding:8px 14px; border-radius:999px; background:rgba(255,255,255,0.06); border:1px solid var(--line);
     transition:background .25s, border-color .25s;
   }
-  .toolbar button:hover{ background:rgba(176,58,63,0.18); border-color:var(--sanguine-bright); }
+  .toolbar button:hover{ background:rgba(176,58,63,0.2); border-color:var(--sanguine-bright); }
   @media (max-width:640px){ .toolbar span.hint{ display:none; } }
 
   main{ padding-left:58px; }
@@ -105,31 +113,29 @@
   section:last-of-type{ border-bottom:none; }
   @media (max-width:860px){ section{ padding:76px 0; } }
 
-  .kicker{ font-family:'Fraunces', serif; font-style:italic; font-weight:400; font-size:15px; color:var(--sanguine-bright); margin-bottom:18px; display:block; }
-  .section-head{ font-size:clamp(30px, 3.6vw, 44px); line-height:1.15; max-width:640px; margin-bottom:52px; }
+  .kicker{ font-family:'Fraunces', serif; font-style:italic; font-weight:400; font-size:15px; color:var(--sanguine-bright); margin-bottom:12px; display:block; }
+  .section-hint{ font-size:14.5px; color:var(--ink-faint); max-width:52ch; margin-bottom:48px; font-weight:300; }
 
-  /* ---------- editable affordance ---------- */
+  /* ---------- editable / placeholder fields ---------- */
 
-  [contenteditable="true"]{ border-radius:6px; outline-offset:4px; transition:background .2s ease; cursor:text; }
-  [contenteditable="true"]:hover{ background:rgba(176,58,63,0.07); }
-  [contenteditable="true"]:focus{ outline:1px dashed var(--sanguine-bright); background:rgba(176,58,63,0.09); }
+  [contenteditable="true"]{ border-radius:7px; outline-offset:4px; transition:background .2s ease; cursor:text; }
+  [contenteditable="true"]:hover{ background:rgba(176,58,63,0.08); }
+  [contenteditable="true"]:focus{ outline:1px dashed var(--sanguine-bright); background:rgba(176,58,63,0.1); }
+  [contenteditable="true"]:empty:before{ content:attr(data-placeholder); color:var(--ink-faint); font-style:italic; pointer-events:none; }
 
   /* ---------- hero ---------- */
 
   #hero{ min-height:92vh; display:flex; flex-direction:column; justify-content:center; padding:150px 0 100px; }
 
-  .hero-card{ border-radius:28px; padding:56px clamp(28px,5vw,64px); position:relative; overflow:hidden; }
-  .hero-card::before{
-    content:""; position:absolute; top:0; left:0; right:0; height:1px;
-    background:linear-gradient(90deg, transparent, rgba(255,255,255,0.5), transparent);
-  }
+  .hero-card{ border-radius:30px; padding:56px clamp(28px,5vw,64px); }
 
   .hero-top{ display:flex; align-items:center; gap:26px; margin-bottom:38px; flex-wrap:wrap; }
 
   .avatar-upload{
     width:88px; height:88px; border-radius:50%; flex:none; position:relative; cursor:pointer;
-    border:1.5px dashed rgba(255,255,255,0.28); display:flex; align-items:center; justify-content:center;
-    background:rgba(255,255,255,0.03); overflow:hidden; transition:border-color .25s;
+    border:1.5px dashed rgba(255,255,255,0.3); display:flex; align-items:center; justify-content:center;
+    background:radial-gradient(circle at 30% 25%, rgba(255,255,255,0.09), rgba(255,255,255,0.01) 60%);
+    overflow:hidden; transition:border-color .25s;
   }
   .avatar-upload:hover{ border-color:var(--sanguine-bright); }
   .avatar-upload img{ width:100%; height:100%; object-fit:cover; display:none; }
@@ -140,24 +146,25 @@
 
   .eyebrow-line{ display:flex; align-items:center; gap:14px; color:var(--ink-dim); font-size:14px; }
   .eyebrow-line .rule{ width:34px; height:1px; background:var(--sanguine); }
+  .eyebrow-line [contenteditable]{ min-width:160px; }
 
   .hero-name{ font-size:clamp(46px, 7.4vw, 96px); line-height:0.98; letter-spacing:-0.01em; max-width:900px; }
+  .hero-name [contenteditable]{ display:inline-block; min-width:1ch; }
   .hero-name em{ font-style:italic; color:var(--sanguine-bright); }
 
-  .hero-role{ margin-top:24px; font-size:clamp(17px, 1.8vw, 21px); color:var(--ink-dim); max-width:560px; font-weight:300; }
+  .hero-role{ margin-top:24px; font-size:clamp(17px, 1.8vw, 21px); color:var(--ink-dim); max-width:560px; font-weight:300; min-height:1.6em; }
 
   .hero-meta{ margin-top:44px; display:flex; flex-wrap:wrap; gap:14px; font-size:14px; color:var(--ink-faint); align-items:center; }
-  .hero-meta a{ color:var(--ink-dim); text-decoration:none; }
-  .meta-pill{ padding:8px 14px; border-radius:999px; background:rgba(255,255,255,0.04); border:1px solid var(--line); }
+  .meta-pill{ padding:8px 14px; border-radius:999px; background:rgba(255,255,255,0.045); border:1px solid var(--line); min-width:70px; }
 
   .cv-upload{
     display:inline-flex; align-items:center; gap:8px; cursor:pointer; padding:8px 16px 8px 12px;
-    border-radius:999px; background:rgba(255,255,255,0.04); border:1px dashed rgba(255,255,255,0.25);
+    border-radius:999px; background:rgba(255,255,255,0.045); border:1px dashed rgba(255,255,255,0.28);
     font-size:13px; color:var(--ink-dim); transition:border-color .25s, background .25s;
   }
-  .cv-upload:hover{ border-color:var(--sanguine-bright); background:rgba(176,58,63,0.1); }
+  .cv-upload:hover{ border-color:var(--sanguine-bright); background:rgba(176,58,63,0.12); }
   .cv-upload.filled{ border-style:solid; border-color:var(--glass-border); }
-  .cv-upload svg{ width:14px; height:14px; flex:none; opacity:.8; }
+  .cv-upload svg{ width:14px; height:14px; flex:none; opacity:.85; }
   .cv-remove{ all:unset; cursor:pointer; color:var(--ink-faint); font-size:14px; padding:0 2px; }
   .cv-remove:hover{ color:var(--sanguine-bright); }
 
@@ -165,10 +172,10 @@
 
   .two-col{ display:grid; grid-template-columns:0.85fr 1.15fr; gap:80px; }
   @media (max-width:860px){ .two-col{ grid-template-columns:1fr; gap:32px; } }
-
-  .lede{ font-family:'Fraunces', serif; font-weight:400; font-size:26px; line-height:1.5; max-width:36ch; }
+  .lede{ font-family:'Fraunces', serif; font-weight:400; font-size:26px; line-height:1.5; max-width:36ch; min-height:1.6em; }
   .body-copy{ color:var(--ink-dim); font-size:16.5px; max-width:56ch; }
-  .body-copy p + p{ margin-top:18px; }
+  .body-copy [contenteditable]{ display:block; min-height:1.6em; }
+  .body-copy [contenteditable] + [contenteditable]{ margin-top:18px; }
 
   /* ---------- education ---------- */
 
@@ -176,27 +183,27 @@
   .ed-item{ display:grid; grid-template-columns:150px 1fr; gap:32px; padding:28px 0; border-top:1px solid var(--line-soft); }
   .ed-list .ed-item:last-child{ border-bottom:1px solid var(--line-soft); }
   @media (max-width:640px){ .ed-item{ grid-template-columns:1fr; gap:8px; } }
-  .ed-years{ color:var(--sanguine-bright); font-size:14px; font-family:'Fraunces', serif; font-style:italic; padding-top:3px; }
-  .ed-degree{ font-size:19px; font-family:'Fraunces', serif; margin-bottom:6px; }
-  .ed-school{ color:var(--ink-dim); font-size:15px; }
+  .ed-years{ color:var(--sanguine-bright); font-size:14px; font-family:'Fraunces', serif; font-style:italic; padding-top:3px; min-height:1.4em; }
+  .ed-degree{ font-size:19px; font-family:'Fraunces', serif; margin-bottom:6px; min-height:1.4em; }
+  .ed-school{ color:var(--ink-dim); font-size:15px; min-height:1.4em; }
 
   /* ---------- philosophy ---------- */
 
   .philosophy-quote{
     font-family:'Fraunces', serif; font-weight:400; font-style:italic; font-size:clamp(23px, 2.8vw, 30px);
-    line-height:1.5; max-width:24ch; border-left:2px solid var(--sanguine); padding-left:32px;
+    line-height:1.5; max-width:26ch; border-left:2px solid var(--sanguine); padding-left:32px; min-height:1.6em;
   }
 
   /* ---------- values ---------- */
 
-  .values-panel{ border-radius:24px; padding:clamp(20px,3vw,10px); margin-top:52px; overflow:hidden; }
+  .values-panel{ border-radius:26px; margin-top:8px; overflow:hidden; }
   .values-grid{ display:grid; grid-template-columns:repeat(3, 1fr); }
   @media (max-width:860px){ .values-grid{ grid-template-columns:1fr; } }
   .value-card{ padding:38px 32px; border-right:1px solid var(--line-soft); border-bottom:1px solid var(--line-soft); }
   .values-grid .value-card:nth-child(3n){ border-right:none; }
   .value-mark{ width:30px; height:1px; background:var(--sanguine-bright); margin-bottom:20px; }
-  .value-title{ font-family:'Fraunces', serif; font-size:19px; margin-bottom:10px; }
-  .value-text{ color:var(--ink-dim); font-size:14.5px; }
+  .value-title{ font-family:'Fraunces', serif; font-size:19px; margin-bottom:10px; min-height:1.4em; }
+  .value-text{ color:var(--ink-dim); font-size:14.5px; min-height:1.4em; }
 
   /* ---------- timeline ---------- */
 
@@ -204,45 +211,40 @@
   .timeline::before{ content:""; position:absolute; left:29px; top:8px; bottom:8px; width:1px; background:var(--line); }
   .tl-item{ position:relative; padding-left:76px; padding-bottom:60px; }
   .tl-item:last-child{ padding-bottom:0; }
-  .tl-node{
-    position:absolute; left:20px; top:2px; width:19px; height:19px; border-radius:50%;
-    display:flex; align-items:center; justify-content:center;
-  }
+  .tl-node{ position:absolute; left:20px; top:2px; width:19px; height:19px; border-radius:50%; display:flex; align-items:center; justify-content:center; }
   .tl-node::after{ content:""; width:7px; height:7px; border-radius:50%; background:var(--sanguine-bright); }
-  .tl-period{ color:var(--sanguine-bright); font-family:'Fraunces', serif; font-style:italic; font-size:14px; margin-bottom:8px; }
-  .tl-role{ font-family:'Fraunces', serif; font-size:23px; margin-bottom:4px; }
-  .tl-org{ color:var(--ink-dim); font-size:15px; margin-bottom:14px; }
-  .tl-desc{ color:var(--ink-dim); font-size:15.5px; max-width:58ch; }
-  .tl-desc ul{ margin:12px 0 0; padding-left:18px; }
-  .tl-desc li{ margin-bottom:6px; }
+  .tl-period{ color:var(--sanguine-bright); font-family:'Fraunces', serif; font-style:italic; font-size:14px; margin-bottom:8px; min-height:1.3em; }
+  .tl-role{ font-family:'Fraunces', serif; font-size:23px; margin-bottom:4px; min-height:1.3em; }
+  .tl-org{ color:var(--ink-dim); font-size:15px; margin-bottom:14px; min-height:1.3em; }
+  .tl-desc{ color:var(--ink-dim); font-size:15.5px; max-width:58ch; min-height:1.6em; }
 
   /* ---------- skills ---------- */
 
   .skill-groups{ display:grid; grid-template-columns:repeat(2, 1fr); gap:44px 60px; }
   @media (max-width:640px){ .skill-groups{ grid-template-columns:1fr; } }
-  .skill-group-title{ font-family:'Fraunces', serif; font-style:italic; font-size:16px; color:var(--sanguine-bright); margin-bottom:18px; }
+  .skill-group-title{ font-family:'Fraunces', serif; font-style:italic; font-size:16px; color:var(--sanguine-bright); margin-bottom:18px; min-height:1.3em; }
   .skill-tags{ display:flex; flex-wrap:wrap; gap:9px; }
-  .skill-tag{ padding:9px 15px; font-size:13.5px; color:var(--ink-dim); border-radius:999px; background:rgba(255,255,255,0.035); border:1px solid var(--line); }
+  .skill-tag{ padding:9px 16px; font-size:13.5px; color:var(--ink-dim); border-radius:999px; background:rgba(255,255,255,0.04); border:1px solid var(--line); min-width:56px; }
 
   /* ---------- community ---------- */
 
   .flat-list{ display:flex; flex-direction:column; }
   .flat-item{ display:grid; grid-template-columns:1fr auto; gap:20px; align-items:baseline; padding:22px 0; border-top:1px solid var(--line-soft); }
   .flat-list .flat-item:last-child{ border-bottom:1px solid var(--line-soft); }
-  .flat-title{ font-family:'Fraunces', serif; font-size:18px; }
-  .flat-sub{ color:var(--ink-dim); font-size:14.5px; margin-top:4px; }
-  .flat-year{ color:var(--ink-faint); font-size:13.5px; white-space:nowrap; }
+  .flat-title{ font-family:'Fraunces', serif; font-size:18px; min-height:1.3em; }
+  .flat-sub{ color:var(--ink-dim); font-size:14.5px; margin-top:4px; min-height:1.3em; }
+  .flat-year{ color:var(--ink-faint); font-size:13.5px; white-space:nowrap; min-height:1.3em; }
 
   /* ---------- certifications ---------- */
 
-  .cert-panel{ border-radius:24px; margin-top:8px; overflow:hidden; }
+  .cert-panel{ border-radius:26px; margin-top:8px; overflow:hidden; }
   .cert-grid{ display:grid; grid-template-columns:repeat(2, 1fr); }
   @media (max-width:640px){ .cert-grid{ grid-template-columns:1fr; } }
   .cert-item{ padding:24px 28px; border-right:1px solid var(--line-soft); border-bottom:1px solid var(--line-soft); }
   .cert-grid .cert-item:nth-child(2n){ border-right:none; }
-  .cert-name{ font-size:15.5px; margin-bottom:5px; }
-  .cert-meta{ font-size:13px; color:var(--ink-faint); margin-bottom:12px; }
-  .cert-attach{ display:inline-flex; align-items:center; gap:6px; cursor:pointer; font-size:12px; color:var(--ink-faint); padding:5px 11px; border-radius:999px; border:1px dashed rgba(255,255,255,0.22); transition:border-color .25s, color .25s; }
+  .cert-name{ font-size:15.5px; margin-bottom:5px; min-height:1.4em; }
+  .cert-meta{ font-size:13px; color:var(--ink-faint); margin-bottom:12px; min-height:1.4em; }
+  .cert-attach{ display:inline-flex; align-items:center; gap:6px; cursor:pointer; font-size:12px; color:var(--ink-faint); padding:5px 11px; border-radius:999px; border:1px dashed rgba(255,255,255,0.24); transition:border-color .25s, color .25s; }
   .cert-attach:hover{ border-color:var(--sanguine-bright); color:var(--ink-dim); }
   .cert-attach svg{ width:11px; height:11px; }
   .cert-file-chip{ display:none; align-items:center; gap:6px; font-size:12px; color:var(--ink-dim); margin-top:4px; }
@@ -256,13 +258,12 @@
   .ref-grid{ display:grid; grid-template-columns:repeat(3, 1fr); gap:36px; }
   @media (max-width:860px){ .ref-grid{ grid-template-columns:1fr; } }
   .ref-card{ padding-top:26px; border-top:1px solid var(--sanguine); }
-  .ref-name{ font-family:'Fraunces', serif; font-size:18px; margin-bottom:4px; }
-  .ref-role{ color:var(--ink-dim); font-size:14px; margin-bottom:12px; }
+  .ref-name{ font-family:'Fraunces', serif; font-size:18px; margin-bottom:4px; min-height:1.4em; }
+  .ref-role{ color:var(--ink-dim); font-size:14px; margin-bottom:12px; min-height:1.4em; }
   .ref-contact{ color:var(--ink-faint); font-size:13.5px; }
-  .ref-contact div{ margin-top:4px; }
+  .ref-contact div{ margin-top:4px; min-height:1.4em; }
 
   footer{ padding:52px 0 90px; display:flex; justify-content:space-between; align-items:center; color:var(--ink-faint); font-size:13px; flex-wrap:wrap; gap:16px; }
-  footer a{ color:var(--ink-dim); text-decoration:none; }
 
   input[type="file"]{ display:none; }
 
@@ -276,6 +277,7 @@
     }
     .bg-blobs, .grain, .rail, .toolbar{ display:none !important; }
     .glass{ backdrop-filter:none !important; -webkit-backdrop-filter:none !important; box-shadow:none !important; }
+    .glass::before, .glass::after{ display:none !important; }
     main{ padding-left:0; }
     section{ padding:40px 0; }
     .avatar-upload, .cv-upload, .cert-attach{ display:none !important; }
@@ -301,7 +303,7 @@
 </nav>
 
 <div class="toolbar glass">
-  <span class="hint" id="save-hint">Click any text to edit — autosaves here</span>
+  <span class="hint" id="save-hint">Click any field to fill it in — autosaves here</span>
   <button id="btn-print">Save as PDF</button>
   <button id="btn-reset">Reset</button>
 </div>
@@ -319,17 +321,17 @@
           <img id="avatar-img" alt="Profile photo">
           <input type="file" accept="image/*" data-role="avatar">
         </label>
-        <div class="eyebrow-line"><span class="rule"></span><span contenteditable="true">Educator &amp; Curriculum Lead</span></div>
+        <div class="eyebrow-line"><span class="rule"></span><span contenteditable="true" data-placeholder="Your title / role"></span></div>
       </div>
 
-      <h1 class="hero-name"><span contenteditable="true">Jordan</span><br><em contenteditable="true">Ellis</em></h1>
-      <p class="hero-role" contenteditable="true">Fourteen years in the classroom and school leadership, building learning environments where curiosity is treated as a skill worth teaching.</p>
+      <h1 class="hero-name"><span contenteditable="true" data-placeholder="First"></span> <em contenteditable="true" data-placeholder="Last"></em></h1>
+      <p class="hero-role" contenteditable="true" data-placeholder="Write a one- to two-sentence summary of who you are and what you do."></p>
 
       <div class="hero-meta">
-        <span class="meta-pill" contenteditable="true">jordan.ellis@email.com</span>
-        <span class="meta-pill" contenteditable="true">+1 (555) 123-4567</span>
-        <span class="meta-pill" contenteditable="true">Chicago, Illinois</span>
-        <span class="meta-pill" contenteditable="true">linkedin.com/in/jordanellis</span>
+        <span class="meta-pill" contenteditable="true" data-placeholder="email@example.com"></span>
+        <span class="meta-pill" contenteditable="true" data-placeholder="+1 (000) 000-0000"></span>
+        <span class="meta-pill" contenteditable="true" data-placeholder="City, Country"></span>
+        <span class="meta-pill" contenteditable="true" data-placeholder="linkedin.com/in/yourname"></span>
 
         <label class="cv-upload" id="cv-zone">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10.5V19a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h8.5L21 10.5z"/><path d="M14 3v7h7"/></svg>
@@ -346,11 +348,11 @@
     <div class="two-col">
       <div>
         <span class="kicker">Background</span>
-        <p class="lede" contenteditable="true">I build classrooms that feel less like holding rooms and more like workshops.</p>
+        <p class="lede" contenteditable="true" data-placeholder="A short, memorable line about how you approach your work."></p>
       </div>
       <div class="body-copy">
-        <p contenteditable="true">I started teaching secondary science in 2012 and moved into curriculum design and department leadership over the following decade. Along the way I've taught in under-resourced public schools and in project-based independent programs, which shaped a practical, adaptable approach to instruction.</p>
-        <p contenteditable="true">Outside formal roles, I write about assessment design and mentor early-career teachers through a regional induction program. I care about the mechanics of learning as much as the content — how a lesson is sequenced, how feedback is timed, how a room is arranged.</p>
+        <div contenteditable="true" data-placeholder="Write a paragraph about your background and experience."></div>
+        <div contenteditable="true" data-placeholder="Write a second paragraph about what drives you professionally."></div>
       </div>
     </div>
   </section>
@@ -358,325 +360,225 @@
   <!-- EDUCATIONAL BACKGROUND -->
   <section id="education">
     <span class="kicker">Educational Background</span>
-    <h2 class="section-head" contenteditable="true">Formal training, in order.</h2>
+    <p class="section-hint">List your degrees and training, most recent first.</p>
     <div class="ed-list">
       <div class="ed-item">
-        <div class="ed-years" contenteditable="true">2018 — 2020</div>
+        <div class="ed-years" contenteditable="true" data-placeholder="20XX — 20XX"></div>
         <div>
-          <div class="ed-degree" contenteditable="true">M.Ed. in Curriculum &amp; Instruction</div>
-          <div class="ed-school" contenteditable="true">Northwestern University · School of Education and Social Policy</div>
+          <div class="ed-degree" contenteditable="true" data-placeholder="Degree / Program name"></div>
+          <div class="ed-school" contenteditable="true" data-placeholder="Institution · Department"></div>
         </div>
       </div>
       <div class="ed-item">
-        <div class="ed-years" contenteditable="true">2008 — 2012</div>
+        <div class="ed-years" contenteditable="true" data-placeholder="20XX — 20XX"></div>
         <div>
-          <div class="ed-degree" contenteditable="true">B.Sc. in Biology, Secondary Education Track</div>
-          <div class="ed-school" contenteditable="true">University of Illinois Urbana-Champaign</div>
+          <div class="ed-degree" contenteditable="true" data-placeholder="Degree / Program name"></div>
+          <div class="ed-school" contenteditable="true" data-placeholder="Institution · Department"></div>
         </div>
       </div>
       <div class="ed-item">
-        <div class="ed-years" contenteditable="true">2021</div>
+        <div class="ed-years" contenteditable="true" data-placeholder="20XX"></div>
         <div>
-          <div class="ed-degree" contenteditable="true">Graduate Certificate, Educational Leadership</div>
-          <div class="ed-school" contenteditable="true">DePaul University College of Education</div>
+          <div class="ed-degree" contenteditable="true" data-placeholder="Certificate / Additional training"></div>
+          <div class="ed-school" contenteditable="true" data-placeholder="Institution · Department"></div>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- TEACHING PHILOSOPHY -->
+  <!-- TEACHING / PROFESSIONAL PHILOSOPHY -->
   <section id="philosophy">
-    <span class="kicker">Teaching Philosophy</span>
-    <blockquote class="philosophy-quote" contenteditable="true">
-      A classroom should ask more questions than it answers, and trust students to sit with that.
-    </blockquote>
+    <span class="kicker">Professional Philosophy</span>
+    <p class="section-hint">Your guiding approach to the work.</p>
+    <blockquote class="philosophy-quote" contenteditable="true" data-placeholder="Add a short line that captures how you approach your work."></blockquote>
     <div class="body-copy" style="margin-top:36px; max-width:60ch;">
-      <p contenteditable="true">I plan backward from the questions I want students to still be asking a year later, not from the test at the end of the unit. Content is the vehicle; the habit of thinking rigorously is the actual destination.</p>
-      <p contenteditable="true">In practice that means students talk more than I do, mistakes are treated as data rather than failure, and every unit ends with something made, argued, or built — not just recalled.</p>
+      <div contenteditable="true" data-placeholder="Expand on your philosophy in a sentence or two."></div>
+      <div contenteditable="true" data-placeholder="Add what this looks like in practice."></div>
     </div>
   </section>
 
   <!-- VALUES -->
   <section id="values">
     <span class="kicker">Values</span>
-    <h2 class="section-head" contenteditable="true">What I hold to, on good days and bad ones.</h2>
+    <p class="section-hint">The principles that guide how you work.</p>
     <div class="values-panel glass">
       <div class="values-grid">
-        <div class="value-card">
-          <div class="value-mark"></div>
-          <div class="value-title" contenteditable="true">Rigor with warmth</div>
-          <div class="value-text" contenteditable="true">High expectations and genuine care aren't opposites — the second is what makes the first sustainable for students.</div>
-        </div>
-        <div class="value-card">
-          <div class="value-mark"></div>
-          <div class="value-title" contenteditable="true">Honest feedback</div>
-          <div class="value-text" contenteditable="true">Vague praise teaches nothing. I aim for feedback specific enough that a student knows exactly what to do next.</div>
-        </div>
-        <div class="value-card">
-          <div class="value-mark"></div>
-          <div class="value-title" contenteditable="true">Equity in access</div>
-          <div class="value-text" contenteditable="true">Differentiation isn't an accommodation bolted on afterward — it's built into how a unit is planned from the start.</div>
-        </div>
-        <div class="value-card">
-          <div class="value-mark"></div>
-          <div class="value-title" contenteditable="true">Reflective practice</div>
-          <div class="value-text" contenteditable="true">I keep a running log of what didn't work. The lessons that fail teach me more than the ones that land cleanly.</div>
-        </div>
-        <div class="value-card">
-          <div class="value-mark"></div>
-          <div class="value-title" contenteditable="true">Collaboration over autonomy</div>
-          <div class="value-text" contenteditable="true">The best units I've taught were co-planned. I default to sharing materials and asking colleagues to push back on them.</div>
-        </div>
-        <div class="value-card">
-          <div class="value-mark"></div>
-          <div class="value-title" contenteditable="true">Steady presence</div>
-          <div class="value-text" contenteditable="true">Students calibrate to the adult in the room. I try to be the same person on a hard Tuesday as I am on a good Friday.</div>
-        </div>
+        <div class="value-card"><div class="value-mark"></div><div class="value-title" contenteditable="true" data-placeholder="Value name"></div><div class="value-text" contenteditable="true" data-placeholder="Briefly describe what this means in how you work."></div></div>
+        <div class="value-card"><div class="value-mark"></div><div class="value-title" contenteditable="true" data-placeholder="Value name"></div><div class="value-text" contenteditable="true" data-placeholder="Briefly describe what this means in how you work."></div></div>
+        <div class="value-card"><div class="value-mark"></div><div class="value-title" contenteditable="true" data-placeholder="Value name"></div><div class="value-text" contenteditable="true" data-placeholder="Briefly describe what this means in how you work."></div></div>
+        <div class="value-card"><div class="value-mark"></div><div class="value-title" contenteditable="true" data-placeholder="Value name"></div><div class="value-text" contenteditable="true" data-placeholder="Briefly describe what this means in how you work."></div></div>
+        <div class="value-card"><div class="value-mark"></div><div class="value-title" contenteditable="true" data-placeholder="Value name"></div><div class="value-text" contenteditable="true" data-placeholder="Briefly describe what this means in how you work."></div></div>
+        <div class="value-card"><div class="value-mark"></div><div class="value-title" contenteditable="true" data-placeholder="Value name"></div><div class="value-text" contenteditable="true" data-placeholder="Briefly describe what this means in how you work."></div></div>
       </div>
     </div>
   </section>
 
-  <!-- CAREER TIMELINE -->
+  <!-- CAREER DEVELOPMENT / TIMELINE -->
   <section id="career">
     <span class="kicker">Career Development</span>
-    <h2 class="section-head" contenteditable="true">Progression, one role at a time.</h2>
+    <p class="section-hint">Your work history and progression, most recent first.</p>
     <div class="timeline">
-
       <div class="tl-item">
         <div class="tl-node glass"></div>
-        <div class="tl-period" contenteditable="true">2022 — Present</div>
-        <div class="tl-role" contenteditable="true">Curriculum Lead, Science Department</div>
-        <div class="tl-org" contenteditable="true">Lakeview Preparatory Academy, Chicago</div>
-        <div class="tl-desc" contenteditable="true">
-          Oversee curriculum design and assessment strategy across a nine-teacher department.
-          <ul>
-            <li>Rebuilt the ninth-grade science sequence around project-based units, raising unit-assessment pass rates by 18%.</li>
-            <li>Lead weekly instructional coaching for early-career teachers.</li>
-            <li>Sit on the school's academic standards committee.</li>
-          </ul>
-        </div>
+        <div class="tl-period" contenteditable="true" data-placeholder="20XX — Present"></div>
+        <div class="tl-role" contenteditable="true" data-placeholder="Job title"></div>
+        <div class="tl-org" contenteditable="true" data-placeholder="Company / Organization"></div>
+        <div class="tl-desc" contenteditable="true" data-placeholder="Describe your responsibilities and impact in this role."></div>
       </div>
-
       <div class="tl-item">
         <div class="tl-node glass"></div>
-        <div class="tl-period" contenteditable="true">2018 — 2022</div>
-        <div class="tl-role" contenteditable="true">Lead Biology Teacher</div>
-        <div class="tl-org" contenteditable="true">Wells Community High School, Chicago Public Schools</div>
-        <div class="tl-desc" contenteditable="true">Taught AP and general biology; mentored two student teachers per year through a partnership with Northwestern's School of Education.</div>
+        <div class="tl-period" contenteditable="true" data-placeholder="20XX — 20XX"></div>
+        <div class="tl-role" contenteditable="true" data-placeholder="Job title"></div>
+        <div class="tl-org" contenteditable="true" data-placeholder="Company / Organization"></div>
+        <div class="tl-desc" contenteditable="true" data-placeholder="Describe your responsibilities and impact in this role."></div>
       </div>
-
       <div class="tl-item">
         <div class="tl-node glass"></div>
-        <div class="tl-period" contenteditable="true">2014 — 2018</div>
-        <div class="tl-role" contenteditable="true">Science Teacher</div>
-        <div class="tl-org" contenteditable="true">Riverside Middle School, Aurora IL</div>
-        <div class="tl-desc" contenteditable="true">Taught seventh and eighth grade earth &amp; life science; built the school's first outdoor classroom program with a local conservation grant.</div>
+        <div class="tl-period" contenteditable="true" data-placeholder="20XX — 20XX"></div>
+        <div class="tl-role" contenteditable="true" data-placeholder="Job title"></div>
+        <div class="tl-org" contenteditable="true" data-placeholder="Company / Organization"></div>
+        <div class="tl-desc" contenteditable="true" data-placeholder="Describe your responsibilities and impact in this role."></div>
       </div>
-
       <div class="tl-item">
         <div class="tl-node glass"></div>
-        <div class="tl-period" contenteditable="true">2012 — 2014</div>
-        <div class="tl-role" contenteditable="true">Teaching Fellow</div>
-        <div class="tl-org" contenteditable="true">Chicago Teaching Fellows Program</div>
-        <div class="tl-desc" contenteditable="true">Two-year alternative-certification placement in a Title I middle school, with concurrent coursework toward initial licensure.</div>
+        <div class="tl-period" contenteditable="true" data-placeholder="20XX — 20XX"></div>
+        <div class="tl-role" contenteditable="true" data-placeholder="Job title"></div>
+        <div class="tl-org" contenteditable="true" data-placeholder="Company / Organization"></div>
+        <div class="tl-desc" contenteditable="true" data-placeholder="Describe your responsibilities and impact in this role."></div>
       </div>
-
     </div>
   </section>
 
   <!-- KEY SKILLS -->
   <section id="skills">
     <span class="kicker">Key Skills</span>
-    <h2 class="section-head" contenteditable="true">What I actually bring to a department.</h2>
+    <p class="section-hint">Group your skills however makes sense to you.</p>
     <div class="skill-groups">
       <div>
-        <div class="skill-group-title">Instruction &amp; Curriculum</div>
+        <div class="skill-group-title" contenteditable="true" data-placeholder="Skill category"></div>
         <div class="skill-tags">
-          <span class="skill-tag" contenteditable="true">Backward design</span>
-          <span class="skill-tag" contenteditable="true">Project-based learning</span>
-          <span class="skill-tag" contenteditable="true">Differentiated instruction</span>
-          <span class="skill-tag" contenteditable="true">Formative assessment</span>
-          <span class="skill-tag" contenteditable="true">IEP &amp; 504 accommodation</span>
+          <span class="skill-tag" contenteditable="true" data-placeholder="Skill"></span>
+          <span class="skill-tag" contenteditable="true" data-placeholder="Skill"></span>
+          <span class="skill-tag" contenteditable="true" data-placeholder="Skill"></span>
+          <span class="skill-tag" contenteditable="true" data-placeholder="Skill"></span>
         </div>
       </div>
       <div>
-        <div class="skill-group-title">Leadership</div>
+        <div class="skill-group-title" contenteditable="true" data-placeholder="Skill category"></div>
         <div class="skill-tags">
-          <span class="skill-tag" contenteditable="true">Instructional coaching</span>
-          <span class="skill-tag" contenteditable="true">Department scheduling</span>
-          <span class="skill-tag" contenteditable="true">New-teacher mentoring</span>
-          <span class="skill-tag" contenteditable="true">Budget planning</span>
+          <span class="skill-tag" contenteditable="true" data-placeholder="Skill"></span>
+          <span class="skill-tag" contenteditable="true" data-placeholder="Skill"></span>
+          <span class="skill-tag" contenteditable="true" data-placeholder="Skill"></span>
         </div>
       </div>
       <div>
-        <div class="skill-group-title">Tools &amp; Platforms</div>
+        <div class="skill-group-title" contenteditable="true" data-placeholder="Skill category"></div>
         <div class="skill-tags">
-          <span class="skill-tag" contenteditable="true">Google Workspace</span>
-          <span class="skill-tag" contenteditable="true">PowerSchool</span>
-          <span class="skill-tag" contenteditable="true">Canvas LMS</span>
-          <span class="skill-tag" contenteditable="true">Excel / Sheets reporting</span>
+          <span class="skill-tag" contenteditable="true" data-placeholder="Skill"></span>
+          <span class="skill-tag" contenteditable="true" data-placeholder="Skill"></span>
+          <span class="skill-tag" contenteditable="true" data-placeholder="Skill"></span>
         </div>
       </div>
       <div>
-        <div class="skill-group-title">Communication</div>
+        <div class="skill-group-title" contenteditable="true" data-placeholder="Skill category"></div>
         <div class="skill-tags">
-          <span class="skill-tag" contenteditable="true">Parent conferencing</span>
-          <span class="skill-tag" contenteditable="true">Public speaking</span>
-          <span class="skill-tag" contenteditable="true">Grant writing</span>
-          <span class="skill-tag" contenteditable="true">Report writing</span>
+          <span class="skill-tag" contenteditable="true" data-placeholder="Skill"></span>
+          <span class="skill-tag" contenteditable="true" data-placeholder="Skill"></span>
+          <span class="skill-tag" contenteditable="true" data-placeholder="Skill"></span>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- EXTRACURRICULAR / COMMUNITY -->
+  <!-- EXTRA-CURRICULAR / COMMUNITY ENGAGEMENT -->
   <section id="community">
     <span class="kicker">Extra-Curricular &amp; Community Engagement</span>
-    <h2 class="section-head" contenteditable="true">Outside the timetable.</h2>
+    <p class="section-hint">Volunteering, coaching, clubs, or civic involvement.</p>
     <div class="flat-list">
       <div class="flat-item">
-        <div>
-          <div class="flat-title" contenteditable="true">Science Olympiad Coach</div>
-          <div class="flat-sub" contenteditable="true">Lakeview Preparatory Academy — regional team, advanced to state twice</div>
-        </div>
-        <div class="flat-year" contenteditable="true">2022 — Present</div>
+        <div><div class="flat-title" contenteditable="true" data-placeholder="Activity / Organization name"></div><div class="flat-sub" contenteditable="true" data-placeholder="Brief description of your involvement."></div></div>
+        <div class="flat-year" contenteditable="true" data-placeholder="20XX — Present"></div>
       </div>
       <div class="flat-item">
-        <div>
-          <div class="flat-title" contenteditable="true">Volunteer Mentor</div>
-          <div class="flat-sub" contenteditable="true">Chicago Teaching Fellows Induction Program — supports first-year teachers</div>
-        </div>
-        <div class="flat-year" contenteditable="true">2019 — Present</div>
+        <div><div class="flat-title" contenteditable="true" data-placeholder="Activity / Organization name"></div><div class="flat-sub" contenteditable="true" data-placeholder="Brief description of your involvement."></div></div>
+        <div class="flat-year" contenteditable="true" data-placeholder="20XX — 20XX"></div>
       </div>
       <div class="flat-item">
-        <div>
-          <div class="flat-title" contenteditable="true">Community Garden Coordinator</div>
-          <div class="flat-sub" contenteditable="true">Riverside Neighborhood Association — student-run plots, seasonal harvest donation</div>
-        </div>
-        <div class="flat-year" contenteditable="true">2015 — 2018</div>
-      </div>
-      <div class="flat-item">
-        <div>
-          <div class="flat-title" contenteditable="true">Youth Science Fair Judge</div>
-          <div class="flat-sub" contenteditable="true">City of Chicago district-wide fair</div>
-        </div>
-        <div class="flat-year" contenteditable="true">2016 — Present</div>
+        <div><div class="flat-title" contenteditable="true" data-placeholder="Activity / Organization name"></div><div class="flat-sub" contenteditable="true" data-placeholder="Brief description of your involvement."></div></div>
+        <div class="flat-year" contenteditable="true" data-placeholder="20XX — 20XX"></div>
       </div>
     </div>
   </section>
 
-  <!-- CERTIFICATIONS -->
+  <!-- CERTIFICATIONS / TRAININGS / SEMINARS -->
   <section id="certifications">
     <span class="kicker">Certifications, Trainings &amp; Seminars</span>
-    <h2 class="section-head" contenteditable="true">Ongoing, not one-and-done.</h2>
+    <p class="section-hint">Attach supporting documents where you have them.</p>
     <div class="cert-panel glass">
       <div class="cert-grid">
-
         <div class="cert-item">
-          <div class="cert-name" contenteditable="true">Illinois Professional Educator License</div>
-          <div class="cert-meta" contenteditable="true">Biology 9–12, Middle Grades Science · Active</div>
-          <label class="cert-attach">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21.4 11.6 12.6 20.4a4 4 0 0 1-5.6-5.6l8.4-8.4a2.7 2.7 0 0 1 3.8 3.8L10.8 18.6"/></svg>
-            <span>Attach proof</span>
-            <input type="file" data-role="cert">
-          </label>
+          <div class="cert-name" contenteditable="true" data-placeholder="Certification / Training name"></div>
+          <div class="cert-meta" contenteditable="true" data-placeholder="Issuing organization · Year"></div>
+          <label class="cert-attach"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21.4 11.6 12.6 20.4a4 4 0 0 1-5.6-5.6l8.4-8.4a2.7 2.7 0 0 1 3.8 3.8L10.8 18.6"/></svg><span>Attach document</span><input type="file" data-role="cert"></label>
           <div class="cert-file-chip"><a target="_blank"></a><button class="cert-file-remove" type="button">✕</button></div>
         </div>
-
         <div class="cert-item">
-          <div class="cert-name" contenteditable="true">Educational Leadership Endorsement</div>
-          <div class="cert-meta" contenteditable="true">State of Illinois · 2021</div>
-          <label class="cert-attach">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21.4 11.6 12.6 20.4a4 4 0 0 1-5.6-5.6l8.4-8.4a2.7 2.7 0 0 1 3.8 3.8L10.8 18.6"/></svg>
-            <span>Attach proof</span>
-            <input type="file" data-role="cert">
-          </label>
+          <div class="cert-name" contenteditable="true" data-placeholder="Certification / Training name"></div>
+          <div class="cert-meta" contenteditable="true" data-placeholder="Issuing organization · Year"></div>
+          <label class="cert-attach"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21.4 11.6 12.6 20.4a4 4 0 0 1-5.6-5.6l8.4-8.4a2.7 2.7 0 0 1 3.8 3.8L10.8 18.6"/></svg><span>Attach document</span><input type="file" data-role="cert"></label>
           <div class="cert-file-chip"><a target="_blank"></a><button class="cert-file-remove" type="button">✕</button></div>
         </div>
-
         <div class="cert-item">
-          <div class="cert-name" contenteditable="true">Restorative Practices in Schools</div>
-          <div class="cert-meta" contenteditable="true">International Institute for Restorative Practices · 2020</div>
-          <label class="cert-attach">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21.4 11.6 12.6 20.4a4 4 0 0 1-5.6-5.6l8.4-8.4a2.7 2.7 0 0 1 3.8 3.8L10.8 18.6"/></svg>
-            <span>Attach proof</span>
-            <input type="file" data-role="cert">
-          </label>
+          <div class="cert-name" contenteditable="true" data-placeholder="Certification / Training name"></div>
+          <div class="cert-meta" contenteditable="true" data-placeholder="Issuing organization · Year"></div>
+          <label class="cert-attach"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21.4 11.6 12.6 20.4a4 4 0 0 1-5.6-5.6l8.4-8.4a2.7 2.7 0 0 1 3.8 3.8L10.8 18.6"/></svg><span>Attach document</span><input type="file" data-role="cert"></label>
           <div class="cert-file-chip"><a target="_blank"></a><button class="cert-file-remove" type="button">✕</button></div>
         </div>
-
         <div class="cert-item">
-          <div class="cert-name" contenteditable="true">Trauma-Informed Classroom Practice</div>
-          <div class="cert-meta" contenteditable="true">40-hour seminar series · 2019</div>
-          <label class="cert-attach">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21.4 11.6 12.6 20.4a4 4 0 0 1-5.6-5.6l8.4-8.4a2.7 2.7 0 0 1 3.8 3.8L10.8 18.6"/></svg>
-            <span>Attach proof</span>
-            <input type="file" data-role="cert">
-          </label>
+          <div class="cert-name" contenteditable="true" data-placeholder="Certification / Training name"></div>
+          <div class="cert-meta" contenteditable="true" data-placeholder="Issuing organization · Year"></div>
+          <label class="cert-attach"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21.4 11.6 12.6 20.4a4 4 0 0 1-5.6-5.6l8.4-8.4a2.7 2.7 0 0 1 3.8 3.8L10.8 18.6"/></svg><span>Attach document</span><input type="file" data-role="cert"></label>
           <div class="cert-file-chip"><a target="_blank"></a><button class="cert-file-remove" type="button">✕</button></div>
         </div>
-
-        <div class="cert-item">
-          <div class="cert-name" contenteditable="true">Advanced Placement Biology Institute</div>
-          <div class="cert-meta" contenteditable="true">College Board Summer Institute · 2017</div>
-          <label class="cert-attach">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21.4 11.6 12.6 20.4a4 4 0 0 1-5.6-5.6l8.4-8.4a2.7 2.7 0 0 1 3.8 3.8L10.8 18.6"/></svg>
-            <span>Attach proof</span>
-            <input type="file" data-role="cert">
-          </label>
-          <div class="cert-file-chip"><a target="_blank"></a><button class="cert-file-remove" type="button">✕</button></div>
-        </div>
-
-        <div class="cert-item">
-          <div class="cert-name" contenteditable="true">CPR &amp; First Aid, Instructor-Level</div>
-          <div class="cert-meta" contenteditable="true">American Red Cross · Renewed annually</div>
-          <label class="cert-attach">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21.4 11.6 12.6 20.4a4 4 0 0 1-5.6-5.6l8.4-8.4a2.7 2.7 0 0 1 3.8 3.8L10.8 18.6"/></svg>
-            <span>Attach proof</span>
-            <input type="file" data-role="cert">
-          </label>
-          <div class="cert-file-chip"><a target="_blank"></a><button class="cert-file-remove" type="button">✕</button></div>
-        </div>
-
       </div>
     </div>
   </section>
 
-  <!-- CHARACTER REFERENCES -->
+  <!-- CHARACTER REFERENCE -->
   <section id="references" style="border-bottom:none;">
     <span class="kicker">Character Reference</span>
-    <h2 class="section-head" contenteditable="true">People who'll vouch for how I actually work.</h2>
+    <p class="section-hint">People who can speak to your character and work.</p>
     <div class="ref-grid">
       <div class="ref-card">
-        <div class="ref-name" contenteditable="true">Dr. Marcus Whitfield</div>
-        <div class="ref-role" contenteditable="true">Principal, Lakeview Preparatory Academy</div>
+        <div class="ref-name" contenteditable="true" data-placeholder="Reference name"></div>
+        <div class="ref-role" contenteditable="true" data-placeholder="Title, Organization"></div>
         <div class="ref-contact">
-          <div contenteditable="true">m.whitfield@lakeviewprep.edu</div>
-          <div contenteditable="true">+1 (555) 234-5678</div>
+          <div contenteditable="true" data-placeholder="email@example.com"></div>
+          <div contenteditable="true" data-placeholder="+1 (000) 000-0000"></div>
         </div>
       </div>
       <div class="ref-card">
-        <div class="ref-name" contenteditable="true">Sara Okonkwo</div>
-        <div class="ref-role" contenteditable="true">Director, Chicago Teaching Fellows Program</div>
+        <div class="ref-name" contenteditable="true" data-placeholder="Reference name"></div>
+        <div class="ref-role" contenteditable="true" data-placeholder="Title, Organization"></div>
         <div class="ref-contact">
-          <div contenteditable="true">s.okonkwo@ctfellows.org</div>
-          <div contenteditable="true">+1 (555) 345-6789</div>
+          <div contenteditable="true" data-placeholder="email@example.com"></div>
+          <div contenteditable="true" data-placeholder="+1 (000) 000-0000"></div>
         </div>
       </div>
       <div class="ref-card">
-        <div class="ref-name" contenteditable="true">Elena Torres</div>
-        <div class="ref-role" contenteditable="true">Department Chair, Wells Community High School</div>
+        <div class="ref-name" contenteditable="true" data-placeholder="Reference name"></div>
+        <div class="ref-role" contenteditable="true" data-placeholder="Title, Organization"></div>
         <div class="ref-contact">
-          <div contenteditable="true">e.torres@cps.edu</div>
-          <div contenteditable="true">+1 (555) 456-7890</div>
+          <div contenteditable="true" data-placeholder="email@example.com"></div>
+          <div contenteditable="true" data-placeholder="+1 (000) 000-0000"></div>
         </div>
       </div>
     </div>
   </section>
 
   <footer>
-    <span contenteditable="true">Jordan Ellis — Resume</span>
-    <span contenteditable="true">jordan.ellis@email.com</span>
+    <span contenteditable="true" data-placeholder="Your name — Resume"></span>
+    <span contenteditable="true" data-placeholder="email@example.com"></span>
   </footer>
 
 </div>
@@ -685,10 +587,9 @@
 
 <script>
 (function(){
-  var STORAGE_KEY = 'blooddonut_resume_v1';
+  var STORAGE_KEY = 'vampirefood_resume_v1';
   var root = document.getElementById('resume-root');
 
-  /* ---------- restore saved edits ---------- */
   try{
     var saved = localStorage.getItem(STORAGE_KEY);
     if(saved){ root.innerHTML = saved; }
@@ -703,7 +604,6 @@
   }
   root.addEventListener('input', scheduleSave);
 
-  /* ---------- avatar upload (event delegation) ---------- */
   document.addEventListener('change', function(e){
     var input = e.target;
     if(!(input.tagName === 'INPUT' && input.type === 'file')) return;
@@ -724,28 +624,25 @@
     }
 
     if(role === 'cv'){
-      var url = URL.createObjectURL(file);
-      var zone = input.closest('.cv-upload');
-      zone.classList.add('filled');
-      zone.querySelector('#cv-label') ? (zone.querySelector('#cv-label').textContent = file.name) : null;
-      var label = zone.querySelector('span:not(.cv-remove)');
+      var zone2 = input.closest('.cv-upload');
+      zone2.classList.add('filled');
+      var label = zone2.querySelector('span:not(.cv-remove)');
       if(label) label.textContent = file.name;
-      var removeBtn = zone.querySelector('.cv-remove');
-      if(removeBtn){ removeBtn.style.display = 'inline'; removeBtn.dataset.url = url; }
+      var removeBtn = zone2.querySelector('.cv-remove');
+      if(removeBtn){ removeBtn.style.display = 'inline'; }
     }
 
     if(role === 'cert'){
       var item = input.closest('.cert-item');
       var chip = item.querySelector('.cert-file-chip');
       var link = chip.querySelector('a');
-      var url2 = URL.createObjectURL(file);
-      link.href = url2;
+      var url = URL.createObjectURL(file);
+      link.href = url;
       link.textContent = file.name;
       chip.classList.add('show');
     }
   });
 
-  /* ---------- remove buttons ---------- */
   document.addEventListener('click', function(e){
     if(e.target.classList.contains('cv-remove')){
       e.preventDefault();
@@ -767,19 +664,16 @@
     }
   });
 
-  /* ---------- toolbar ---------- */
   document.getElementById('btn-print').addEventListener('click', function(){ window.print(); });
   document.getElementById('btn-reset').addEventListener('click', function(){
-    if(confirm('Reset all edits and uploads back to the original template?')){
+    if(confirm('Reset everything back to a blank template?')){
       try{ localStorage.removeItem(STORAGE_KEY); }catch(e){}
       location.reload();
     }
   });
 
-  /* ---------- rail nav ---------- */
   var sections = document.querySelectorAll('main section[id]');
   var dots = document.querySelectorAll('.rail button');
-
   function setActive(){
     var current = sections[0].id;
     var y = window.scrollY + window.innerHeight * 0.4;
