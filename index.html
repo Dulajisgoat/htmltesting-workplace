@@ -3,26 +3,25 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Résumé</title>
+<title>Résumé — Read Only</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <style>
-
   :root{
     --bg:#120D0C;
-    --line:rgba(255,255,255,0.09);
-    --line-soft:rgba(255,255,255,0.05);
+    --line:rgba(255,255,255,0.12);
+    --line-soft:rgba(255,255,255,0.06);
     --ink:#F1E9E1;
     --ink-dim:#B9AC9F;
     --ink-faint:#7E7069;
     --sanguine:#7A2027;
     --sanguine-bright:#B03A3F;
     --sanguine-deep:#4E1519;
-    --glass-fill: rgba(255,255,255,0.045);
-    --glass-border: rgba(255,255,255,0.10);
-    --glass-shadow: 0 1px 1px rgba(0,0,0,0.3), 0 20px 48px -18px rgba(0,0,0,0.6), inset 0 1px 0 rgba(255,255,255,0.06);
-    --radius-lg: 22px;
+    --glass-fill: rgba(255,255,255,0.04);
+    --glass-border: rgba(255,255,255,0.12);
+    --glass-shadow: 0 8px 32px rgba(0,0,0,0.37), inset 0 1px 0 rgba(255,255,255,0.1), inset 0 -1px 0 rgba(0,0,0,0.2);
+    --radius-lg: 24px;
     --radius-md: 16px;
     --ease: cubic-bezier(.22,.61,.36,1);
   }
@@ -34,252 +33,294 @@
     margin:0;
     background:var(--bg);
     color:var(--ink);
-    font-family:-apple-system, BlinkMacSystemFont, "Inter", "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    font-family:"Space Grotesk", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
     line-height:1.6;
     -webkit-font-smoothing:antialiased;
     text-rendering:optimizeLegibility;
+    overflow-x: hidden;
   }
 
   ::selection{ background:var(--sanguine-deep); color:var(--ink); }
-  h1,h2,h3{ font-family:inherit; font-weight:700; letter-spacing:-0.02em; margin:0; color:var(--ink); }
+  h1,h2,h3{ font-family:inherit; font-weight:500; letter-spacing:-0.03em; margin:0; color:var(--ink); }
   a{ color:inherit; }
 
-  /* ---------- ambient background ---------- */
+  /* ---------- WebGL Background ---------- */
+  #webgl-bg {
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    z-index: -2;
+  }
 
-  .bg-blobs{ position:fixed; inset:0; z-index:-2; overflow:hidden; }
-  .blob{ position:absolute; border-radius:50%; filter:blur(120px); }
-  .blob-1{ width:50vw; height:50vw; max-width:680px; max-height:680px; background:radial-gradient(circle, var(--sanguine-deep) 0%, transparent 70%); top:-18%; right:-16%; opacity:.4; animation:drift1 70s ease-in-out infinite alternate; }
-  .blob-2{ width:38vw; height:38vw; max-width:560px; max-height:560px; background:radial-gradient(circle, rgba(122,32,39,0.3) 0%, transparent 72%); bottom:-20%; left:-12%; opacity:.32; animation:drift2 80s ease-in-out infinite alternate; }
-  @keyframes drift1{ from{ transform:translate(0,0); } to{ transform:translate(-40px,30px); } }
-  @keyframes drift2{ from{ transform:translate(0,0); } to{ transform:translate(30px,-24px); } }
+  /* ---------- Stripe Accents ---------- */
+  .stripes {
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    z-index: -1;
+    pointer-events: none;
+    background-image: repeating-linear-gradient(
+      45deg,
+      transparent,
+      transparent 40px,
+      rgba(176, 58, 63, 0.03) 40px,
+      rgba(176, 58, 63, 0.03) 41px
+    );
+  }
 
-  /* ---------- glass primitive (Apple-style frosted material) ---------- */
+  .side-stripe {
+    position: fixed;
+    top: 0; left: 0;
+    width: 4px;
+    height: 100%;
+    background: linear-gradient(to bottom, var(--sanguine-deep), var(--sanguine-bright), var(--sanguine-deep));
+    z-index: 50;
+  }
 
+  /* ---------- Liquid Glass Primitive ---------- */
   .glass{
     position:relative;
     background:var(--glass-fill);
-    -webkit-backdrop-filter: blur(24px) saturate(140%);
-    backdrop-filter: blur(24px) saturate(140%);
+    -webkit-backdrop-filter: blur(20px) saturate(180%);
+    backdrop-filter: blur(20px) saturate(180%);
     border:1px solid var(--glass-border);
     box-shadow:var(--glass-shadow);
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+  }
+
+  .glass::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    padding: 1px;
+    background: linear-gradient(135deg, rgba(255,255,255,0.2), rgba(255,255,255,0) 40%, rgba(255,255,255,0) 60%, rgba(255,255,255,0.1));
+    -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+    -webkit-mask-composite: xor;
+    mask-composite: exclude;
+    pointer-events: none;
+    z-index: 1;
+  }
+
+  .glass::after {
+    content: "";
+    position: absolute;
+    top: 0; left: 20%; right: 20%;
+    height: 40%;
+    background: radial-gradient(ellipse at center top, rgba(255,255,255,0.08), transparent 70%);
+    pointer-events: none;
+    z-index: 1;
   }
 
   .wrap{ max-width:1180px; margin:0 auto; padding:0 48px; position:relative; }
-  @media (max-width:860px){ .wrap{ padding:0 22px; } }
+  @media (max-width:860px){ .wrap{ padding:0 24px; } }
 
   /* ---------- floating chrome ---------- */
-
   .rail{
     position:fixed; top:50%; left:22px; transform:translateY(-50%);
     display:flex; flex-direction:column; align-items:center; gap:18px;
     padding:20px 11px; border-radius:999px; z-index:60;
   }
   .rail button{
-    all:unset; width:6px; height:6px; border-radius:50%; background:rgba(255,255,255,0.22);
-    cursor:pointer; transition:background .3s var(--ease), transform .3s var(--ease);
+    all:unset; width:8px; height:8px; border-radius:50%; background:rgba(255,255,255,0.25);
+    cursor:pointer; transition:all .3s var(--ease);
   }
-  .rail button:hover{ background:var(--ink-dim); }
-  .rail button.active{ background:var(--sanguine-bright); transform:scale(1.9); }
+  .rail button:hover{ background:var(--ink-dim); transform: scale(1.4); }
+  .rail button.active{ background:var(--sanguine-bright); transform:scale(2.2); box-shadow: 0 0 12px var(--sanguine-bright); }
   @media (max-width:860px){ .rail{ display:none; } }
 
   .toolbar{
-    position:fixed; top:22px; right:22px; z-index:60; border-radius:999px;
+    position:fixed; top:24px; right:24px; z-index:60; border-radius:999px;
     display:flex; align-items:center; gap:6px; padding:8px 8px 8px 16px;
   }
-  .toolbar span.hint{ font-size:12.5px; color:var(--ink-dim); margin-right:6px; white-space:nowrap; letter-spacing:-0.005em; }
+  .toolbar span.hint{ font-size:12px; color:var(--ink-dim); margin-right:6px; white-space:nowrap; letter-spacing:0.02em; font-weight: 400; }
   .toolbar button{
-    all:unset; cursor:pointer; font-family:inherit; font-weight:600; font-size:12.5px; color:var(--ink);
-    padding:8px 14px; border-radius:999px; background:rgba(255,255,255,0.07); border:1px solid var(--line);
-    transition:background .2s var(--ease), border-color .2s var(--ease), transform .15s var(--ease);
+    all:unset; cursor:pointer; font-family:inherit; font-weight:500; font-size:12px; color:var(--ink);
+    padding:10px 16px; border-radius:999px; background:rgba(255,255,255,0.08); border:1px solid transparent;
+    transition:all .2s var(--ease);
   }
-  .toolbar button:hover{ background:rgba(255,255,255,0.13); border-color:var(--glass-border); }
+  .toolbar button:hover{ background:rgba(176, 58, 63, 0.3); border-color:var(--sanguine-bright); color: #fff; }
   .toolbar button:active{ transform:scale(0.96); }
   @media (max-width:640px){ .toolbar span.hint{ display:none; } }
 
   main{ padding-left:58px; }
   @media (max-width:860px){ main{ padding-left:0; } }
 
-  section{ padding:120px 0; border-bottom:1px solid var(--line-soft); }
+  section{ padding:120px 0; border-bottom:1px solid var(--line-soft); position: relative; }
   section:last-of-type{ border-bottom:none; }
   @media (max-width:860px){ section{ padding:76px 0; } }
 
-  .kicker{ font-family:inherit; font-weight:700; font-size:12.5px; letter-spacing:0.09em; text-transform:uppercase; color:var(--sanguine-bright); margin-bottom:14px; display:block; }
-  .section-hint{ font-size:14.5px; color:var(--ink-faint); max-width:52ch; margin-bottom:48px; font-weight:400; }
+  .kicker{ font-family:inherit; font-weight:500; font-size:11px; letter-spacing:0.2em; text-transform:uppercase; color:var(--sanguine-bright); margin-bottom:14px; display:block; }
+  .section-hint{ font-size:14px; color:var(--ink-faint); max-width:52ch; margin-bottom:48px; font-weight:300; }
 
-  /* ---------- editable / placeholder fields ---------- */
-
-  [contenteditable="true"]{ border-radius:7px; outline-offset:4px; transition:background .2s ease; cursor:text; }
-  [contenteditable="true"]:hover{ background:rgba(176,58,63,0.08); }
-  [contenteditable="true"]:focus{ outline:1px dashed var(--sanguine-bright); background:rgba(176,58,63,0.1); }
-  [contenteditable="true"]:empty:before{ content:attr(data-placeholder); color:var(--ink-faint); font-style:normal; pointer-events:none; }
+  /* ---------- read-only display fields ---------- */
+  [data-field]{ border-radius:7px; transition:background .2s ease; cursor:default; }
+  [data-field]:empty:before{ content:attr(data-placeholder); color:var(--ink-faint); font-style:normal; pointer-events:none; }
 
   /* ---------- hero ---------- */
-
   #hero{ min-height:92vh; display:flex; flex-direction:column; justify-content:center; padding:150px 0 100px; }
 
-  .hero-card{ border-radius:var(--radius-lg); padding:56px clamp(28px,5vw,64px); }
+  .hero-card{ padding:56px clamp(28px,5vw,64px); }
 
-  .hero-top{ display:flex; align-items:center; gap:26px; margin-bottom:38px; flex-wrap:wrap; }
+  .hero-card::before {
+    padding: 2px;
+    background: linear-gradient(135deg, rgba(176,58,63,0.5), rgba(255,255,255,0.1) 40%, rgba(255,255,255,0.1) 60%, rgba(176,58,63,0.3));
+  }
+
+  .hero-top{ display:flex; align-items:center; gap:26px; margin-bottom:38px; flex-wrap:wrap; position: relative; z-index: 2; }
 
   .avatar-upload{
-    width:88px; height:88px; border-radius:50%; flex:none; position:relative; cursor:pointer;
+    width:88px; height:88px; border-radius:50%; flex:none; position:relative;
     border:1px solid var(--glass-border); display:flex; align-items:center; justify-content:center;
     background:rgba(255,255,255,0.05);
-    overflow:hidden; transition:border-color .2s var(--ease), background .2s var(--ease);
+    overflow:hidden;
   }
-  .avatar-upload:hover{ border-color:var(--sanguine-bright); background:rgba(176,58,63,0.1); }
   .avatar-upload img{ width:100%; height:100%; object-fit:cover; display:none; }
-  .avatar-upload.has-photo{ border-color:var(--glass-border); }
   .avatar-upload.has-photo img{ display:block; }
   .avatar-upload.has-photo .avatar-plus{ display:none; }
-  .avatar-plus{ font-size:10.5px; font-weight:600; letter-spacing:0.03em; color:var(--ink-faint); text-align:center; line-height:1.3; padding:0 8px; }
+  .avatar-plus{ font-size:10px; font-weight:400; letter-spacing:0.1em; color:var(--ink-faint); text-align:center; line-height:1.3; padding:0 8px; text-transform: uppercase; }
 
-  .eyebrow-line{ display:flex; align-items:center; gap:14px; color:var(--ink-dim); font-size:14px; font-weight:500; }
+  .eyebrow-line{ display:flex; align-items:center; gap:14px; color:var(--ink-dim); font-size:13px; font-weight:300; letter-spacing: 0.05em; }
   .eyebrow-line .rule{ width:34px; height:1px; background:var(--sanguine); }
-  .eyebrow-line [contenteditable]{ min-width:160px; }
+  .eyebrow-line [data-field]{ min-width:160px; }
 
-  .hero-name{ font-weight:800; font-size:clamp(44px, 7.2vw, 92px); line-height:0.98; letter-spacing:-0.035em; max-width:900px; }
-  .hero-name [contenteditable]{ display:inline-block; min-width:1ch; }
-  .hero-name em{ font-style:normal; color:var(--sanguine-bright); }
+  .hero-name{ font-weight:300; font-size:clamp(48px, 7.5vw, 96px); line-height:0.98; letter-spacing:-0.045em; max-width:900px; position: relative; z-index: 2; }
+  .hero-name [data-field]{ display:inline-block; min-width:1ch; }
+  .hero-name em{ font-style:normal; color:var(--sanguine-bright); font-weight: 400; }
 
-  .hero-role{ margin-top:24px; font-size:clamp(17px, 1.8vw, 21px); color:var(--ink-dim); max-width:560px; font-weight:400; min-height:1.6em; letter-spacing:-0.005em; }
+  .hero-role{ margin-top:24px; font-size:clamp(16px, 1.6vw, 19px); color:var(--ink-dim); max-width:560px; font-weight:300; min-height:1.6em; letter-spacing:-0.01em; position: relative; z-index: 2; }
 
-  .hero-meta{ margin-top:44px; display:flex; flex-wrap:wrap; gap:10px; font-size:14px; color:var(--ink-faint); align-items:center; }
-  .meta-pill{ padding:8px 14px; border-radius:999px; background:rgba(255,255,255,0.05); border:1px solid var(--line); min-width:70px; font-weight:500; }
+  .hero-meta{ margin-top:44px; display:flex; flex-wrap:wrap; gap:10px; font-size:13px; color:var(--ink-faint); align-items:center; position: relative; z-index: 2; }
+  .meta-pill{ padding:9px 14px; border-radius:999px; background:rgba(255,255,255,0.05); border:1px solid var(--line); min-width:70px; font-weight:400; transition: all .2s ease; }
 
   .cv-upload{
-    display:inline-flex; align-items:center; gap:8px; cursor:pointer; padding:8px 16px 8px 12px;
+    display:inline-flex; align-items:center; gap:8px; padding:9px 16px 9px 12px;
     border-radius:999px; background:rgba(255,255,255,0.05); border:1px solid var(--line);
-    font-size:13px; font-weight:500; color:var(--ink-dim); transition:border-color .2s var(--ease), background .2s var(--ease);
+    font-size:12px; font-weight:400; color:var(--ink-dim);
   }
-  .cv-upload:hover{ border-color:var(--sanguine-bright); background:rgba(176,58,63,0.12); }
-  .cv-upload.filled{ border-color:var(--glass-border); }
   .cv-upload svg{ width:14px; height:14px; flex:none; opacity:.85; }
-  .cv-remove{ all:unset; cursor:pointer; color:var(--ink-faint); font-size:14px; padding:0 2px; }
-  .cv-remove:hover{ color:var(--sanguine-bright); }
 
   /* ---------- about ---------- */
-
   .two-col{ display:grid; grid-template-columns:0.85fr 1.15fr; gap:80px; }
   @media (max-width:860px){ .two-col{ grid-template-columns:1fr; gap:32px; } }
-  .lede{ font-family:inherit; font-weight:600; font-size:25px; letter-spacing:-0.015em; line-height:1.45; max-width:36ch; min-height:1.6em; }
-  .body-copy{ color:var(--ink-dim); font-size:16.5px; max-width:56ch; }
-  .body-copy [contenteditable]{ display:block; min-height:1.6em; }
-  .body-copy [contenteditable] + [contenteditable]{ margin-top:18px; }
+  .lede{ font-family:inherit; font-weight:300; font-size:26px; letter-spacing:-0.02em; line-height:1.45; max-width:36ch; min-height:1.6em; }
+  .body-copy{ color:var(--ink-dim); font-size:15px; max-width:56ch; font-weight: 300; }
+  .body-copy [data-field]{ display:block; min-height:1.6em; }
+  .body-copy [data-field] + [data-field]{ margin-top:18px; }
 
   /* ---------- education ---------- */
-
   .ed-list{ display:flex; flex-direction:column; }
-  .ed-item{ display:grid; grid-template-columns:150px 1fr; gap:32px; padding:28px 0; border-top:1px solid var(--line-soft); }
+  .ed-item{ display:grid; grid-template-columns:150px 1fr; gap:32px; padding:28px 0; border-top:1px solid var(--line-soft); transition: padding-left .3s var(--ease); }
+  .ed-item:hover { padding-left: 8px; }
   .ed-list .ed-item:last-child{ border-bottom:1px solid var(--line-soft); }
   @media (max-width:640px){ .ed-item{ grid-template-columns:1fr; gap:8px; } }
-  .ed-years{ color:var(--sanguine-bright); font-size:12.5px; font-weight:700; letter-spacing:0.06em; text-transform:uppercase; padding-top:3px; min-height:1.4em; }
-  .ed-degree{ font-size:19px; font-weight:600; letter-spacing:-0.01em; margin-bottom:6px; min-height:1.4em; }
-  .ed-school{ color:var(--ink-dim); font-size:15px; min-height:1.4em; }
+  .ed-years{ color:var(--sanguine-bright); font-size:11px; font-weight:500; letter-spacing:0.15em; text-transform:uppercase; padding-top:3px; min-height:1.4em; }
+  .ed-degree{ font-size:18px; font-weight:500; letter-spacing:-0.01em; margin-bottom:6px; min-height:1.4em; }
+  .ed-school{ color:var(--ink-dim); font-size:14px; font-weight:300; min-height:1.4em; }
 
   /* ---------- philosophy ---------- */
-
   .philosophy-quote{
-    font-family:inherit; font-weight:400; font-style:normal; font-size:clamp(23px, 2.8vw, 30px);
-    letter-spacing:-0.015em; line-height:1.4; max-width:26ch; border-left:2px solid var(--sanguine); padding-left:32px; min-height:1.6em;
+    font-family:inherit; font-weight:300; font-style:normal; font-size:clamp(24px, 2.8vw, 32px);
+    letter-spacing:-0.02em; line-height:1.4; max-width:26ch; border-left:1px solid var(--sanguine); padding-left:32px; min-height:1.6em;
   }
 
   /* ---------- values ---------- */
-
-  .values-panel{ border-radius:var(--radius-lg); margin-top:8px; overflow:hidden; }
+  .values-panel{ margin-top:8px; }
   .values-grid{ display:grid; grid-template-columns:repeat(3, 1fr); }
   @media (max-width:860px){ .values-grid{ grid-template-columns:1fr; } }
-  .value-card{ padding:38px 32px; border-right:1px solid var(--line-soft); border-bottom:1px solid var(--line-soft); }
+  .value-card{ padding:38px 32px; border-right:1px solid var(--line-soft); border-bottom:1px solid var(--line-soft); transition: background .3s var(--ease); }
+  .value-card:hover { background: rgba(255,255,255,0.02); }
   .values-grid .value-card:nth-child(3n){ border-right:none; }
+  .values-grid .value-card:nth-last-child(-n+3){ border-bottom:none; }
+  @media (max-width:860px){ .value-card { border-right: none !important; } .values-grid .value-card:last-child { border-bottom: none; } }
+
   .value-mark{ width:30px; height:1px; background:var(--sanguine-bright); margin-bottom:20px; }
-  .value-title{ font-weight:600; font-size:18px; letter-spacing:-0.01em; margin-bottom:10px; min-height:1.4em; }
-  .value-text{ color:var(--ink-dim); font-size:14.5px; min-height:1.4em; }
+  .value-title{ font-weight:500; font-size:17px; letter-spacing:-0.01em; margin-bottom:10px; min-height:1.4em; }
+  .value-text{ color:var(--ink-dim); font-size:13.5px; font-weight:300; min-height:1.4em; }
 
   /* ---------- timeline ---------- */
-
   .timeline{ position:relative; margin-top:10px; }
-  .timeline::before{ content:""; position:absolute; left:29px; top:8px; bottom:8px; width:1px; background:var(--line); }
+  .timeline::before{ content:""; position:absolute; left:29px; top:8px; bottom:8px; width:1px; background:linear-gradient(to bottom, transparent, var(--sanguine) 10%, var(--line) 50%, transparent); }
   .tl-item{ position:relative; padding-left:76px; padding-bottom:60px; }
   .tl-item:last-child{ padding-bottom:0; }
   .tl-node{ position:absolute; left:20px; top:2px; width:19px; height:19px; border-radius:50%; display:flex; align-items:center; justify-content:center; }
-  .tl-node::after{ content:""; width:7px; height:7px; border-radius:50%; background:var(--sanguine-bright); }
-  .tl-period{ color:var(--sanguine-bright); font-weight:700; font-size:12.5px; letter-spacing:0.06em; text-transform:uppercase; margin-bottom:8px; min-height:1.3em; }
-  .tl-role{ font-weight:700; font-size:23px; letter-spacing:-0.015em; margin-bottom:4px; min-height:1.3em; }
-  .tl-org{ color:var(--ink-dim); font-size:15px; margin-bottom:14px; min-height:1.3em; }
-  .tl-desc{ color:var(--ink-dim); font-size:15.5px; max-width:58ch; min-height:1.6em; }
+  .tl-node::after{ content:""; width:7px; height:7px; border-radius:50%; background:var(--sanguine-bright); box-shadow: 0 0 8px var(--sanguine-bright); }
+  .tl-period{ color:var(--sanguine-bright); font-weight:500; font-size:11px; letter-spacing:0.15em; text-transform:uppercase; margin-bottom:8px; min-height:1.3em; }
+  .tl-role{ font-weight:500; font-size:22px; letter-spacing:-0.02em; margin-bottom:4px; min-height:1.3em; }
+  .tl-org{ color:var(--ink-dim); font-size:14px; font-weight:300; margin-bottom:14px; min-height:1.3em; }
+  .tl-desc{ color:var(--ink-dim); font-size:14.5px; font-weight:300; max-width:58ch; min-height:1.6em; }
 
   /* ---------- skills ---------- */
-
   .skill-groups{ display:grid; grid-template-columns:repeat(2, 1fr); gap:44px 60px; }
   @media (max-width:640px){ .skill-groups{ grid-template-columns:1fr; } }
-  .skill-group-title{ font-weight:700; font-size:12.5px; letter-spacing:0.08em; text-transform:uppercase; color:var(--sanguine-bright); margin-bottom:18px; min-height:1.3em; }
+  .skill-group-title{ font-weight:500; font-size:11px; letter-spacing:0.2em; text-transform:uppercase; color:var(--sanguine-bright); margin-bottom:18px; min-height:1.3em; }
   .skill-tags{ display:flex; flex-wrap:wrap; gap:9px; }
-  .skill-tag{ padding:9px 16px; font-size:13.5px; font-weight:500; color:var(--ink-dim); border-radius:999px; background:rgba(255,255,255,0.045); border:1px solid var(--line); min-width:56px; }
+  .skill-tag{ padding:8px 14px; font-size:12.5px; font-weight:400; color:var(--ink-dim); border-radius:999px; background:rgba(255,255,255,0.03); border:1px solid var(--line); min-width:56px; }
 
   /* ---------- community ---------- */
-
   .flat-list{ display:flex; flex-direction:column; }
-  .flat-item{ display:grid; grid-template-columns:1fr auto; gap:20px; align-items:baseline; padding:22px 0; border-top:1px solid var(--line-soft); }
+  .flat-item{ display:grid; grid-template-columns:1fr auto; gap:20px; align-items:baseline; padding:22px 0; border-top:1px solid var(--line-soft); transition: padding-left .3s var(--ease); }
+  .flat-item:hover { padding-left: 8px; }
   .flat-list .flat-item:last-child{ border-bottom:1px solid var(--line-soft); }
-  .flat-title{ font-weight:600; font-size:17px; letter-spacing:-0.01em; min-height:1.3em; }
-  .flat-sub{ color:var(--ink-dim); font-size:14.5px; margin-top:4px; min-height:1.3em; }
-  .flat-year{ color:var(--ink-faint); font-size:13px; font-weight:500; white-space:nowrap; min-height:1.3em; }
+  .flat-title{ font-weight:500; font-size:16px; letter-spacing:-0.01em; min-height:1.3em; }
+  .flat-sub{ color:var(--ink-dim); font-size:13.5px; font-weight:300; margin-top:4px; min-height:1.3em; }
+  .flat-year{ color:var(--ink-faint); font-size:12px; font-weight:400; white-space:nowrap; min-height:1.3em; }
 
   /* ---------- certifications ---------- */
-
-  .cert-panel{ border-radius:var(--radius-lg); margin-top:8px; overflow:hidden; }
+  .cert-panel{ margin-top:8px; }
   .cert-grid{ display:grid; grid-template-columns:repeat(2, 1fr); }
   @media (max-width:640px){ .cert-grid{ grid-template-columns:1fr; } }
-  .cert-item{ padding:24px 28px; border-right:1px solid var(--line-soft); border-bottom:1px solid var(--line-soft); }
+  .cert-item{ padding:28px 32px; border-right:1px solid var(--line-soft); border-bottom:1px solid var(--line-soft); position: relative; z-index: 2; transition: background .3s var(--ease); }
+  .cert-item:hover { background: rgba(255,255,255,0.02); }
   .cert-grid .cert-item:nth-child(2n){ border-right:none; }
-  .cert-name{ font-size:15.5px; font-weight:600; margin-bottom:5px; min-height:1.4em; }
-  .cert-meta{ font-size:13px; color:var(--ink-faint); margin-bottom:12px; min-height:1.4em; }
-  .cert-attach{ display:inline-flex; align-items:center; gap:6px; cursor:pointer; font-size:12px; font-weight:500; color:var(--ink-faint); padding:5px 11px; border-radius:999px; border:1px solid var(--line); transition:border-color .2s var(--ease), color .2s var(--ease); }
-  .cert-attach:hover{ border-color:var(--sanguine-bright); color:var(--ink-dim); }
-  .cert-attach svg{ width:11px; height:11px; }
-  .cert-file-chip{ display:none; align-items:center; gap:6px; font-size:12px; color:var(--ink-dim); margin-top:4px; }
+  .cert-grid .cert-item:nth-last-child(-n+2){ border-bottom:none; }
+  @media (max-width:640px){ .cert-item { border-right: none !important; } .cert-grid .cert-item:last-child { border-bottom: none; } }
+
+  .cert-name{ font-size:15px; font-weight:500; margin-bottom:5px; min-height:1.4em; }
+  .cert-meta{ font-size:12px; color:var(--ink-faint); font-weight:300; margin-bottom:12px; min-height:1.4em; }
+  .cert-file-chip{ display:none; align-items:center; gap:6px; font-size:12px; color:var(--ink-dim); margin-top:8px; }
   .cert-file-chip.show{ display:inline-flex; }
   .cert-file-chip a{ text-decoration:underline; text-decoration-color:var(--line); }
-  .cert-file-remove{ all:unset; cursor:pointer; color:var(--ink-faint); }
-  .cert-file-remove:hover{ color:var(--sanguine-bright); }
 
   /* ---------- references ---------- */
-
   .ref-grid{ display:grid; grid-template-columns:repeat(3, 1fr); gap:36px; }
   @media (max-width:860px){ .ref-grid{ grid-template-columns:1fr; } }
   .ref-card{ padding-top:26px; border-top:1px solid var(--sanguine); }
-  .ref-name{ font-weight:600; font-size:17px; letter-spacing:-0.01em; margin-bottom:4px; min-height:1.4em; }
-  .ref-role{ color:var(--ink-dim); font-size:14px; margin-bottom:12px; min-height:1.4em; }
-  .ref-contact{ color:var(--ink-faint); font-size:13.5px; }
+  .ref-name{ font-weight:500; font-size:16px; letter-spacing:-0.01em; margin-bottom:4px; min-height:1.4em; }
+  .ref-role{ color:var(--ink-dim); font-size:13px; font-weight:300; margin-bottom:12px; min-height:1.4em; }
+  .ref-contact{ color:var(--ink-faint); font-size:12.5px; font-weight:300; }
   .ref-contact div{ margin-top:4px; min-height:1.4em; }
 
-  footer{ padding:52px 0 90px; display:flex; justify-content:space-between; align-items:center; color:var(--ink-faint); font-size:13px; font-weight:500; flex-wrap:wrap; gap:16px; }
+  footer{ padding:52px 0 90px; display:flex; justify-content:space-between; align-items:center; color:var(--ink-faint); font-size:12px; font-weight:400; flex-wrap:wrap; gap:16px; letter-spacing: 0.05em; }
 
   input[type="file"]{ display:none; }
 
   /* ---------- print ---------- */
-
   @media print{
     :root{
       --bg:#ffffff; --ink:#141414; --ink-dim:#3a3a3a; --ink-faint:#666666;
       --line:#dcdcdc; --line-soft:#e8e8e8; --sanguine-bright:#7A2027;
       --glass-shadow:none; --glass-border:#dcdcdc; --glass-fill:#ffffff;
     }
-    .bg-blobs, .rail, .toolbar{ display:none !important; }
-    .glass{ backdrop-filter:none !important; -webkit-backdrop-filter:none !important; box-shadow:none !important; }
+    #webgl-bg, .stripes, .rail, .toolbar, .side-stripe { display:none !important; }
+    .glass{ backdrop-filter:none !important; -webkit-backdrop-filter:none !important; box-shadow:none !important; border: 1px solid #dcdcdc !important; }
+    .glass::before, .glass::after { display: none !important; }
     main{ padding-left:0; }
     section{ padding:40px 0; }
-    .avatar-upload, .cv-upload, .cert-attach{ display:none !important; }
+    .avatar-upload, .cv-upload { display:none !important; }
   }
-
 </style>
 </head>
 <body>
 
-<div class="bg-blobs"><div class="blob blob-1"></div><div class="blob blob-2"></div></div>
+<canvas id="webgl-bg"></canvas>
+<div class="stripes"></div>
+<div class="side-stripe"></div>
 
 <nav class="rail glass" id="rail">
   <button data-target="hero" class="active" aria-label="About"></button>
+  <button data-target="about" aria-label="About"></button>
   <button data-target="education" aria-label="Education"></button>
   <button data-target="philosophy" aria-label="Philosophy"></button>
   <button data-target="values" aria-label="Values"></button>
@@ -291,282 +332,264 @@
 </nav>
 
 <div class="toolbar glass">
-  <span class="hint" id="save-hint">Click any field to fill it in — autosaves here</span>
+  <span class="hint" id="save-hint">Read only view</span>
   <button id="btn-print">Save as PDF</button>
-  <button id="btn-reset">Reset</button>
 </div>
 
 <main>
 <div class="wrap">
 <div id="resume-root">
 
-  <!-- ABOUT / HERO -->
   <section id="hero">
     <div class="hero-card glass">
       <div class="hero-top">
-        <label class="avatar-upload" id="avatar-zone">
-          <span class="avatar-plus">＋<br>photo</span>
+        <div class="avatar-upload" id="avatar-zone">
+          <span class="avatar-plus">no photo</span>
           <img id="avatar-img" alt="Profile photo">
-          <input type="file" accept="image/*" data-role="avatar">
-        </label>
-        <div class="eyebrow-line"><span class="rule"></span><span contenteditable="true" data-placeholder="Your title / role"></span></div>
+        </div>
+        <div class="eyebrow-line"><span class="rule"></span><span data-field data-placeholder="Edited by: someone">Edited by: someone</span></div>
       </div>
 
-      <h1 class="hero-name"><span contenteditable="true" data-placeholder="First"></span> <em contenteditable="true" data-placeholder="Last"></em></h1>
-      <p class="hero-role" contenteditable="true" data-placeholder="Write a one- to two-sentence summary of who you are and what you do."></p>
+      <h1 class="hero-name"><span data-field data-placeholder="Edited by: someone">Edited by: someone</span> <em data-field data-placeholder="Edited by: someone">Edited by: someone</em></h1>
+      <p class="hero-role" data-field data-placeholder="Edited by: someone">Edited by: someone</p>
 
       <div class="hero-meta">
-        <span class="meta-pill" contenteditable="true" data-placeholder="email@example.com"></span>
-        <span class="meta-pill" contenteditable="true" data-placeholder="+1 (000) 000-0000"></span>
-        <span class="meta-pill" contenteditable="true" data-placeholder="City, Country"></span>
-        <span class="meta-pill" contenteditable="true" data-placeholder="linkedin.com/in/yourname"></span>
+        <span class="meta-pill" data-field data-placeholder="Edited by: someone">Edited by: someone</span>
+        <span class="meta-pill" data-field data-placeholder="Edited by: someone">Edited by: someone</span>
+        <span class="meta-pill" data-field data-placeholder="Edited by: someone">Edited by: someone</span>
+        <span class="meta-pill" data-field data-placeholder="Edited by: someone">Edited by: someone</span>
 
-        <label class="cv-upload" id="cv-zone">
+        <div class="cv-upload" id="cv-zone">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10.5V19a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h8.5L21 10.5z"/><path d="M14 3v7h7"/></svg>
-          <span id="cv-label">Attach CV (PDF)</span>
-          <button type="button" class="cv-remove" id="cv-remove" style="display:none;">✕</button>
-          <input type="file" accept="application/pdf,.pdf" data-role="cv">
-        </label>
+          <span id="cv-label">No CV attached</span>
+        </div>
       </div>
     </div>
   </section>
 
-  <!-- ABOUT -->
   <section id="about">
     <div class="two-col">
       <div>
         <span class="kicker">Background</span>
-        <p class="lede" contenteditable="true" data-placeholder="A short, memorable line about how you approach your work."></p>
+        <p class="lede" data-field data-placeholder="Edited by: someone">Edited by: someone</p>
       </div>
       <div class="body-copy">
-        <div contenteditable="true" data-placeholder="Write a paragraph about your background and experience."></div>
-        <div contenteditable="true" data-placeholder="Write a second paragraph about what drives you professionally."></div>
+        <div data-field data-placeholder="Edited by: someone">Edited by: someone</div>
+        <div data-field data-placeholder="Edited by: someone">Edited by: someone</div>
       </div>
     </div>
   </section>
 
-  <!-- EDUCATIONAL BACKGROUND -->
   <section id="education">
     <span class="kicker">Educational Background</span>
     <p class="section-hint">List your degrees and training, most recent first.</p>
     <div class="ed-list">
       <div class="ed-item">
-        <div class="ed-years" contenteditable="true" data-placeholder="20XX — 20XX"></div>
+        <div class="ed-years" data-field data-placeholder="Edited by: someone">Edited by: someone</div>
         <div>
-          <div class="ed-degree" contenteditable="true" data-placeholder="Degree / Program name"></div>
-          <div class="ed-school" contenteditable="true" data-placeholder="Institution · Department"></div>
+          <div class="ed-degree" data-field data-placeholder="Edited by: someone">Edited by: someone</div>
+          <div class="ed-school" data-field data-placeholder="Edited by: someone">Edited by: someone</div>
         </div>
       </div>
       <div class="ed-item">
-        <div class="ed-years" contenteditable="true" data-placeholder="20XX — 20XX"></div>
+        <div class="ed-years" data-field data-placeholder="Edited by: someone">Edited by: someone</div>
         <div>
-          <div class="ed-degree" contenteditable="true" data-placeholder="Degree / Program name"></div>
-          <div class="ed-school" contenteditable="true" data-placeholder="Institution · Department"></div>
+          <div class="ed-degree" data-field data-placeholder="Edited by: someone">Edited by: someone</div>
+          <div class="ed-school" data-field data-placeholder="Edited by: someone">Edited by: someone</div>
         </div>
       </div>
       <div class="ed-item">
-        <div class="ed-years" contenteditable="true" data-placeholder="20XX"></div>
+        <div class="ed-years" data-field data-placeholder="Edited by: someone">Edited by: someone</div>
         <div>
-          <div class="ed-degree" contenteditable="true" data-placeholder="Certificate / Additional training"></div>
-          <div class="ed-school" contenteditable="true" data-placeholder="Institution · Department"></div>
+          <div class="ed-degree" data-field data-placeholder="Edited by: someone">Edited by: someone</div>
+          <div class="ed-school" data-field data-placeholder="Edited by: someone">Edited by: someone</div>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- TEACHING / PROFESSIONAL PHILOSOPHY -->
   <section id="philosophy">
     <span class="kicker">Professional Philosophy</span>
     <p class="section-hint">Your guiding approach to the work.</p>
-    <blockquote class="philosophy-quote" contenteditable="true" data-placeholder="Add a short line that captures how you approach your work."></blockquote>
+    <blockquote class="philosophy-quote" data-field data-placeholder="Edited by: someone">Edited by: someone</blockquote>
     <div class="body-copy" style="margin-top:36px; max-width:60ch;">
-      <div contenteditable="true" data-placeholder="Expand on your philosophy in a sentence or two."></div>
-      <div contenteditable="true" data-placeholder="Add what this looks like in practice."></div>
+      <div data-field data-placeholder="Edited by: someone">Edited by: someone</div>
+      <div data-field data-placeholder="Edited by: someone">Edited by: someone</div>
     </div>
   </section>
 
-  <!-- VALUES -->
   <section id="values">
     <span class="kicker">Values</span>
     <p class="section-hint">The principles that guide how you work.</p>
     <div class="values-panel glass">
       <div class="values-grid">
-        <div class="value-card"><div class="value-mark"></div><div class="value-title" contenteditable="true" data-placeholder="Value name"></div><div class="value-text" contenteditable="true" data-placeholder="Briefly describe what this means in how you work."></div></div>
-        <div class="value-card"><div class="value-mark"></div><div class="value-title" contenteditable="true" data-placeholder="Value name"></div><div class="value-text" contenteditable="true" data-placeholder="Briefly describe what this means in how you work."></div></div>
-        <div class="value-card"><div class="value-mark"></div><div class="value-title" contenteditable="true" data-placeholder="Value name"></div><div class="value-text" contenteditable="true" data-placeholder="Briefly describe what this means in how you work."></div></div>
-        <div class="value-card"><div class="value-mark"></div><div class="value-title" contenteditable="true" data-placeholder="Value name"></div><div class="value-text" contenteditable="true" data-placeholder="Briefly describe what this means in how you work."></div></div>
-        <div class="value-card"><div class="value-mark"></div><div class="value-title" contenteditable="true" data-placeholder="Value name"></div><div class="value-text" contenteditable="true" data-placeholder="Briefly describe what this means in how you work."></div></div>
-        <div class="value-card"><div class="value-mark"></div><div class="value-title" contenteditable="true" data-placeholder="Value name"></div><div class="value-text" contenteditable="true" data-placeholder="Briefly describe what this means in how you work."></div></div>
+        <div class="value-card"><div class="value-mark"></div><div class="value-title" data-field data-placeholder="Edited by: someone">Edited by: someone</div><div class="value-text" data-field data-placeholder="Edited by: someone">Edited by: someone</div></div>
+        <div class="value-card"><div class="value-mark"></div><div class="value-title" data-field data-placeholder="Edited by: someone">Edited by: someone</div><div class="value-text" data-field data-placeholder="Edited by: someone">Edited by: someone</div></div>
+        <div class="value-card"><div class="value-mark"></div><div class="value-title" data-field data-placeholder="Edited by: someone">Edited by: someone</div><div class="value-text" data-field data-placeholder="Edited by: someone">Edited by: someone</div></div>
+        <div class="value-card"><div class="value-mark"></div><div class="value-title" data-field data-placeholder="Edited by: someone">Edited by: someone</div><div class="value-text" data-field data-placeholder="Edited by: someone">Edited by: someone</div></div>
+        <div class="value-card"><div class="value-mark"></div><div class="value-title" data-field data-placeholder="Edited by: someone">Edited by: someone</div><div class="value-text" data-field data-placeholder="Edited by: someone">Edited by: someone</div></div>
+        <div class="value-card"><div class="value-mark"></div><div class="value-title" data-field data-placeholder="Edited by: someone">Edited by: someone</div><div class="value-text" data-field data-placeholder="Edited by: someone">Edited by: someone</div></div>
       </div>
     </div>
   </section>
 
-  <!-- CAREER DEVELOPMENT / TIMELINE -->
   <section id="career">
     <span class="kicker">Career Development</span>
     <p class="section-hint">Your work history and progression, most recent first.</p>
     <div class="timeline">
       <div class="tl-item">
         <div class="tl-node glass"></div>
-        <div class="tl-period" contenteditable="true" data-placeholder="20XX — Present"></div>
-        <div class="tl-role" contenteditable="true" data-placeholder="Job title"></div>
-        <div class="tl-org" contenteditable="true" data-placeholder="Company / Organization"></div>
-        <div class="tl-desc" contenteditable="true" data-placeholder="Describe your responsibilities and impact in this role."></div>
+        <div class="tl-period" data-field data-placeholder="Edited by: someone">Edited by: someone</div>
+        <div class="tl-role" data-field data-placeholder="Edited by: someone">Edited by: someone</div>
+        <div class="tl-org" data-field data-placeholder="Edited by: someone">Edited by: someone</div>
+        <div class="tl-desc" data-field data-placeholder="Edited by: someone">Edited by: someone</div>
       </div>
       <div class="tl-item">
         <div class="tl-node glass"></div>
-        <div class="tl-period" contenteditable="true" data-placeholder="20XX — 20XX"></div>
-        <div class="tl-role" contenteditable="true" data-placeholder="Job title"></div>
-        <div class="tl-org" contenteditable="true" data-placeholder="Company / Organization"></div>
-        <div class="tl-desc" contenteditable="true" data-placeholder="Describe your responsibilities and impact in this role."></div>
+        <div class="tl-period" data-field data-placeholder="Edited by: someone">Edited by: someone</div>
+        <div class="tl-role" data-field data-placeholder="Edited by: someone">Edited by: someone</div>
+        <div class="tl-org" data-field data-placeholder="Edited by: someone">Edited by: someone</div>
+        <div class="tl-desc" data-field data-placeholder="Edited by: someone">Edited by: someone</div>
       </div>
       <div class="tl-item">
         <div class="tl-node glass"></div>
-        <div class="tl-period" contenteditable="true" data-placeholder="20XX — 20XX"></div>
-        <div class="tl-role" contenteditable="true" data-placeholder="Job title"></div>
-        <div class="tl-org" contenteditable="true" data-placeholder="Company / Organization"></div>
-        <div class="tl-desc" contenteditable="true" data-placeholder="Describe your responsibilities and impact in this role."></div>
+        <div class="tl-period" data-field data-placeholder="Edited by: someone">Edited by: someone</div>
+        <div class="tl-role" data-field data-placeholder="Edited by: someone">Edited by: someone</div>
+        <div class="tl-org" data-field data-placeholder="Edited by: someone">Edited by: someone</div>
+        <div class="tl-desc" data-field data-placeholder="Edited by: someone">Edited by: someone</div>
       </div>
       <div class="tl-item">
         <div class="tl-node glass"></div>
-        <div class="tl-period" contenteditable="true" data-placeholder="20XX — 20XX"></div>
-        <div class="tl-role" contenteditable="true" data-placeholder="Job title"></div>
-        <div class="tl-org" contenteditable="true" data-placeholder="Company / Organization"></div>
-        <div class="tl-desc" contenteditable="true" data-placeholder="Describe your responsibilities and impact in this role."></div>
+        <div class="tl-period" data-field data-placeholder="Edited by: someone">Edited by: someone</div>
+        <div class="tl-role" data-field data-placeholder="Edited by: someone">Edited by: someone</div>
+        <div class="tl-org" data-field data-placeholder="Edited by: someone">Edited by: someone</div>
+        <div class="tl-desc" data-field data-placeholder="Edited by: someone">Edited by: someone</div>
       </div>
     </div>
   </section>
 
-  <!-- KEY SKILLS -->
   <section id="skills">
     <span class="kicker">Key Skills</span>
     <p class="section-hint">Group your skills however makes sense to you.</p>
     <div class="skill-groups">
       <div>
-        <div class="skill-group-title" contenteditable="true" data-placeholder="Skill category"></div>
+        <div class="skill-group-title" data-field data-placeholder="Edited by: someone">Edited by: someone</div>
         <div class="skill-tags">
-          <span class="skill-tag" contenteditable="true" data-placeholder="Skill"></span>
-          <span class="skill-tag" contenteditable="true" data-placeholder="Skill"></span>
-          <span class="skill-tag" contenteditable="true" data-placeholder="Skill"></span>
-          <span class="skill-tag" contenteditable="true" data-placeholder="Skill"></span>
+          <span class="skill-tag" data-field data-placeholder="Edited by: someone">Edited by: someone</span>
+          <span class="skill-tag" data-field data-placeholder="Edited by: someone">Edited by: someone</span>
+          <span class="skill-tag" data-field data-placeholder="Edited by: someone">Edited by: someone</span>
+          <span class="skill-tag" data-field data-placeholder="Edited by: someone">Edited by: someone</span>
         </div>
       </div>
       <div>
-        <div class="skill-group-title" contenteditable="true" data-placeholder="Skill category"></div>
+        <div class="skill-group-title" data-field data-placeholder="Edited by: someone">Edited by: someone</div>
         <div class="skill-tags">
-          <span class="skill-tag" contenteditable="true" data-placeholder="Skill"></span>
-          <span class="skill-tag" contenteditable="true" data-placeholder="Skill"></span>
-          <span class="skill-tag" contenteditable="true" data-placeholder="Skill"></span>
+          <span class="skill-tag" data-field data-placeholder="Edited by: someone">Edited by: someone</span>
+          <span class="skill-tag" data-field data-placeholder="Edited by: someone">Edited by: someone</span>
+          <span class="skill-tag" data-field data-placeholder="Edited by: someone">Edited by: someone</span>
         </div>
       </div>
       <div>
-        <div class="skill-group-title" contenteditable="true" data-placeholder="Skill category"></div>
+        <div class="skill-group-title" data-field data-placeholder="Edited by: someone">Edited by: someone</div>
         <div class="skill-tags">
-          <span class="skill-tag" contenteditable="true" data-placeholder="Skill"></span>
-          <span class="skill-tag" contenteditable="true" data-placeholder="Skill"></span>
-          <span class="skill-tag" contenteditable="true" data-placeholder="Skill"></span>
+          <span class="skill-tag" data-field data-placeholder="Edited by: someone">Edited by: someone</span>
+          <span class="skill-tag" data-field data-placeholder="Edited by: someone">Edited by: someone</span>
+          <span class="skill-tag" data-field data-placeholder="Edited by: someone">Edited by: someone</span>
         </div>
       </div>
       <div>
-        <div class="skill-group-title" contenteditable="true" data-placeholder="Skill category"></div>
+        <div class="skill-group-title" data-field data-placeholder="Edited by: someone">Edited by: someone</div>
         <div class="skill-tags">
-          <span class="skill-tag" contenteditable="true" data-placeholder="Skill"></span>
-          <span class="skill-tag" contenteditable="true" data-placeholder="Skill"></span>
-          <span class="skill-tag" contenteditable="true" data-placeholder="Skill"></span>
+          <span class="skill-tag" data-field data-placeholder="Edited by: someone">Edited by: someone</span>
+          <span class="skill-tag" data-field data-placeholder="Edited by: someone">Edited by: someone</span>
+          <span class="skill-tag" data-field data-placeholder="Edited by: someone">Edited by: someone</span>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- EXTRA-CURRICULAR / COMMUNITY ENGAGEMENT -->
   <section id="community">
     <span class="kicker">Extra-Curricular &amp; Community Engagement</span>
     <p class="section-hint">Volunteering, coaching, clubs, or civic involvement.</p>
     <div class="flat-list">
       <div class="flat-item">
-        <div><div class="flat-title" contenteditable="true" data-placeholder="Activity / Organization name"></div><div class="flat-sub" contenteditable="true" data-placeholder="Brief description of your involvement."></div></div>
-        <div class="flat-year" contenteditable="true" data-placeholder="20XX — Present"></div>
+        <div><div class="flat-title" data-field data-placeholder="Edited by: someone">Edited by: someone</div><div class="flat-sub" data-field data-placeholder="Edited by: someone">Edited by: someone</div></div>
+        <div class="flat-year" data-field data-placeholder="Edited by: someone">Edited by: someone</div>
       </div>
       <div class="flat-item">
-        <div><div class="flat-title" contenteditable="true" data-placeholder="Activity / Organization name"></div><div class="flat-sub" contenteditable="true" data-placeholder="Brief description of your involvement."></div></div>
-        <div class="flat-year" contenteditable="true" data-placeholder="20XX — 20XX"></div>
+        <div><div class="flat-title" data-field data-placeholder="Edited by: someone">Edited by: someone</div><div class="flat-sub" data-field data-placeholder="Edited by: someone">Edited by: someone</div></div>
+        <div class="flat-year" data-field data-placeholder="Edited by: someone">Edited by: someone</div>
       </div>
       <div class="flat-item">
-        <div><div class="flat-title" contenteditable="true" data-placeholder="Activity / Organization name"></div><div class="flat-sub" contenteditable="true" data-placeholder="Brief description of your involvement."></div></div>
-        <div class="flat-year" contenteditable="true" data-placeholder="20XX — 20XX"></div>
+        <div><div class="flat-title" data-field data-placeholder="Edited by: someone">Edited by: someone</div><div class="flat-sub" data-field data-placeholder="Edited by: someone">Edited by: someone</div></div>
+        <div class="flat-year" data-field data-placeholder="Edited by: someone">Edited by: someone</div>
       </div>
     </div>
   </section>
 
-  <!-- CERTIFICATIONS / TRAININGS / SEMINARS -->
   <section id="certifications">
     <span class="kicker">Certifications, Trainings &amp; Seminars</span>
     <p class="section-hint">Attach supporting documents where you have them.</p>
     <div class="cert-panel glass">
       <div class="cert-grid">
         <div class="cert-item">
-          <div class="cert-name" contenteditable="true" data-placeholder="Certification / Training name"></div>
-          <div class="cert-meta" contenteditable="true" data-placeholder="Issuing organization · Year"></div>
-          <label class="cert-attach"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21.4 11.6 12.6 20.4a4 4 0 0 1-5.6-5.6l8.4-8.4a2.7 2.7 0 0 1 3.8 3.8L10.8 18.6"/></svg><span>Attach document</span><input type="file" data-role="cert"></label>
-          <div class="cert-file-chip"><a target="_blank"></a><button class="cert-file-remove" type="button">✕</button></div>
+          <div class="cert-name" data-field data-placeholder="Edited by: someone">Edited by: someone</div>
+          <div class="cert-meta" data-field data-placeholder="Edited by: someone">Edited by: someone</div>
+          <div class="cert-file-chip"><a target="_blank"></a></div>
         </div>
         <div class="cert-item">
-          <div class="cert-name" contenteditable="true" data-placeholder="Certification / Training name"></div>
-          <div class="cert-meta" contenteditable="true" data-placeholder="Issuing organization · Year"></div>
-          <label class="cert-attach"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21.4 11.6 12.6 20.4a4 4 0 0 1-5.6-5.6l8.4-8.4a2.7 2.7 0 0 1 3.8 3.8L10.8 18.6"/></svg><span>Attach document</span><input type="file" data-role="cert"></label>
-          <div class="cert-file-chip"><a target="_blank"></a><button class="cert-file-remove" type="button">✕</button></div>
+          <div class="cert-name" data-field data-placeholder="Edited by: someone">Edited by: someone</div>
+          <div class="cert-meta" data-field data-placeholder="Edited by: someone">Edited by: someone</div>
+          <div class="cert-file-chip"><a target="_blank"></a></div>
         </div>
         <div class="cert-item">
-          <div class="cert-name" contenteditable="true" data-placeholder="Certification / Training name"></div>
-          <div class="cert-meta" contenteditable="true" data-placeholder="Issuing organization · Year"></div>
-          <label class="cert-attach"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21.4 11.6 12.6 20.4a4 4 0 0 1-5.6-5.6l8.4-8.4a2.7 2.7 0 0 1 3.8 3.8L10.8 18.6"/></svg><span>Attach document</span><input type="file" data-role="cert"></label>
-          <div class="cert-file-chip"><a target="_blank"></a><button class="cert-file-remove" type="button">✕</button></div>
+          <div class="cert-name" data-field data-placeholder="Edited by: someone">Edited by: someone</div>
+          <div class="cert-meta" data-field data-placeholder="Edited by: someone">Edited by: someone</div>
+          <div class="cert-file-chip"><a target="_blank"></a></div>
         </div>
         <div class="cert-item">
-          <div class="cert-name" contenteditable="true" data-placeholder="Certification / Training name"></div>
-          <div class="cert-meta" contenteditable="true" data-placeholder="Issuing organization · Year"></div>
-          <label class="cert-attach"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21.4 11.6 12.6 20.4a4 4 0 0 1-5.6-5.6l8.4-8.4a2.7 2.7 0 0 1 3.8 3.8L10.8 18.6"/></svg><span>Attach document</span><input type="file" data-role="cert"></label>
-          <div class="cert-file-chip"><a target="_blank"></a><button class="cert-file-remove" type="button">✕</button></div>
+          <div class="cert-name" data-field data-placeholder="Edited by: someone">Edited by: someone</div>
+          <div class="cert-meta" data-field data-placeholder="Edited by: someone">Edited by: someone</div>
+          <div class="cert-file-chip"><a target="_blank"></a></div>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- CHARACTER REFERENCE -->
   <section id="references" style="border-bottom:none;">
     <span class="kicker">Character Reference</span>
     <p class="section-hint">People who can speak to your character and work.</p>
     <div class="ref-grid">
       <div class="ref-card">
-        <div class="ref-name" contenteditable="true" data-placeholder="Reference name"></div>
-        <div class="ref-role" contenteditable="true" data-placeholder="Title, Organization"></div>
+        <div class="ref-name" data-field data-placeholder="Edited by: someone">Edited by: someone</div>
+        <div class="ref-role" data-field data-placeholder="Edited by: someone">Edited by: someone</div>
         <div class="ref-contact">
-          <div contenteditable="true" data-placeholder="email@example.com"></div>
-          <div contenteditable="true" data-placeholder="+1 (000) 000-0000"></div>
+          <div data-field data-placeholder="Edited by: someone">Edited by: someone</div>
+          <div data-field data-placeholder="Edited by: someone">Edited by: someone</div>
         </div>
       </div>
       <div class="ref-card">
-        <div class="ref-name" contenteditable="true" data-placeholder="Reference name"></div>
-        <div class="ref-role" contenteditable="true" data-placeholder="Title, Organization"></div>
+        <div class="ref-name" data-field data-placeholder="Edited by: someone">Edited by: someone</div>
+        <div class="ref-role" data-field data-placeholder="Edited by: someone">Edited by: someone</div>
         <div class="ref-contact">
-          <div contenteditable="true" data-placeholder="email@example.com"></div>
-          <div contenteditable="true" data-placeholder="+1 (000) 000-0000"></div>
+          <div data-field data-placeholder="Edited by: someone">Edited by: someone</div>
+          <div data-field data-placeholder="Edited by: someone">Edited by: someone</div>
         </div>
       </div>
       <div class="ref-card">
-        <div class="ref-name" contenteditable="true" data-placeholder="Reference name"></div>
-        <div class="ref-role" contenteditable="true" data-placeholder="Title, Organization"></div>
+        <div class="ref-name" data-field data-placeholder="Edited by: someone">Edited by: someone</div>
+        <div class="ref-role" data-field data-placeholder="Edited by: someone">Edited by: someone</div>
         <div class="ref-contact">
-          <div contenteditable="true" data-placeholder="email@example.com"></div>
-          <div contenteditable="true" data-placeholder="+1 (000) 000-0000"></div>
+          <div data-field data-placeholder="Edited by: someone">Edited by: someone</div>
+          <div data-field data-placeholder="Edited by: someone">Edited by: someone</div>
         </div>
       </div>
     </div>
   </section>
 
   <footer>
-    <span contenteditable="true" data-placeholder="Your name — Resume"></span>
-    <span contenteditable="true" data-placeholder="email@example.com"></span>
+    <span data-field data-placeholder="Edited by: someone">Edited by: someone</span>
+    <span data-field data-placeholder="Edited by: someone">Edited by: someone</span>
   </footer>
 
 </div>
@@ -575,90 +598,136 @@
 
 <script>
 (function(){
-  var STORAGE_KEY = 'werewolffood_resume_v1';
-  var root = document.getElementById('resume-root');
+  /* ============== WEBGL ANIMATED BACKGROUND ============== */
+  const canvas = document.getElementById('webgl-bg');
+  const gl = canvas.getContext('webgl');
 
-  try{
-    var saved = localStorage.getItem(STORAGE_KEY);
-    if(saved){ root.innerHTML = saved; }
-  }catch(e){}
+  if (gl) {
+    const resize = () => {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+      gl.viewport(0, 0, canvas.width, canvas.height);
+    };
+    window.addEventListener('resize', resize);
+    resize();
 
-  var saveTimer = null;
-  function scheduleSave(){
-    clearTimeout(saveTimer);
-    saveTimer = setTimeout(function(){
-      try{ localStorage.setItem(STORAGE_KEY, root.innerHTML); }catch(e){}
-    }, 500);
+    const vsSource = `
+      attribute vec2 a_position;
+      void main() {
+        gl_Position = vec4(a_position, 0.0, 1.0);
+      }
+    `;
+
+    const fsSource = `
+      precision highp float;
+      uniform vec2 u_resolution;
+      uniform float u_time;
+      uniform vec2 u_mouse;
+
+      float random(vec2 st) {
+        return fract(sin(dot(st.xy, vec2(12.9898,78.233))) * 43758.5453123);
+      }
+
+      float noise(vec2 st) {
+        vec2 i = floor(st);
+        vec2 f = fract(st);
+        float a = random(i);
+        float b = random(i + vec2(1.0, 0.0));
+        float c = random(i + vec2(0.0, 1.0));
+        float d = random(i + vec2(1.0, 1.0));
+        vec2 u = f * f * (3.0 - 2.0 * f);
+        return mix(a, b, u.x) + (c - a) * u.y * (1.0 - u.x) + (d - b) * u.x * u.y;
+      }
+
+      float fbm(vec2 st) {
+        float value = 0.0;
+        float amplitude = 0.5;
+        for (int i = 0; i < 5; i++) {
+          value += amplitude * noise(st);
+          st *= 2.0;
+          amplitude *= 0.5;
+        }
+        return value;
+      }
+
+      void main() {
+        vec2 st = gl_FragCoord.xy / u_resolution.xy;
+        st.x *= u_resolution.x / u_resolution.y;
+
+        vec2 mouse = u_mouse / u_resolution;
+        mouse.x *= u_resolution.x / u_resolution.y;
+
+        float t = u_time * 0.03;
+
+        vec2 dist = st - mouse;
+        float mouseInfluence = exp(-dot(dist, dist) * 3.0) * 0.5;
+
+        vec2 q = vec2(fbm(st + t), fbm(st - t + vec2(5.2, 1.3)));
+        vec2 r = vec2(fbm(st + 4.0*q + vec2(1.7,9.2) + t*1.5), fbm(st + 4.0*q + vec2(8.3,2.8) - t*1.5));
+        float f = fbm(st + 4.0*r + mouseInfluence);
+
+        vec3 color1 = vec3(0.07, 0.05, 0.04);
+        vec3 color2 = vec3(0.30, 0.08, 0.10);
+        vec3 color3 = vec3(0.69, 0.22, 0.25);
+
+        vec3 color = mix(color1, color2, f);
+        color = mix(color, color3, smoothstep(0.4, 0.8, f) * smoothstep(0.0, 0.5, length(q)));
+
+        color += vec3(0.15, 0.05, 0.05) * mouseInfluence;
+
+        float vignette = smoothstep(1.5, 0.2, distance(st, vec2(0.5, 0.5)));
+        color *= 0.4 + vignette * 0.6;
+
+        gl_FragColor = vec4(color, 1.0);
+      }
+    `;
+
+    const compileShader = (type, source) => {
+      const shader = gl.createShader(type);
+      gl.shaderSource(shader, source);
+      gl.compileShader(shader);
+      return shader;
+    };
+
+    const program = gl.createProgram();
+    gl.attachShader(program, compileShader(gl.VERTEX_SHADER, vsSource));
+    gl.attachShader(program, compileShader(gl.FRAGMENT_SHADER, fsSource));
+    gl.linkProgram(program);
+    gl.useProgram(program);
+
+    const positionBuffer = gl.createBuffer();
+    gl.bindBuffer(gl.ARRAY_BUFFER, positionBuffer);
+    gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([-1, -1, 1, -1, -1, 1, 1, 1]), gl.STATIC_DRAW);
+
+    const a_position = gl.getAttribLocation(program, "a_position");
+    gl.enableVertexAttribArray(a_position);
+    gl.vertexAttribPointer(a_position, 2, gl.FLOAT, false, 0, 0);
+
+    const u_resolution = gl.getUniformLocation(program, "u_resolution");
+    const u_time = gl.getUniformLocation(program, "u_time");
+    const u_mouse = gl.getUniformLocation(program, "u_mouse");
+
+    let mouseX = window.innerWidth / 2;
+    let mouseY = window.innerHeight / 2;
+
+    window.addEventListener('mousemove', (e) => {
+      mouseX = e.clientX;
+      mouseY = window.innerHeight - e.clientY;
+    });
+
+    const startTime = performance.now();
+    function render() {
+      gl.uniform2f(u_resolution, canvas.width, canvas.height);
+      gl.uniform1f(u_time, (performance.now() - startTime) / 1000);
+      gl.uniform2f(u_mouse, mouseX, mouseY);
+      gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
+      requestAnimationFrame(render);
+    }
+    render();
   }
-  root.addEventListener('input', scheduleSave);
 
-  document.addEventListener('change', function(e){
-    var input = e.target;
-    if(!(input.tagName === 'INPUT' && input.type === 'file')) return;
-    var role = input.getAttribute('data-role');
-    var file = input.files && input.files[0];
-    if(!file) return;
-
-    if(role === 'avatar'){
-      var reader = new FileReader();
-      reader.onload = function(ev){
-        var zone = input.closest('.avatar-upload');
-        var img = zone.querySelector('img');
-        img.src = ev.target.result;
-        zone.classList.add('has-photo');
-        scheduleSave();
-      };
-      reader.readAsDataURL(file);
-    }
-
-    if(role === 'cv'){
-      var zone2 = input.closest('.cv-upload');
-      zone2.classList.add('filled');
-      var label = zone2.querySelector('span:not(.cv-remove)');
-      if(label) label.textContent = file.name;
-      var removeBtn = zone2.querySelector('.cv-remove');
-      if(removeBtn){ removeBtn.style.display = 'inline'; }
-    }
-
-    if(role === 'cert'){
-      var item = input.closest('.cert-item');
-      var chip = item.querySelector('.cert-file-chip');
-      var link = chip.querySelector('a');
-      var url = URL.createObjectURL(file);
-      link.href = url;
-      link.textContent = file.name;
-      chip.classList.add('show');
-    }
-  });
-
-  document.addEventListener('click', function(e){
-    if(e.target.classList.contains('cv-remove')){
-      e.preventDefault();
-      var zone = e.target.closest('.cv-upload');
-      zone.classList.remove('filled');
-      var label = zone.querySelector('span:not(.cv-remove)');
-      if(label) label.textContent = 'Attach CV (PDF)';
-      e.target.style.display = 'none';
-      zone.querySelector('input[type=file]').value = '';
-      scheduleSave();
-    }
-    if(e.target.classList.contains('cert-file-remove')){
-      var chip = e.target.closest('.cert-file-chip');
-      chip.classList.remove('show');
-      chip.querySelector('a').removeAttribute('href');
-      chip.querySelector('a').textContent = '';
-      var item = e.target.closest('.cert-item');
-      item.querySelector('input[type=file]').value = '';
-    }
-  });
-
+  /* ============== READ-ONLY NAVIGATION ============== */
   document.getElementById('btn-print').addEventListener('click', function(){ window.print(); });
-  document.getElementById('btn-reset').addEventListener('click', function(){
-    if(confirm('Reset everything back to a blank template?')){
-      try{ localStorage.removeItem(STORAGE_KEY); }catch(e){}
-      location.reload();
-    }
-  });
 
   var sections = document.querySelectorAll('main section[id]');
   var dots = document.querySelectorAll('.rail button');
@@ -676,6 +745,104 @@
   });
   window.addEventListener('scroll', setActive, {passive:true});
   setActive();
+})();
+</script>
+
+<script>
+/* ============================================================
+   READ-ONLY SYNC
+   Pulls the content saved by index.html (same localStorage key,
+   same origin) and paints it into this read-only page.
+   Nothing here is editable: this page has no contenteditable
+   elements at all.
+   ============================================================ */
+(function(){
+  var STORAGE_KEY = 'werewolffood_resume_v1';   /* must match index.html */
+  var root = document.getElementById('resume-root');
+  if(!root) return;
+
+  function applySaved(){
+    var saved = null;
+    try { saved = localStorage.getItem(STORAGE_KEY); } catch(e){ return; }
+    if(!saved) return;
+
+    var doc;
+    try {
+      doc = new DOMParser().parseFromString(saved, 'text/html');
+    } catch(e){ return; }
+    if(!doc) return;
+
+    /* ---- 1. every text field, matched in document order ---- */
+    var srcFields = doc.querySelectorAll('[contenteditable]');
+    var dstFields = root.querySelectorAll('[data-field]');
+    var n = Math.min(srcFields.length, dstFields.length);
+
+    for(var i = 0; i < n; i++){
+      var src = srcFields[i];
+      var dst = dstFields[i];
+
+      dst.innerHTML = src.innerHTML;
+
+      /* carry over the placeholder so empty fields still read nicely */
+      if(src.hasAttribute('data-placeholder')){
+        dst.setAttribute('data-placeholder', src.getAttribute('data-placeholder'));
+      } else {
+        dst.removeAttribute('data-placeholder');
+      }
+    }
+
+    /* ---- 2. profile photo ---- */
+    var srcAvatar = doc.querySelector('.avatar-upload');
+    var dstAvatar = root.querySelector('.avatar-upload');
+    if(srcAvatar && dstAvatar){
+      var srcImg = srcAvatar.querySelector('img');
+      var dstImg = dstAvatar.querySelector('img');
+      if(srcImg && dstImg && srcImg.getAttribute('src')){
+        dstImg.setAttribute('src', srcImg.getAttribute('src'));
+        dstAvatar.classList.add('has-photo');
+      }
+    }
+
+    /* ---- 3. CV attachment label ---- */
+    var srcCvLabel = doc.querySelector('#cv-label');
+    var dstCvLabel = root.querySelector('#cv-label');
+    var dstCvZone  = root.querySelector('#cv-zone');
+    if(srcCvLabel && dstCvLabel){
+      var cvText = (srcCvLabel.textContent || '').trim();
+      if(cvText && cvText !== 'Attach CV (PDF)'){
+        dstCvLabel.textContent = cvText;
+        if(dstCvZone) dstCvZone.classList.add('filled');
+      }
+    }
+
+    /* ---- 4. certification document chips ---- */
+    var srcChips = doc.querySelectorAll('.cert-file-chip');
+    var dstChips = root.querySelectorAll('.cert-file-chip');
+    var m = Math.min(srcChips.length, dstChips.length);
+    for(var j = 0; j < m; j++){
+      var sChip = srcChips[j];
+      var dChip = dstChips[j];
+      var sLink = sChip.querySelector('a');
+      var dLink = dChip.querySelector('a');
+      if(!sLink || !dLink) continue;
+      if(sChip.classList.contains('show') && sLink.textContent.trim()){
+        if(sLink.getAttribute('href')) dLink.setAttribute('href', sLink.getAttribute('href'));
+        dLink.textContent = sLink.textContent;
+        dChip.classList.add('show');
+      }
+    }
+  }
+
+  /* paint on load */
+  applySaved();
+
+  /* live update when the editor saves in another tab/window */
+  window.addEventListener('storage', function(e){
+    if(e.key === STORAGE_KEY) applySaved();
+  });
+
+  /* and again whenever this page regains focus */
+  window.addEventListener('focus', applySaved);
 })();
 </script>
 
