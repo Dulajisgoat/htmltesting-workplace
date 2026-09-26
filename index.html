@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -606,11 +607,13 @@
 <script>
 (function(){
   /* ============================================================
-     SUPABASE CONFIG — replace this key with your SERVICE_ROLE key
-     (Settings → API → service_role) so saving works.
+     SUPABASE CONFIG
+     1. Go to Supabase → Settings → API Keys
+     2. Rotate the leaked sb_secret_... key
+     3. Copy the NEW secret key and paste it below between the quotes
      ============================================================ */
   var SUPABASE_URL      = 'https://dtpubmqtsexlosoexjba.supabase.co';
-  var SUPABASE_ANON_KEY = 'sb_secret_9_8DF43CrU_9L_LHI01ypA_nxdAaS5m';';
+  var SUPABASE_ANON_KEY = 'PASTE_YOUR_NEW_SECRET_KEY_HERE';
 
   var sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
   var TABLE = 'resume';
