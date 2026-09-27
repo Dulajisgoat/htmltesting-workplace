@@ -669,6 +669,19 @@
     caret-color: var(--accent);
   }
   .textarea::placeholder { color: var(--text-muted); }
+  .dialog-input::placeholder, .palette-input::placeholder { color: var(--text-muted); }
+
+  /* Placeholder theming: light mode reads white against the moving stripe field,
+     dark mode stays on the same muted tone already used across the UI. */
+  html:not([data-theme="dark"]) .login-form-group input::placeholder,
+  html:not([data-theme="dark"]) .search-input::placeholder,
+  html:not([data-theme="dark"]) .editor-title-input::placeholder,
+  html:not([data-theme="dark"]) .textarea::placeholder,
+  html:not([data-theme="dark"]) .dialog-input::placeholder,
+  html:not([data-theme="dark"]) .palette-input::placeholder {
+    color: rgba(255, 255, 255, 0.94);
+    text-shadow: 0 1px 3px rgba(24, 18, 14, 0.22);
+  }
 
   .editor-bottom-bar {
     position: absolute; bottom: 0; left: 0; right: 0;
@@ -1676,29 +1689,35 @@
         vec2 p = uv * 2.0 - 1.0;
         p.x *= u_resolution.x / u_resolution.y;
 
-        float t = u_time * 0.045;
+        float t = u_time * 0.05;
 
-        // the whole flow field gets pulled gently toward the pointer,
-        // like the aurora is orbiting a warm, glowing "ball"
-        vec2 pw = p + (u_mouse - p) * 0.22;
+        // tilted axis the bands travel along, in the classic diagonal
+        // "stripe" direction, gently steered by the pointer
+        float angle = 0.5;
+        vec2 pull = (u_mouse - p) * 0.16;
+        vec2 pw = p + pull;
+        float diag = pw.x * cos(angle) - pw.y * sin(angle);
 
-        float n1 = snoise(pw * 1.1 + vec2(t, -t * 0.8));
-        float n2 = snoise(pw * 1.7 + vec2(-t * 0.6, t * 1.1) + 4.0);
-        float n3 = snoise(pw * 0.75 + vec2(t * 0.35, t * 0.28) + 8.0);
+        // organic warp so the bands breathe instead of sitting rigid
+        float warp = snoise(pw * 0.55 + vec2(t * 0.5, -t * 0.35)) * 0.4;
+        float warp2 = snoise(pw * 1.3 + vec2(-t * 0.4, t * 0.6) + 5.0) * 0.15;
+        diag += warp + warp2;
 
-        float mixVal = smoothstep(-0.6, 0.9, n1 + n2 * 0.5);
-        vec3 col = mix(u_colorA, u_colorB, mixVal);
-        float glow = smoothstep(0.25, 1.0, n3);
-        col = mix(col, u_colorC, glow * 0.45);
+        float bands = diag * 3.0 + t * 1.8;
+        float waveA = sin(bands) * 0.5 + 0.5;
+        float waveB = sin(bands * 1.65 + 1.4) * 0.5 + 0.5;
 
-        // the ball itself: a soft warm core that tracks the pointer
+        vec3 col = mix(u_colorA, u_colorB, smoothstep(0.1, 0.9, waveA));
+        col = mix(col, u_colorC, smoothstep(0.6, 1.0, waveB) * 0.5);
+
+        // soft light sweep that tracks the pointer across the stripes
         float distToMouse = length(p - u_mouse);
-        float ball = smoothstep(0.55, 0.0, distToMouse);
-        col = mix(col, u_colorC, ball * 0.55);
-        col += u_colorC * smoothstep(0.12, 0.0, distToMouse) * 0.4;
+        float glow = smoothstep(0.55, 0.0, distToMouse);
+        col += u_colorC * glow * 0.3;
+        col = mix(col, u_colorC, smoothstep(0.12, 0.0, distToMouse) * 0.3);
 
-        float vign = 1.0 - smoothstep(0.45, 1.35, length(p));
-        col *= mix(0.72, 1.0, vign);
+        float vign = 1.0 - smoothstep(0.5, 1.4, length(p));
+        col *= mix(0.75, 1.0, vign);
 
         gl_FragColor = vec4(col, 1.0);
       }
