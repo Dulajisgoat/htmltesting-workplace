@@ -194,7 +194,7 @@
     width: 60vmax;
     height: 60vmax;
     border-radius: 50%;
-    filter: blur(70px);
+    filter: blur(40px);
     opacity: 0.5;
     pointer-events: none;
   }
@@ -241,8 +241,8 @@
     position: relative;
     z-index: 1;
     overflow: hidden;
-    backdrop-filter: blur(24px) saturate(160%);
-    -webkit-backdrop-filter: blur(24px) saturate(160%);
+    backdrop-filter: blur(13px) saturate(120%);
+    -webkit-backdrop-filter: blur(13px) saturate(120%);
     transform: perspective(900px) rotateX(var(--rx)) rotateY(var(--ry));
     transition: transform 0.35s cubic-bezier(0.2, 0.8, 0.2, 1), background 0.4s ease, border-color 0.4s ease;
     animation: loginRise 0.5s cubic-bezier(0.2, 0.8, 0.2, 1);
@@ -256,7 +256,7 @@
     background: radial-gradient(circle, var(--glass-sheen) 0%, transparent 70%);
     animation: glassSheen 20s ease-in-out infinite;
     pointer-events: none;
-    filter: blur(30px);
+    filter: blur(16px);
   }
   .login-shell::after {
     content: '';
@@ -423,9 +423,8 @@
     background: var(--liquid-glow), var(--liquid-sheen), var(--app-glass-bg);
     background-repeat: no-repeat;
     background-size: 220% 220%, 100% 100%, 100% 100%;
-    animation: liquidGlow 22s ease-in-out infinite;
-    -webkit-backdrop-filter: blur(28px) saturate(180%);
-    backdrop-filter: blur(28px) saturate(180%);
+    -webkit-backdrop-filter: blur(14px) saturate(130%);
+    backdrop-filter: blur(14px) saturate(130%);
     border-right: 1px solid var(--app-glass-border);
     box-shadow: var(--app-glass-shadow);
     display: flex; flex-direction: column; height: 100vh; height: 100dvh;
@@ -540,8 +539,8 @@
     display: flex; flex-direction: column; gap: 10px;
     font-size: 11px; color: var(--text-muted);
     position: sticky; bottom: 0; background: var(--app-glass-bg);
-    -webkit-backdrop-filter: blur(20px) saturate(160%);
-    backdrop-filter: blur(20px) saturate(160%);
+    -webkit-backdrop-filter: blur(11px) saturate(120%);
+    backdrop-filter: blur(11px) saturate(120%);
     z-index: 2;
     margin-top: auto;
   }
@@ -571,9 +570,8 @@
     background: var(--liquid-glow), var(--liquid-sheen), var(--app-glass-bg);
     background-repeat: no-repeat;
     background-size: 220% 220%, 100% 100%, 100% 100%;
-    animation: liquidGlow 24s ease-in-out infinite;
-    -webkit-backdrop-filter: blur(24px) saturate(170%);
-    backdrop-filter: blur(24px) saturate(170%);
+    -webkit-backdrop-filter: blur(13px) saturate(125%);
+    backdrop-filter: blur(13px) saturate(125%);
     z-index: 10;
     border-bottom: 1px solid var(--app-glass-border); gap: 12px;
   }
@@ -584,9 +582,8 @@
     background: var(--liquid-glow), var(--liquid-sheen), var(--app-glass-bg);
     background-repeat: no-repeat;
     background-size: 200% 200%, 100% 100%, 100% 100%;
-    animation: liquidGlow 18s ease-in-out infinite;
-    -webkit-backdrop-filter: blur(20px) saturate(180%);
-    backdrop-filter: blur(20px) saturate(180%);
+    -webkit-backdrop-filter: blur(11px) saturate(130%);
+    backdrop-filter: blur(11px) saturate(130%);
     border: 1px solid var(--app-glass-border);
     box-shadow: var(--app-glass-shadow);
     border-radius: 999px; flex-wrap: nowrap; width: 100%; justify-content: center;
@@ -611,9 +608,8 @@
     background: var(--liquid-glow), var(--liquid-sheen), var(--liquid-pill-bg);
     background-repeat: no-repeat;
     background-size: 200% 200%, 100% 100%, 100% 100%;
-    animation: liquidGlow 12s ease-in-out infinite;
-    -webkit-backdrop-filter: blur(10px) saturate(160%);
-    backdrop-filter: blur(10px) saturate(160%);
+    -webkit-backdrop-filter: blur(6px) saturate(120%);
+    backdrop-filter: blur(6px) saturate(120%);
     color: var(--text); font-weight: 600;
     box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1), inset 0 1px 0 rgba(255, 255, 255, 0.5);
   }  
@@ -633,8 +629,8 @@
   .dropdown-menu {
     position: absolute; top: calc(100% + 6px); left: 0; right: 0;
     background: var(--app-glass-bg);
-    -webkit-backdrop-filter: blur(24px) saturate(170%);
-    backdrop-filter: blur(24px) saturate(170%);
+    -webkit-backdrop-filter: blur(13px) saturate(125%);
+    backdrop-filter: blur(13px) saturate(125%);
     border: 1px solid var(--app-glass-border);
     border-radius: var(--radius-lg); box-shadow: var(--app-glass-shadow), var(--shadow-soft); z-index: 20;
     display: none; flex-direction: column; overflow: hidden; padding: 4px;
@@ -686,8 +682,8 @@
   .custom-dropdown-menu {
     position: absolute; top: calc(100% + 6px); right: 0; min-width: 160px;
     background: var(--app-glass-bg);
-    -webkit-backdrop-filter: blur(24px) saturate(170%);
-    backdrop-filter: blur(24px) saturate(170%);
+    -webkit-backdrop-filter: blur(13px) saturate(125%);
+    backdrop-filter: blur(13px) saturate(125%);
     border: 1px solid var(--app-glass-border);
     border-radius: var(--radius-lg); box-shadow: var(--app-glass-shadow), var(--shadow-soft);
     z-index: 50; display: none; flex-direction: column; padding: 4px;
@@ -715,8 +711,8 @@
   .custom-select-menu {
     position: absolute; top: calc(100% + 4px); left: 0; right: 0;
     background: var(--app-glass-bg);
-    -webkit-backdrop-filter: blur(24px) saturate(170%);
-    backdrop-filter: blur(24px) saturate(170%);
+    -webkit-backdrop-filter: blur(13px) saturate(125%);
+    backdrop-filter: blur(13px) saturate(125%);
     border: 1px solid var(--app-glass-border);
     border-radius: var(--radius-lg); box-shadow: var(--app-glass-shadow), var(--shadow-soft);
     z-index: 100; display: none; flex-direction: column; padding: 4px;
@@ -781,8 +777,8 @@
   }
   .editor-toolbar {
     background: var(--app-glass-bg);
-    -webkit-backdrop-filter: blur(20px) saturate(170%);
-    backdrop-filter: blur(20px) saturate(170%);
+    -webkit-backdrop-filter: blur(11px) saturate(125%);
+    backdrop-filter: blur(11px) saturate(125%);
     border: 1px solid var(--app-glass-border); border-radius: var(--radius);
     padding: 4px; display: flex; gap: 2px; box-shadow: var(--app-glass-shadow);
     pointer-events: auto; max-width: calc(100% - 48px); overflow-x: auto;
@@ -806,8 +802,8 @@
     position: absolute; right: 32px; bottom: 32px;
     font-size: 11px; color: var(--text-muted); display: flex; gap: 8px;
     pointer-events: auto; background: var(--app-glass-bg);
-    -webkit-backdrop-filter: blur(16px) saturate(160%);
-    backdrop-filter: blur(16px) saturate(160%);
+    -webkit-backdrop-filter: blur(9px) saturate(120%);
+    backdrop-filter: blur(9px) saturate(120%);
     padding: 6px 12px; border-radius: var(--radius); border: 1px solid var(--app-glass-border); box-shadow: var(--app-glass-shadow);
   }
   .counter strong { color: var(--text); font-weight: 600; }
@@ -861,8 +857,8 @@
 
   .table-wrapper {
     background: var(--app-glass-bg);
-    -webkit-backdrop-filter: blur(20px) saturate(160%);
-    backdrop-filter: blur(20px) saturate(160%);
+    -webkit-backdrop-filter: blur(11px) saturate(120%);
+    backdrop-filter: blur(11px) saturate(120%);
     border: 1px solid var(--app-glass-border); border-radius: var(--radius-lg);
     overflow: hidden; box-shadow: var(--app-glass-shadow); animation: fadeInTab 0.4s ease;
     transition: box-shadow 0.25s ease;
@@ -902,7 +898,7 @@
     display: flex; align-items: center; gap: 14px;
     background: var(--glass-bg); border: 1px solid var(--glass-border);
     box-shadow: var(--shadow-soft), var(--glass-inset);
-    backdrop-filter: blur(18px) saturate(160%); -webkit-backdrop-filter: blur(18px) saturate(160%);
+    backdrop-filter: blur(10px) saturate(120%); -webkit-backdrop-filter: blur(10px) saturate(120%);
     border-radius: 999px; padding: 10px 12px 10px 20px;
     font-size: 12px; font-weight: 600; color: var(--text-soft);
     transform: translate(-50%, 24px); opacity: 0; pointer-events: none;
@@ -924,8 +920,8 @@
 
   .task-card {
     background: var(--app-glass-bg);
-    -webkit-backdrop-filter: blur(20px) saturate(160%);
-    backdrop-filter: blur(20px) saturate(160%);
+    -webkit-backdrop-filter: blur(11px) saturate(120%);
+    backdrop-filter: blur(11px) saturate(120%);
     border: 1px solid var(--app-glass-border);
     border-radius: var(--radius-lg); padding: 24px; margin-bottom: 24px;
     box-shadow: var(--app-glass-shadow);
@@ -981,8 +977,8 @@
 
   .graph-card {
     background: var(--app-glass-bg);
-    -webkit-backdrop-filter: blur(20px) saturate(160%);
-    backdrop-filter: blur(20px) saturate(160%);
+    -webkit-backdrop-filter: blur(11px) saturate(120%);
+    backdrop-filter: blur(11px) saturate(120%);
     border: 1px solid var(--app-glass-border);
     border-radius: var(--radius-lg); padding: 24px; margin-bottom: 24px;
     box-shadow: var(--app-glass-shadow); animation: fadeInTab 0.4s ease;
@@ -998,7 +994,7 @@
   .dialog-overlay, .palette-overlay, .shortcuts-overlay {
     position: fixed; inset: 0;
     background: rgba(0, 0, 0, 0.4);
-    backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
+    backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px);
     display: none; align-items: center; justify-content: center;
     z-index: 1000; opacity: 0; transition: opacity 0.2s ease; padding: 24px;
   }
@@ -1008,9 +1004,8 @@
     background: var(--liquid-glow), var(--liquid-sheen), var(--app-glass-bg);
     background-repeat: no-repeat;
     background-size: 200% 200%, 100% 100%, 100% 100%;
-    animation: liquidGlow 20s ease-in-out infinite;
-    -webkit-backdrop-filter: blur(28px) saturate(180%);
-    backdrop-filter: blur(28px) saturate(180%);
+    -webkit-backdrop-filter: blur(14px) saturate(130%);
+    backdrop-filter: blur(14px) saturate(130%);
     border: 1px solid var(--app-glass-border);
     border-radius: var(--radius-lg); box-shadow: var(--app-glass-shadow), var(--shadow-soft);
     width: 100%; max-width: 480px; transform: translateY(14px) scale(0.97);
@@ -1104,15 +1099,15 @@
   .key {
     padding: 2px 6px; font-size: 11px;
     background: var(--liquid-chip-bg);
-    -webkit-backdrop-filter: blur(6px) saturate(160%);
-    backdrop-filter: blur(6px) saturate(160%);
+    -webkit-backdrop-filter: blur(5px) saturate(115%);
+    backdrop-filter: blur(5px) saturate(115%);
     border: 1px solid var(--app-glass-border); border-radius: 4px; font-family: var(--sans);
   }
   .shortcuts-close {
     margin-top: 24px; width: 100%; padding: 10px;
     background: var(--liquid-sheen), var(--liquid-chip-bg);
-    -webkit-backdrop-filter: blur(14px) saturate(170%);
-    backdrop-filter: blur(14px) saturate(170%);
+    -webkit-backdrop-filter: blur(6px) saturate(125%);
+    backdrop-filter: blur(6px) saturate(125%);
     border: 1px solid var(--app-glass-border); border-radius: var(--radius); cursor: pointer;
     font-family: var(--sans); font-size: 13px; font-weight: 500; color: var(--text); transition: var(--t);
     position: relative; overflow: hidden;
@@ -1166,8 +1161,8 @@
   }
   .group-card {
     background: var(--app-glass-bg);
-    -webkit-backdrop-filter: blur(20px) saturate(160%);
-    backdrop-filter: blur(20px) saturate(160%);
+    -webkit-backdrop-filter: blur(11px) saturate(120%);
+    backdrop-filter: blur(11px) saturate(120%);
     border: 1px solid var(--app-glass-border);
     border-radius: var(--radius-lg); padding: 20px; margin-bottom: 16px;
     box-shadow: var(--app-glass-shadow); transition: transform 0.2s cubic-bezier(0.2, 0.8, 0.2, 1), box-shadow 0.2s ease;
