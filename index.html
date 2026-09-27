@@ -43,15 +43,16 @@
 
     /* Lighter "liquid glass" used across the in-app chrome (sidebar, top
        bar, toolbar, cards) so the WebGL backdrop reads through it. */
-    --app-glass-bg: rgba(255, 250, 244, 0.6);
-    --app-glass-border: rgba(24, 18, 14, 0.13);
-    --app-glass-shadow: 0 8px 28px rgba(34, 24, 16, 0.09), inset 0 1px 0 rgba(255, 255, 255, 0.55), inset 0 0 0 1px rgba(255, 255, 255, 0.1);
+    --app-glass-bg: rgba(255, 250, 244, 0.58);
+    --app-glass-border: rgba(24, 18, 14, 0.14);
+    --app-glass-shadow: 0 8px 28px rgba(34, 24, 16, 0.1), inset 0 1px 0 rgba(255, 255, 255, 0.72), inset 0 0 0 1px rgba(255, 255, 255, 0.18), inset 0 -1px 0 rgba(34, 24, 16, 0.05);
 
     /* Liquid Glass specular sheen — layered under the glass fill on the
        app chrome (dock/tabs, shortcuts, dialogs, sidebar, top bar) */
-    --liquid-sheen: linear-gradient(135deg, rgba(255, 255, 255, 0.38) 0%, rgba(255, 255, 255, 0.08) 35%, rgba(255, 255, 255, 0) 65%);
-    --liquid-pill-bg: rgba(255, 255, 255, 0.55);
-    --liquid-chip-bg: rgba(255, 255, 255, 0.42);
+    --liquid-sheen: linear-gradient(135deg, rgba(255, 255, 255, 0.5) 0%, rgba(255, 255, 255, 0.12) 35%, rgba(255, 255, 255, 0) 65%);
+    --liquid-glow: radial-gradient(560px 380px at 12% -10%, rgba(255, 255, 255, 0.55), transparent 62%);
+    --liquid-pill-bg: rgba(255, 255, 255, 0.62);
+    --liquid-chip-bg: rgba(255, 255, 255, 0.48);
   }
 
   html[data-theme="dark"] {
@@ -78,13 +79,14 @@
     --glass-highlight: rgba(255, 255, 255, 0.1);
     --glass-inset: inset 0 1px 0 rgba(255, 255, 255, 0.08), inset 0 0 0 1px rgba(255, 255, 255, 0.05);
 
-    --app-glass-bg: rgba(15, 15, 15, 0.5);
-    --app-glass-border: rgba(255, 255, 255, 0.09);
-    --app-glass-shadow: 0 8px 28px rgba(0, 0, 0, 0.55), inset 0 1px 0 rgba(255, 255, 255, 0.06), inset 0 0 0 1px rgba(255, 255, 255, 0.04);
+    --app-glass-bg: rgba(15, 15, 15, 0.48);
+    --app-glass-border: rgba(255, 255, 255, 0.12);
+    --app-glass-shadow: 0 8px 28px rgba(0, 0, 0, 0.55), inset 0 1px 0 rgba(255, 255, 255, 0.14), inset 0 0 0 1px rgba(255, 255, 255, 0.07), inset 0 -1px 0 rgba(0, 0, 0, 0.3);
 
-    --liquid-sheen: linear-gradient(135deg, rgba(255, 255, 255, 0.10) 0%, rgba(255, 255, 255, 0.02) 35%, rgba(255, 255, 255, 0) 65%);
-    --liquid-pill-bg: rgba(255, 255, 255, 0.12);
-    --liquid-chip-bg: rgba(255, 255, 255, 0.08);
+    --liquid-sheen: linear-gradient(135deg, rgba(255, 255, 255, 0.16) 0%, rgba(255, 255, 255, 0.03) 35%, rgba(255, 255, 255, 0) 65%);
+    --liquid-glow: radial-gradient(560px 380px at 12% -10%, rgba(255, 255, 255, 0.16), transparent 62%);
+    --liquid-pill-bg: rgba(255, 255, 255, 0.14);
+    --liquid-chip-bg: rgba(255, 255, 255, 0.09);
   }
 
   html, body {
@@ -180,9 +182,10 @@
   }
   .app-webgl {
     position: fixed; inset: 0; width: 100%; height: 100%;
-    z-index: 0; opacity: 0.55; pointer-events: none;
+    z-index: 0; opacity: 0.7; pointer-events: none;
+    filter: saturate(1.18) contrast(1.05);
   }
-  html[data-theme="dark"] .app-webgl { opacity: 0.42; }
+  html[data-theme="dark"] .app-webgl { opacity: 0.52; filter: saturate(1.1); }
   .sidebar, .editor-area, .backdrop { position: relative; z-index: 1; }
   .login-screen::before, .login-screen::after {
     content: '';
@@ -208,6 +211,23 @@
   .login-screen.webgl-active::before, .login-screen.webgl-active::after { opacity: 0.3; }
   @keyframes orbFloatA { 0%, 100% { transform: translate(0, 0) scale(1); } 50% { transform: translate(6%, 8%) scale(1.15); } }
   @keyframes orbFloatB { 0%, 100% { transform: translate(0, 0) scale(1); } 50% { transform: translate(-7%, -6%) scale(1.1); } }
+
+  /* Slow ambient drift for the Liquid Glass chrome (dock, top bar, sidebar,
+     shortcuts/dialogs) — a soft highlight that glides very slowly so the
+     glass feels alive without being distracting. */
+  @keyframes liquidGlow {
+    0%, 100% { background-position: 0% 0%, 0 0, 0 0; }
+    50% { background-position: 90% 55%, 0 0, 0 0; }
+  }
+  @keyframes liquidGlowPill {
+    0%, 100% { background-position: 0% 0%, 0 0; }
+    50% { background-position: 90% 55%, 0 0; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .sidebar, .editor-top-bar, .tabs-container, .dialog-box, .palette, .shortcuts-box, .tab-item.active {
+      animation: none !important;
+    }
+  }
 
   .login-shell {
     --mx: 50%; --my: 40%; --rx: 0deg; --ry: 0deg;
@@ -400,7 +420,10 @@
     to   { opacity: 1; transform: scale(1) translateY(0); filter: blur(0); }
   }
   .sidebar {
-    background: var(--liquid-sheen), var(--app-glass-bg);
+    background: var(--liquid-glow), var(--liquid-sheen), var(--app-glass-bg);
+    background-repeat: no-repeat;
+    background-size: 220% 220%, 100% 100%, 100% 100%;
+    animation: liquidGlow 22s ease-in-out infinite;
     -webkit-backdrop-filter: blur(28px) saturate(180%);
     backdrop-filter: blur(28px) saturate(180%);
     border-right: 1px solid var(--app-glass-border);
@@ -545,7 +568,10 @@
     grid-template-columns: 1fr auto 1fr; 
     align-items: center;
     padding: 0 32px;
-    background: var(--liquid-sheen), var(--app-glass-bg);
+    background: var(--liquid-glow), var(--liquid-sheen), var(--app-glass-bg);
+    background-repeat: no-repeat;
+    background-size: 220% 220%, 100% 100%, 100% 100%;
+    animation: liquidGlow 24s ease-in-out infinite;
     -webkit-backdrop-filter: blur(24px) saturate(170%);
     backdrop-filter: blur(24px) saturate(170%);
     z-index: 10;
@@ -555,7 +581,10 @@
   .sidebar-tabs { display: flex; justify-content: center; flex: 1; min-width: 0; overflow: visible; justify-self: center; width: 100%; max-width: 360px; }
   .tabs-container {  
     display: flex; align-items: center; gap: 6px; padding: 6px;
-    background: var(--liquid-sheen), var(--app-glass-bg);
+    background: var(--liquid-glow), var(--liquid-sheen), var(--app-glass-bg);
+    background-repeat: no-repeat;
+    background-size: 200% 200%, 100% 100%, 100% 100%;
+    animation: liquidGlow 18s ease-in-out infinite;
     -webkit-backdrop-filter: blur(20px) saturate(180%);
     backdrop-filter: blur(20px) saturate(180%);
     border: 1px solid var(--app-glass-border);
@@ -567,9 +596,22 @@
     padding: 7px 24px; border-radius: 999px; color: var(--text-muted);
     cursor: pointer; font-size: 15px; font-weight: 500; transition: 0.2s ease;
     user-select: none; text-align: center; white-space: nowrap;
+    position: relative; overflow: hidden;
   }  
+  .tab-item::after {
+    content: '';
+    position: absolute; top: 0; left: -60%;
+    width: 40%; height: 100%;
+    background: linear-gradient(120deg, transparent, rgba(255, 255, 255, 0.55), transparent);
+    transform: skewX(-20deg);
+    transition: left 0.5s ease; pointer-events: none;
+  }
+  .tab-item:hover::after { left: 130%; }
   .tab-item.active {  
-    background: var(--liquid-sheen), var(--liquid-pill-bg);
+    background: var(--liquid-glow), var(--liquid-sheen), var(--liquid-pill-bg);
+    background-repeat: no-repeat;
+    background-size: 200% 200%, 100% 100%, 100% 100%;
+    animation: liquidGlow 12s ease-in-out infinite;
     -webkit-backdrop-filter: blur(10px) saturate(160%);
     backdrop-filter: blur(10px) saturate(160%);
     color: var(--text); font-weight: 600;
@@ -963,7 +1005,10 @@
   .dialog-overlay.active, .palette-overlay.active, .shortcuts-overlay.active { display: flex; opacity: 1; }
 
   .dialog-box, .palette, .shortcuts-box {
-    background: var(--liquid-sheen), var(--app-glass-bg);
+    background: var(--liquid-glow), var(--liquid-sheen), var(--app-glass-bg);
+    background-repeat: no-repeat;
+    background-size: 200% 200%, 100% 100%, 100% 100%;
+    animation: liquidGlow 20s ease-in-out infinite;
     -webkit-backdrop-filter: blur(28px) saturate(180%);
     backdrop-filter: blur(28px) saturate(180%);
     border: 1px solid var(--app-glass-border);
@@ -1070,7 +1115,17 @@
     backdrop-filter: blur(14px) saturate(170%);
     border: 1px solid var(--app-glass-border); border-radius: var(--radius); cursor: pointer;
     font-family: var(--sans); font-size: 13px; font-weight: 500; color: var(--text); transition: var(--t);
+    position: relative; overflow: hidden;
   }
+  .shortcuts-close::after {
+    content: '';
+    position: absolute; top: 0; left: -60%;
+    width: 40%; height: 100%;
+    background: linear-gradient(120deg, transparent, rgba(255, 255, 255, 0.55), transparent);
+    transform: skewX(-20deg);
+    transition: left 0.5s ease; pointer-events: none;
+  }
+  .shortcuts-close:hover::after { left: 130%; }
   .shortcuts-close:hover { background: var(--liquid-sheen), var(--accent-soft); color: var(--accent); border-color: var(--accent); }
 
   /* Toast */
